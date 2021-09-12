@@ -1,5 +1,5 @@
-#include "../Registry.h"
-#include "iostream"
+#include "lib/Registry.h"
+#include <iostream>
 
 int main()
 {
