@@ -1,4 +1,4 @@
-#include "lib/Registry.h"
+#include "lib/core/Registry.h"
 #include <iostream>
 
 int main()
