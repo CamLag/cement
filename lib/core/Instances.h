@@ -3,6 +3,7 @@
 #include "Property.h"
 #include "StringConversions.h"
 #include <vector>
+#include <iostream>
 
 namespace cement
 {
@@ -23,6 +24,7 @@ namespace cement
 
         void SetValue(size_t a_pos, const T &a_val = T{})
         {
+            std::cout << "Instances SetValue position " << a_pos << " value " << StringConversions::ToString(a_val) << " size : " << m_values.size() << std::endl;
             m_values[a_pos] = a_val;
         }
 
@@ -54,6 +56,14 @@ namespace cement
             return result;
         }
 
+        virtual int Type() override;
+
+        const std::vector<T> &GetValues() const
+        {
+            return m_values;
+        }
+
+    private:
         std::vector<T> m_values;
     };
 } //end namespace cement

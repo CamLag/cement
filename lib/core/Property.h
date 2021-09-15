@@ -14,5 +14,7 @@ namespace cement
         virtual std::string Print();
         virtual size_t Instanciate() = 0;
         virtual size_t Size() = 0;
+
+        virtual int Type() = 0;
     };
 } //end namespace cement

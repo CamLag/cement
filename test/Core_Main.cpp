@@ -18,4 +18,8 @@ int main()
     candle->SetValue<std::string>(color, candle2, "Red");
 
     std::cout << registry.Print() << std::endl;
+
+    std::cout << size->Type() << std::endl;
+    std::cout << color->Type() << std::endl;
+    std::cout << candle->Type() << std::endl;
 }

@@ -21,7 +21,7 @@ namespace cement
             pair.second.push_back(index);
         }
         m_size++;
-        return m_size;
+        return m_size - 1;
     }
 
     size_t Model::Size()
@@ -53,5 +53,10 @@ namespace cement
         result += "\n";
 
         return result;
+    }
+
+    int Model::Type()
+    {
+        return 1;
     }
 } //end namespace cement
