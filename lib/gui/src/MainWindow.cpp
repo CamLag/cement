@@ -26,6 +26,7 @@ namespace cement
 
         layout->addWidget(Factory::MakeWidget(size));
         layout->addWidget(Factory::MakeWidget(color));
+        layout->addStretch();
 
         central_widget->setLayout(layout);
         setCentralWidget(central_widget);

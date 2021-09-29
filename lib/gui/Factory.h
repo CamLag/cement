@@ -5,7 +5,7 @@
 #include "lib/core/StringConversions.h"
 #include "lib/core/Instances.h"
 #include "lib/core/Model.h"
-#include "lib/gui/VectorWidget.h"
+#include "lib/gui/PropertyWidget.h"
 
 namespace cement
 {
@@ -24,7 +24,7 @@ namespace cement
             }
             case 2: // long
             {
-                auto widget = new VectorWidget();
+                auto widget = new PropertyWidget(a_property);
 
                 widget->Init<long>(dynamic_cast<Instances<long> *>(a_property)->GetValues());
 
@@ -32,7 +32,7 @@ namespace cement
             }
             case 3: // bool
             {
-                auto widget = new VectorWidget();
+                auto widget = new PropertyWidget(a_property);
 
                 widget->Init<bool>(dynamic_cast<Instances<bool> *>(a_property)->GetValues());
 
@@ -40,7 +40,7 @@ namespace cement
             }
             case 4: // double
             {
-                auto widget = new VectorWidget();
+                auto widget = new PropertyWidget(a_property);
 
                 widget->Init<double>(dynamic_cast<Instances<double> *>(a_property)->GetValues());
 
@@ -48,7 +48,7 @@ namespace cement
             }
             case 5: // string
             {
-                auto widget = new VectorWidget();
+                auto widget = new PropertyWidget(a_property);
 
                 widget->Init<std::string>(dynamic_cast<Instances<std::string> *>(a_property)->GetValues());
 

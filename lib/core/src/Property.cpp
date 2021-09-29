@@ -6,9 +6,19 @@ namespace cement
     {
     }
 
-    std::string Property::Print()
+    std::string Property::Print() const
     {
         return m_name;
+    }
+
+    const size_t Property::Depth() const
+    {
+        return 1;
+    }
+
+    const size_t Property::PropertyCount() const
+    {
+        return 1;
     }
 
 } //end namespace cement

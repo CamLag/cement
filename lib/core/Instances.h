@@ -33,12 +33,12 @@ namespace cement
             return AddValue();
         }
 
-        virtual size_t Size() override
+        virtual const size_t Size() const override
         {
             return m_values.size();
         }
 
-        virtual std::string Print() override
+        virtual std::string Print() const override
         {
             std::string result;
             result += Property::Print();
@@ -56,7 +56,7 @@ namespace cement
             return result;
         }
 
-        virtual int Type() override;
+        virtual const int Type() const override;
 
         const std::vector<T> &GetValues() const
         {

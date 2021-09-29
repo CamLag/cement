@@ -24,9 +24,11 @@ namespace cement
         }
 
         virtual size_t Instanciate() override;
-        virtual size_t Size() override;
-        virtual std::string Print() override;
-        virtual int Type() override;
+        virtual const size_t Size() const override;
+        virtual std::string Print() const override;
+        virtual const int Type() const override;
+        virtual const size_t Depth() const override;
+        virtual const size_t PropertyCount() const override;
 
         std::unordered_map<Property *, std::vector<size_t>> m_indexes;
         size_t m_size;

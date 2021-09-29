@@ -22,4 +22,6 @@ int main()
     std::cout << size->Type() << std::endl;
     std::cout << color->Type() << std::endl;
     std::cout << candle->Type() << std::endl;
+    std::cout << color->Depth() << std::endl;
+    std::cout << candle->Depth() << std::endl;
 }
