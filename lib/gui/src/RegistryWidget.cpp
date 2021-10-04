@@ -4,18 +4,8 @@ namespace cement
 {
     RegistryWidget::RegistryWidget(Registry *a_registry, QWidget *a_parent) : m_registry(a_registry), QTableWidget(a_parent)
     {
-    }
-
-    void RegistryWidget::UpdateRowCount()
-    {
-        size_t counter = 0;
-
-        for (auto &pair : m_registry->m_properties)
-        {
-            counter += pair.second->PropertyCount();
-        }
-
-        setRowCount(counter);
+        Update();
+        UpdateColumnCount();
     }
 
     void RegistryWidget::UpdateColumnCount()
@@ -31,13 +21,69 @@ namespace cement
         setColumnCount(max);
     }
 
-    void RegistryWidget::UpdateHeader()
+    void RegistryWidget::Update()
     {
-        for (size_t i = 0; i < rowCount(); i++)
+        UpdateColumnCount();
+
+        size_t size = 0;
+
+        for (auto &pair : m_registry->m_properties)
         {
-            auto it = m_registry->m_properties.begin();
-            it++;
-            setVerticalHeaderItem(0, new QTableWidgetItem(QString::fromStdString(it->second->m_name)));
+            size += pair.second->PropertyCount();
+        }
+
+        setRowCount(size);
+
+        size_t counter = 0;
+
+        for (auto &pair : m_registry->m_properties)
+        {
+            switch (pair.second->Type())
+            {
+            case 1: // Model
+            {
+                auto model = dynamic_cast<Model *>(pair.second);
+
+                for (auto &model_pair : model->m_indexes)
+                {
+                    QString name;
+                    name += QString::fromStdString(model->m_name);
+                    name += " / ";
+                    name += QString::fromStdString(model_pair.first->m_name);
+                    setVerticalHeaderItem(counter, new QTableWidgetItem(name));
+                    SetValues(counter, model_pair.second);
+                    counter++;
+                }
+
+                break;
+            }
+            case 2: // long
+            {
+                setVerticalHeaderItem(counter, new QTableWidgetItem(QString::fromStdString(pair.second->m_name)));
+                SetValues(counter, dynamic_cast<Instances<long> *>(pair.second)->GetValues());
+                counter++;
+                break;
+            }
+            case 3: // bool
+            {
+                setVerticalHeaderItem(counter, new QTableWidgetItem(QString::fromStdString(pair.second->m_name)));
+                SetValues(counter, dynamic_cast<Instances<bool> *>(pair.second)->GetValues());
+                counter++;
+                break;
+            }
+            case 4: // double
+            {
+                setVerticalHeaderItem(counter, new QTableWidgetItem(QString::fromStdString(pair.second->m_name)));
+                SetValues(counter, dynamic_cast<Instances<double> *>(pair.second)->GetValues());
+                counter++;
+                break;
+            }
+            case 5: // string
+                setVerticalHeaderItem(counter, new QTableWidgetItem(QString::fromStdString(pair.second->m_name)));
+                SetValues(counter, dynamic_cast<Instances<std::string> *>(pair.second)->GetValues());
+                counter++;
+                break;
+            }
         }
     }
 

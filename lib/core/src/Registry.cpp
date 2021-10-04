@@ -18,4 +18,19 @@ namespace cement
         }
         return result;
     }
+
+    std::vector<std::vector<Property *>> Registry::Visit()
+    {
+        std::vector<std::vector<Property *>> result;
+
+        for (auto &pair : m_properties)
+        {
+            for (auto &child : pair.second->VisitProperties())
+            {
+                result.push_back(child);
+            }
+        }
+
+        return result;
+    }
 } //end namespace cement

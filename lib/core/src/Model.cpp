@@ -81,4 +81,27 @@ namespace cement
     {
         return m_indexes.size();
     }
+
+    const std::unordered_map<Property *, std::vector<size_t>> &Model::Children() const
+    {
+        return m_indexes;
+    }
+
+    std::vector<std::vector<Property *>> Model::VisitProperties()
+    {
+        std::vector<std::vector<Property *>> result;
+
+        for (auto &pair : m_indexes)
+        {
+            for (auto &child : pair.first->VisitProperties())
+            {
+                result.emplace_back();
+                result.back().push_back(this);
+                std::copy(child.begin(), child.end(), std::back_inserter(result.back()));
+                // result.back().push_back(child);
+            }
+        }
+
+        return result;
+    }
 } //end namespace cement

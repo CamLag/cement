@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+#include <unordered_map>
+#include <vector>
 
 namespace cement
 {
@@ -17,5 +19,7 @@ namespace cement
         virtual const size_t Depth() const;
         virtual const size_t PropertyCount() const;
         virtual const int Type() const = 0;
+        virtual const std::unordered_map<Property *, std::vector<size_t>> &Children() const;
+        virtual std::vector<std::vector<Property *>> VisitProperties();
     };
 } //end namespace cement

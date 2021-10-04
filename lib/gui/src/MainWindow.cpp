@@ -1,5 +1,4 @@
 #include "../MainWindow.h"
-#include "../Factory.h"
 
 #include <QHBoxLayout>
 
@@ -21,15 +20,8 @@ namespace cement
         candle->SetValue<std::string>(color, candle1, "Blue");
         candle->SetValue<std::string>(color, candle2, "Red");
 
-        auto central_widget = new QWidget();
-        auto layout = new QVBoxLayout();
-
-        layout->addWidget(Factory::MakeWidget(size));
-        layout->addWidget(Factory::MakeWidget(color));
-        layout->addStretch();
-
-        central_widget->setLayout(layout);
-        setCentralWidget(central_widget);
+        m_registry_widget = new RegistryWidget(&m_registry);
+        setCentralWidget(m_registry_widget);
     }
 
 } //end namespace cement

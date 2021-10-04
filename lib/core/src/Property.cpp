@@ -21,4 +21,15 @@ namespace cement
         return 1;
     }
 
+    const std::unordered_map<Property *, std::vector<size_t>> &Property::Children() const
+    {
+        static const std::unordered_map<Property *, std::vector<size_t>> blank_map;
+        return blank_map;
+    }
+
+    std::vector<std::vector<Property *>> Property::VisitProperties()
+    {
+        return {{this}};
+    }
+
 } //end namespace cement

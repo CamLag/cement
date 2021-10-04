@@ -13,7 +13,6 @@ namespace cement
 
     public:
         RegistryWidget(Registry *a_registry, QWidget *a_parent = nullptr);
-
         template <typename T>
         void Init(const std::vector<T> &a_vector)
         {
@@ -25,9 +24,17 @@ namespace cement
             }
         }
 
-        void UpdateRowCount();
         void UpdateColumnCount();
-        void UpdateHeader();
+        void Update();
+
+        template <typename T>
+        void SetValues(size_t a_row, const std::vector<T> &a_vector)
+        {
+            for (size_t i = 0; i < a_vector.size(); i++)
+            {
+                setItem(a_row, i, new QTableWidgetItem(QString::fromStdString(StringConversions::ToString<T>(a_vector[i]))));
+            }
+        }
 
         Registry *m_registry;
     };

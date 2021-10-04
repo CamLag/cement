@@ -20,6 +20,7 @@ namespace cement
 
         Model *CreateModel(const std::string &a_name);
         std::string Print();
+        std::vector<std::vector<Property *>> Visit();
 
         std::unordered_map<std::string, Property *> m_properties;
     };

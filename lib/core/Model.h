@@ -29,6 +29,8 @@ namespace cement
         virtual const int Type() const override;
         virtual const size_t Depth() const override;
         virtual const size_t PropertyCount() const override;
+        virtual const std::unordered_map<Property *, std::vector<size_t>> &Children() const override;
+        virtual std::vector<std::vector<Property *>> VisitProperties() override;
 
         std::unordered_map<Property *, std::vector<size_t>> m_indexes;
         size_t m_size;
