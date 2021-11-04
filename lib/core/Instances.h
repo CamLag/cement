@@ -54,11 +54,11 @@ namespace cement
             result += Property::Print();
             result += " [";
 
-            // for (auto it = m_values.begin(); it != m_values.end() - 1; it++)
-            // {
-            //     result += StringConversions::ToString(*it);
-            //     result += ", ";
-            // }
+            for (size_t i = 0; i != m_values.Size() - 1; i++)
+            {
+                result += StringConversions::ToString(m_values[i]);
+                result += ", ";
+            }
 
             result += StringConversions::ToString(m_values.Back());
             result += "]\n";

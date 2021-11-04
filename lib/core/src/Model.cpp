@@ -75,13 +75,13 @@ namespace cement
             result += pair.first->Property::Print();
             result += "[";
 
-            // for (auto it = pair.second.begin(); it != pair.second.end() - 1; it++)
-            // {
-            //     result += StringConversions::ToString(*it);
-            //     result += ", ";
-            // }
+            for (size_t i = 0; i != pair.second.Size() - 1; i++)
+            {
+                result += StringConversions::ToString(pair.second[i]);
+                result += ", ";
+            }
 
-            // result += StringConversions::ToString(pair.second.back());
+            result += StringConversions::ToString(pair.second.Back());
             result += "]";
         }
         result += "\n";
