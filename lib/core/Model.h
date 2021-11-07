@@ -24,10 +24,10 @@ namespace cement
             instance->SetValue(m_indexes.at(a_property).At(a_instance), a_value); // TODO manage recursive models // TODO remove at after better error management // TODO shared values?
         }
 
-        void SetIndex(Property *a_property, size_t a_model_instance, size_t a_property_instance);
+        virtual void SetIndex(Property *a_property, size_t a_model_instance, size_t a_property_instance) override;
 
         virtual size_t Instanciate() override;
-        virtual void DeleteInstance(size_t a_index) override;
+        virtual void DeleteInstance(size_t a_instance) override;
         virtual const size_t Size() const override;
         virtual std::string Print() const override;
         virtual const int Type() const override;

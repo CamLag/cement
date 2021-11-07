@@ -19,17 +19,23 @@ namespace cement
     void Model::SetIndex(Property *a_property, size_t a_model_instance, size_t a_property_instance)
     {
         // TODO check if index is valid
+
         auto &index_pointer = m_indexes.at(a_property)[a_model_instance];
-        if (index_pointer == NO_VALUE) // the property is shared and this instance has never been set
+        if (a_property_instance == NO_VALUE)
+        {
+            a_property->RemoveReference(a_property_instance, this, index_pointer);
+            index_pointer = a_property_instance;
+        }
+        else if (index_pointer == NO_VALUE) // the property is shared and this instance has never been set
         {
             index_pointer = a_property_instance;
-            a_property->AddReference(a_property_instance, &index_pointer);
+            a_property->AddReference(a_property_instance, this, a_model_instance);
         }
         else if (index_pointer != a_property_instance) // the instance points elsewhere
         {
-            a_property->RemoveReference(a_property_instance, &index_pointer);
+            a_property->RemoveReference(a_property_instance, this, index_pointer);
             index_pointer = a_property_instance;
-            a_property->AddReference(a_property_instance, &index_pointer);
+            a_property->AddReference(a_property_instance, this, index_pointer);
         }
     }
 
@@ -44,17 +50,28 @@ namespace cement
         return m_size - 1;
     }
 
-    void Model::DeleteInstance(size_t a_index)
+    void Model::DeleteInstance(size_t a_instance)
     {
+
+        if (HasReference(a_instance))
+        {
+            // TODO LOG
+            return;
+        }
+
         auto last_index = m_size - 1;
 
         for (auto &pair : m_indexes)
         {
-            pair.second.Delete(a_index);
+            pair.second.Delete(a_instance);
         }
-        for (auto &reference : m_references[a_index])
+
+        for (auto &reference : m_references[a_instance])
         {
-            *reference = last_index;
+            for (auto &index : reference.second)
+            {
+                dynamic_cast<Model *>(reference.first)->SetIndex(this, last_index, a_instance);
+            }
         }
     }
 

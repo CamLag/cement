@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Property.h"
+#include "Common.h"
 #include "StringConversions.h"
 #include <vector>
 #include <iostream>
@@ -33,14 +34,20 @@ namespace cement
             return AddValue();
         }
 
-        virtual void DeleteInstance(size_t a_index) override
+        virtual void DeleteInstance(size_t a_instance) override
         {
             auto last_index = m_values.Size() - 1;
-            m_values.Delete(a_index);
-            for (auto &reference : m_references[a_index])
+            m_values.Delete(a_instance);
+
+            for (auto &reference : m_references[a_instance])
             {
-                *reference = last_index;
+                for (auto &index : reference.second)
+                {
+                    reference.first->SetIndex(this, last_index, NO_VALUE);
+                }
             }
+
+            m_references.Delete(a_instance);
         }
 
         virtual const size_t Size() const override
