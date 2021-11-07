@@ -1,0 +1,5 @@
+add_executable(cement_test Core_Main.cpp)
+target_link_libraries(cement_test cement)
+
+add_executable(cement_gui_test Gui_Main.cpp)
+target_link_libraries(cement_gui_test cement_gui)
