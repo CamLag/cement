@@ -25,8 +25,6 @@ namespace cement
         virtual const size_t Depth() const;
         virtual const size_t PropertyCount() const;
         virtual const int Type() const = 0;
-        virtual void SetIndex(Property *a_property, size_t a_model_instance, size_t a_property_instance);
-        virtual const std::unordered_map<Property *, Pool<size_t>> &Children() const;
         virtual std::vector<std::vector<Property *>> VisitProperties();
         void AddReference(size_t a_instance, Property *a_property, size_t a_model_instance);
         void RemoveReference(size_t a_instance, Property *a_property, size_t a_model_instance);

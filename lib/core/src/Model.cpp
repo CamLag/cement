@@ -8,43 +8,13 @@ namespace cement
     {
     }
 
-    void Model::AddProperty(Property *a_property)
-    {
-        if (m_indexes.find(a_property) == m_indexes.end())
-        {
-            m_indexes.insert(std::make_pair(a_property, Pool<size_t>(1000)));
-        }
-    }
-
-    void Model::SetIndex(Property *a_property, size_t a_model_instance, size_t a_property_instance)
-    {
-        // TODO check if index is valid
-
-        auto &index_pointer = m_indexes.at(a_property)[a_model_instance];
-        if (a_property_instance == NO_VALUE)
-        {
-            a_property->RemoveReference(a_property_instance, this, index_pointer);
-            index_pointer = a_property_instance;
-        }
-        else if (index_pointer == NO_VALUE) // the property is shared and this instance has never been set
-        {
-            index_pointer = a_property_instance;
-            a_property->AddReference(a_property_instance, this, a_model_instance);
-        }
-        else if (index_pointer != a_property_instance) // the instance points elsewhere
-        {
-            a_property->RemoveReference(a_property_instance, this, index_pointer);
-            index_pointer = a_property_instance;
-            a_property->AddReference(a_property_instance, this, index_pointer);
-        }
-    }
-
     size_t Model::Instanciate()
     {
-        for (auto &pair : m_indexes)
+        for (auto &index : m_indexes)
         {
-            auto index = pair.first->Instanciate();
-            pair.second.PushBack(index);
+            auto instance = index->GetIndexed()->Instanciate();
+            auto position = index->Instanciate();
+            index->SetValue(position, instance);
         }
         m_size++;
         return m_size - 1;
@@ -61,18 +31,18 @@ namespace cement
 
         auto last_index = m_size - 1;
 
-        for (auto &pair : m_indexes)
+        for (auto &index : m_indexes)
         {
-            pair.second.Delete(a_instance);
+            index->DeleteInstance(a_instance);
         }
 
-        for (auto &reference : m_references[a_instance])
-        {
-            for (auto &index : reference.second)
-            {
-                dynamic_cast<Model *>(reference.first)->SetIndex(this, last_index, a_instance);
-            }
-        }
+        // for (auto &reference : m_references[a_instance])
+        // {
+        //     for (auto &index : reference.second)
+        //     {
+        //         dynamic_cast<Model *>(reference.first)->SetIndex(this, last_index, a_instance);
+        //     }
+        // }
     }
 
     const size_t Model::Size() const
@@ -86,20 +56,10 @@ namespace cement
 
         result += Property::Print();
 
-        for (auto &pair : m_indexes)
+        for (auto &index : m_indexes)
         {
             result += "\n  ";
-            result += pair.first->Property::Print();
-            result += "[";
-
-            for (size_t i = 0; i != pair.second.Size() - 1; i++)
-            {
-                result += StringConversions::ToString(pair.second[i]);
-                result += ", ";
-            }
-
-            result += StringConversions::ToString(pair.second.Back());
-            result += "]";
+            result += index->Print();
         }
         result += "\n";
 
@@ -115,9 +75,9 @@ namespace cement
     {
         size_t counter = 1;
         size_t max = 1;
-        for (auto &pair : m_indexes)
+        for (auto &index : m_indexes)
         {
-            size_t depth = pair.first->Depth();
+            size_t depth = index->GetIndexed()->Depth();
             if (depth > max)
             {
                 max = depth;
@@ -133,18 +93,13 @@ namespace cement
         return m_indexes.size();
     }
 
-    const std::unordered_map<Property *, Pool<size_t>> &Model::Children() const
-    {
-        return m_indexes;
-    }
-
     std::vector<std::vector<Property *>> Model::VisitProperties()
     {
         std::vector<std::vector<Property *>> result;
 
-        for (auto &pair : m_indexes)
+        for (auto &index : m_indexes)
         {
-            for (auto &child : pair.first->VisitProperties())
+            for (auto &child : index->VisitProperties())
             {
                 result.emplace_back();
                 result.back().push_back(this);
@@ -154,4 +109,6 @@ namespace cement
 
         return result;
     }
+
+    std::set<Index *> Model::GetIndexes() const { return m_indexes; }
 } // end namespace cement

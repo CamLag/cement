@@ -44,14 +44,14 @@ namespace cement
             {
                 auto model = dynamic_cast<Model *>(pair.second);
 
-                for (auto &model_pair : model->m_indexes)
+                for (auto &index : model->GetIndexes())
                 {
                     QString name;
                     name += QString::fromStdString(model->m_name);
                     name += " / ";
-                    name += QString::fromStdString(model_pair.first->m_name);
+                    name += QString::fromStdString(index->m_name);
                     setVerticalHeaderItem(counter, new QTableWidgetItem(name));
-                    SetValues(counter, model_pair.second);
+                    SetValues(counter, index->GetValues());
                     counter++;
                 }
 
@@ -87,4 +87,4 @@ namespace cement
         }
     }
 
-} //end namespace cement
+} // end namespace cement

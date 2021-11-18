@@ -23,7 +23,7 @@ namespace cement
             return size;
         }
 
-        void SetValue(size_t a_pos, const T &a_val = T{})
+        virtual void SetValue(size_t a_pos, const T &a_val = T{})
         {
             std::cout << "Instances SetValue position " << a_pos << " value " << StringConversions::ToString(a_val) << " size : " << m_values.Size() << std::endl;
             m_values[a_pos] = a_val;
@@ -43,7 +43,7 @@ namespace cement
             {
                 for (auto &index : reference.second)
                 {
-                    reference.first->SetIndex(this, last_index, NO_VALUE);
+                    // reference.first->SetIndex(this, last_index, NO_VALUE);
                 }
             }
 
@@ -80,7 +80,7 @@ namespace cement
             return m_values;
         }
 
-    private:
+    protected:
         Pool<T> m_values;
     };
 } // end namespace cement

@@ -18,6 +18,8 @@ namespace cement
             return property;
         }
 
+        Index *AddProperty(Model *a_model, Property *a_property, const std::string &a_name); // TODO Manage addition of property to an already instanciated model (instanciation of the property?)
+
         Model *CreateModel(const std::string &a_name);
         std::string Print();
         std::vector<std::vector<Property *>> Visit();
@@ -25,4 +27,4 @@ namespace cement
         std::unordered_map<std::string, Property *> m_properties;
     };
 
-} //end namespace cement
+} // end namespace cement

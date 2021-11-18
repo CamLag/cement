@@ -26,4 +26,10 @@ namespace cement
         return 5;
     }
 
-} //end namespace cement
+    template <>
+    const int Instances<unsigned long>::Type() const
+    {
+        return 6;
+    }
+
+} // end namespace cement

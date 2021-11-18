@@ -21,16 +21,6 @@ namespace cement
         return 1;
     }
 
-    void Property::SetIndex(Property *a_property, size_t a_model_instance, size_t a_property_instance)
-    {
-    }
-
-    const std::unordered_map<Property *, Pool<size_t>> &Property::Children() const
-    {
-        static const std::unordered_map<Property *, Pool<size_t>> blank_map;
-        return blank_map;
-    }
-
     std::vector<std::vector<Property *>> Property::VisitProperties()
     {
         return {{this}};

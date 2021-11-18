@@ -2,6 +2,14 @@
 
 namespace cement
 {
+    Index *Registry::AddProperty(Model *a_model, Property *a_property, const std::string &a_name)
+    {
+        auto index = new Index(a_name, a_property);
+        m_properties[a_name] = index;
+        a_model->GetIndexes().insert(index);
+        return index;
+    }
+
     Model *Registry::CreateModel(const std::string &a_name)
     {
         auto model = new Model(a_name);
@@ -33,4 +41,4 @@ namespace cement
 
         return result;
     }
-} //end namespace cement
+} // end namespace cement
