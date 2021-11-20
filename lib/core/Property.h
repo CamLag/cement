@@ -11,6 +11,8 @@
 
 namespace cement
 {
+    class Index;
+
     class Property
     {
     public:
@@ -31,5 +33,7 @@ namespace cement
         bool HasReference(size_t a_instance);
 
         Pool<std::map<Property *, std::set<size_t>>> m_references;
+
+        std::set<Index *> m_index_references;
     };
 } // end namespace cement

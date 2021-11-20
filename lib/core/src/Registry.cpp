@@ -6,7 +6,8 @@ namespace cement
     {
         auto index = new Index(a_name, a_property);
         m_properties[a_name] = index;
-        a_model->GetIndexes().insert(index);
+        a_model->AddIndex(index);
+        a_property->m_index_references.insert(index);
         return index;
     }
 

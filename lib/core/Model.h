@@ -21,8 +21,8 @@ namespace cement
         virtual const size_t Depth() const override;
         virtual const size_t PropertyCount() const override;
         virtual std::vector<std::vector<Property *>> VisitProperties() override;
-
-        std::set<Index *> GetIndexes() const;
+        void AddIndex(Index *a_index);
+        const std::set<Index *> &GetIndexes() const;
 
     private:
         std::set<Index *> m_indexes;

@@ -110,5 +110,13 @@ namespace cement
         return result;
     }
 
-    std::set<Index *> Model::GetIndexes() const { return m_indexes; }
+    void Model::AddIndex(Index *a_index)
+    {
+        m_indexes.insert(a_index);
+    }
+
+    const std::set<Index *> &Model::GetIndexes() const
+    {
+        return m_indexes;
+    }
 } // end namespace cement
