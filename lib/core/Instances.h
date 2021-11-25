@@ -12,7 +12,7 @@ namespace cement
     class Instances : public Property
     {
     public:
-        Instances(const std::string &a_name) : Property(a_name), m_values(1000)
+        Instances(const std::string &a_name, bool a_shared) : Property(a_name, a_shared), m_values(1000)
         {
         }
 

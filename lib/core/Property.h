@@ -16,7 +16,7 @@ namespace cement
     class Property
     {
     public:
-        Property(const std::string &a_name);
+        Property(const std::string &a_name, bool a_shared);
 
         std::string m_name;
 
@@ -31,9 +31,12 @@ namespace cement
         void AddReference(size_t a_instance, Property *a_property, size_t a_model_instance);
         void RemoveReference(size_t a_instance, Property *a_property, size_t a_model_instance);
         bool HasReference(size_t a_instance);
-
+        bool IsShared() const;
         Pool<std::map<Property *, std::set<size_t>>> m_references;
 
         std::set<Index *> m_index_references;
+
+    private:
+        bool m_shared;
     };
 } // end namespace cement

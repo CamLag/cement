@@ -2,7 +2,7 @@
 
 namespace cement
 {
-    Index::Index(const std::string &a_name, Property *a_indexed) : Instances<unsigned long>(a_name), m_indexed(a_indexed)
+    Index::Index(const std::string &a_name, Property *a_indexed) : Instances<unsigned long>(a_name, false), m_indexed(a_indexed)
     {
     }
 

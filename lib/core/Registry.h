@@ -11,16 +11,16 @@ namespace cement
     {
     public:
         template <typename T>
-        Instances<T> *CreateProperty(const std::string &a_name)
+        Instances<T> *CreateProperty(const std::string &a_name, bool a_shared)
         {
-            auto property = new Instances<T>(a_name);
+            auto property = new Instances<T>(a_name, a_shared);
             m_properties[a_name] = property;
             return property;
         }
 
         Index *AddProperty(Model *a_model, Property *a_property, const std::string &a_name); // TODO Manage addition of property to an already instanciated model (instanciation of the property?)
 
-        Model *CreateModel(const std::string &a_name);
+        Model *CreateModel(const std::string &a_name, bool a_shared);
         std::string Print();
         std::vector<std::vector<Property *>> Visit();
 

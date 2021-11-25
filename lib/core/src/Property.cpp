@@ -2,7 +2,9 @@
 
 namespace cement
 {
-    Property::Property(const std::string &a_name) : m_name(a_name), m_references(1000)
+    Property::Property(const std::string &a_name, bool a_shared) : m_name(a_name),
+                                                                   m_shared(a_shared),
+                                                                   m_references(1000)
     {
     }
 
@@ -51,6 +53,11 @@ namespace cement
     bool Property::HasReference(size_t a_instance)
     {
         return m_references[a_instance].size() != 0;
+    }
+
+    bool Property::IsShared() const
+    {
+        return m_shared;
     }
 
 } // end namespace cement

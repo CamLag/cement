@@ -11,9 +11,9 @@ namespace cement
         return index;
     }
 
-    Model *Registry::CreateModel(const std::string &a_name)
+    Model *Registry::CreateModel(const std::string &a_name, bool a_shared)
     {
-        auto model = new Model(a_name);
+        auto model = new Model(a_name, a_shared);
         m_properties[a_name] = model;
         return model;
     }

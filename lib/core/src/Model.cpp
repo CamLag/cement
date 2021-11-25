@@ -3,8 +3,8 @@
 
 namespace cement
 {
-    Model::Model(const std::string &a_name) : Property(a_name),
-                                              m_size(0)
+    Model::Model(const std::string &a_name, bool a_shared) : Property(a_name, a_shared),
+                                                             m_size(0)
     {
     }
 
@@ -12,7 +12,11 @@ namespace cement
     {
         for (auto &index : m_indexes)
         {
-            auto instance = index->GetIndexed()->Instanciate();
+            unsigned long instance = NO_VALUE;
+            if (!index->GetIndexed()->IsShared())
+            {
+                instance = index->GetIndexed()->Instanciate();
+            }
             auto position = index->Instanciate();
             index->SetValue(position, instance);
         }
@@ -22,7 +26,6 @@ namespace cement
 
     void Model::DeleteInstance(size_t a_instance)
     {
-
         if (HasReference(a_instance))
         {
             // TODO LOG
@@ -33,6 +36,7 @@ namespace cement
 
         for (auto &index : m_indexes)
         {
+
             index->DeleteInstance(a_instance);
         }
 
