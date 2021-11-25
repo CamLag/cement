@@ -25,6 +25,7 @@ namespace cement
         const std::set<Index *> &GetIndexes() const;
 
     private:
+        void DeleteSubInstance(size_t a_instance);
         std::set<Index *> m_indexes;
         size_t m_size;
     };

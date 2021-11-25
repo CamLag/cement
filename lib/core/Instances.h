@@ -36,18 +36,33 @@ namespace cement
 
         virtual void DeleteInstance(size_t a_instance) override
         {
-            auto last_index = m_values.Size() - 1;
-            m_values.Delete(a_instance);
-
-            for (auto &reference : m_references[a_instance])
+            if (IsShared())
             {
-                for (auto &index : reference.second)
+                int total_count = 0;
+                for (auto index : m_index_references)
                 {
-                    // reference.first->SetIndex(this, last_index, NO_VALUE);
+                    total_count += index->Count(a_instance);
+                }
+
+                if (total_count == 0) // Nobody points on this instance
+                {
+                    auto last_index = m_values.Size() - 1;
+                    m_values.Delete(a_instance);
+                    for (auto index : m_index_references)
+                    {
+                        index->Replace(a_instance, last_index); // Due to the swap we have to update all the pointers to the last value
+                    }
                 }
             }
-
-            m_references.Delete(a_instance);
+            else
+            {
+                if (m_index_references.size() == 0) // Nobody points on this property
+                {
+                    m_values.Delete(a_instance);
+                }
+                // Else the value is owned by someone and can't be deleted
+            }
+            // TODO error logs
         }
 
         virtual const size_t Size() const override

@@ -28,11 +28,7 @@ namespace cement
         virtual const size_t PropertyCount() const;
         virtual const int Type() const = 0;
         virtual std::vector<std::vector<Property *>> VisitProperties();
-        void AddReference(size_t a_instance, Property *a_property, size_t a_model_instance);
-        void RemoveReference(size_t a_instance, Property *a_property, size_t a_model_instance);
-        bool HasReference(size_t a_instance);
         bool IsShared() const;
-        Pool<std::map<Property *, std::set<size_t>>> m_references;
 
         std::set<Index *> m_index_references;
 

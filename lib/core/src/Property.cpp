@@ -3,8 +3,7 @@
 namespace cement
 {
     Property::Property(const std::string &a_name, bool a_shared) : m_name(a_name),
-                                                                   m_shared(a_shared),
-                                                                   m_references(1000)
+                                                                   m_shared(a_shared)
     {
     }
 
@@ -26,33 +25,6 @@ namespace cement
     std::vector<std::vector<Property *>> Property::VisitProperties()
     {
         return {{this}};
-    }
-
-    void Property::AddReference(size_t a_instance, Property *a_property, size_t a_model_instance)
-    {
-        m_references[a_instance][a_property].insert(a_model_instance);
-    }
-
-    void Property::RemoveReference(size_t a_instance, Property *a_property, size_t a_model_instance)
-    {
-        auto map_it = m_references[a_instance].find(a_property);
-
-        if (map_it == m_references[a_instance].end())
-        {
-            return;
-        }
-
-        map_it->second.erase(a_model_instance);
-
-        if (map_it->second.empty())
-        {
-            m_references[a_instance].erase(a_property);
-        }
-    }
-
-    bool Property::HasReference(size_t a_instance)
-    {
-        return m_references[a_instance].size() != 0;
     }
 
     bool Property::IsShared() const

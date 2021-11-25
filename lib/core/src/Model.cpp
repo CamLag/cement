@@ -26,27 +26,47 @@ namespace cement
 
     void Model::DeleteInstance(size_t a_instance)
     {
-        if (HasReference(a_instance))
+        if (IsShared())
         {
-            // TODO LOG
-            return;
+            int total_count = 0;
+            for (auto index : m_index_references)
+            {
+                total_count += index->Count(a_instance);
+            }
+
+            if (total_count == 0) // Nobody points on this instance
+            {
+                auto last_index = Size() - 1;
+
+                DeleteSubInstance(a_instance);
+
+                for (auto index : m_index_references)
+                {
+                    index->Replace(a_instance, last_index); // Due to the swap we have to update all the pointers to the last value
+                }
+            }
         }
-
-        auto last_index = m_size - 1;
-
-        for (auto &index : m_indexes)
+        else
         {
+            if (m_index_references.size() == 0) // Nobody points on this property
+            {
+                DeleteSubInstance(a_instance);
+            }
+            // Else the value is owned by someœone and can't be deleted
+        }
+        // TODO error logs
+    }
 
+    void Model::DeleteSubInstance(size_t a_instance)
+    {
+        for (auto index : m_indexes)
+        {
+            if (!index->GetIndexed()->IsShared()) // the property value is owned by this model and can be deleted
+            {
+                index->GetIndexed()->DeleteInstance(index->GetValue(a_instance));
+            }
             index->DeleteInstance(a_instance);
         }
-
-        // for (auto &reference : m_references[a_instance])
-        // {
-        //     for (auto &index : reference.second)
-        //     {
-        //         dynamic_cast<Model *>(reference.first)->SetIndex(this, last_index, a_instance);
-        //     }
-        // }
     }
 
     const size_t Model::Size() const
