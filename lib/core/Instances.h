@@ -29,6 +29,37 @@ namespace cement
             m_values[a_pos] = a_val;
         }
 
+        int CountValues(const T &a_value)
+        {
+            // TODO improve with std::count after iterator addition in pool
+            int count = 0;
+            for (size_t i = 0; i < m_values.Size(); i++)
+            {
+                if (m_values[i] == a_value)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        int ReplaceValues(const T &a_old_value, const T &a_new_value)
+        {
+            // TODO improve with std::count after iterator addition in pool
+            int count = 0;
+            for (size_t i = 0; i < m_values.Size(); i++)
+            {
+                if (m_values[i] == a_old_value)
+                {
+                    m_values[i] = a_new_value;
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
         virtual size_t Instanciate() override
         {
             return AddValue();
@@ -41,7 +72,7 @@ namespace cement
                 int total_count = 0;
                 for (auto index : m_index_references)
                 {
-                    total_count += index->Count(a_instance);
+                    total_count += dynamic_cast<Instances<unsigned long> *>(index)->CountValues(a_instance);
                 }
 
                 if (total_count == 0) // Nobody points on this instance
@@ -50,7 +81,7 @@ namespace cement
                     m_values.Delete(a_instance);
                     for (auto index : m_index_references)
                     {
-                        index->Replace(a_instance, last_index); // Due to the swap we have to update all the pointers to the last value
+                        dynamic_cast<Instances<unsigned long> *>(index)->ReplaceValues(a_instance, last_index); // Due to the swap we have to update all the pointers to the last value
                     }
                 }
             }

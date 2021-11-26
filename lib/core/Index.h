@@ -14,9 +14,6 @@ namespace cement
 
         Property *GetIndexed() const;
 
-        int Count(size_t a_property_instance);
-        int Replace(size_t a_new_property_instance, size_t a_old_property_instance);
-
     private:
         Index(const std::string &a_name, Property *a_indexed);
 
