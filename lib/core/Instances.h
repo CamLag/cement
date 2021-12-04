@@ -29,6 +29,16 @@ namespace cement
             m_values[a_pos] = a_val;
         }
 
+        const T &GetValue(size_t a_pos) const
+        {
+            return m_values[a_pos];
+        }
+
+        T &GetValue(size_t a_pos)
+        {
+            return m_values[a_pos];
+        }
+
         int CountValues(const T &a_value)
         {
             // TODO improve with std::count after iterator addition in pool

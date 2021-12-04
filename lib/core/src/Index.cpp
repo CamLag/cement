@@ -11,11 +11,6 @@ namespace cement
         Instances<unsigned long>::SetValue(a_pos, a_val);
     }
 
-    unsigned long Index::GetValue(size_t a_pos)
-    {
-        return m_values[a_pos];
-    }
-
     Property *Index::GetIndexed() const
     {
         return m_indexed;
