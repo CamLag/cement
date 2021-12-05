@@ -75,39 +75,10 @@ namespace cement
             return AddValue();
         }
 
-        virtual void DeleteInstance(size_t a_instance) override
+        virtual void SelfDeleteInstance(size_t a_instance) override
         {
-            if (IsShared())
-            {
-                int total_count = 0;
-                for (auto index : m_index_references)
-                {
-                    total_count += dynamic_cast<Instances<unsigned long> *>(index)->CountValues(a_instance);
-                }
-
-                if (total_count == 0) // Nobody points on this instance
-                {
-                    auto last_index = m_values.Size() - 1;
-                    m_values.Delete(a_instance);
-                    for (auto index : m_index_references)
-                    {
-                        dynamic_cast<Instances<unsigned long> *>(index)->ReplaceValues(last_index, a_instance);
-                        // Due to the swap we have to update all the pointers to the last value
-                    }
-                }
-            }
-            else
-            {
-                auto last_index = m_values.Size() - 1;
-                m_values.Delete(a_instance);
-                for (auto index : m_index_references)
-                {
-                    dynamic_cast<Instances<unsigned long> *>(index)->ReplaceValues(last_index, a_instance);
-                    // Due to the swap we have to update all the pointers to the last value
-                }
-            }
-            // TODO error logs
-        }
+            m_values.Delete(a_instance);
+           }
 
         virtual const size_t Size() const override
         {

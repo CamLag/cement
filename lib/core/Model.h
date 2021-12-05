@@ -14,7 +14,6 @@ namespace cement
         Model(const std::string &a_name, bool a_shared);
 
         virtual size_t Instanciate() override;
-        virtual void DeleteInstance(size_t a_instance) override;
         virtual const size_t Size() const override;
         virtual std::string Print() const override;
         virtual const int Type() const override;
@@ -24,8 +23,10 @@ namespace cement
         void AddIndex(Index *a_index);
         const std::set<Index *> &GetIndexes() const;
 
+    protected:
+        virtual void SelfDeleteInstance(size_t a_instance) override;
+
     private:
-        void DeleteSubInstance(size_t a_instance);
         std::set<Index *> m_indexes;
         size_t m_size;
     };
