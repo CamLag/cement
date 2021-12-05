@@ -40,8 +40,8 @@ TEST_F(CoreTest, SimpleTest)
     /** At this stage we should have this :
      * size [1,2,3]
      * color [Blue, Red]
-     * thing_size [1,2,3]
-     * thing_color [2,2,1]
+     * thing_size [0,1,2]
+     * thing_color [1,1,0]
      */
 
     EXPECT_EQ(thing->Size(), 3);
@@ -65,4 +65,25 @@ TEST_F(CoreTest, SimpleTest)
     EXPECT_EQ(thing_color->GetValue(0), 1);
     EXPECT_EQ(thing_color->GetValue(1), 1);
     EXPECT_EQ(thing_color->GetValue(2), 0);
+
+    // Removing test
+
+    thing->DeleteInstance(th2);
+    std::cout << m_registry.Print() << std::endl;
+
+    /** At this stage we should have this :
+     * size [1,3]
+     * color [Blue, Red]
+     * thing_size [0,1]
+     * thing_color [1,0]
+     */
+
+    EXPECT_EQ(size->GetValue(0), 1);
+    EXPECT_EQ(size->GetValue(1), 3);
+    EXPECT_EQ(color->GetValue(0), "Blue");
+    EXPECT_EQ(color->GetValue(1), "Red");
+    EXPECT_EQ(thing_size->GetValue(0), 0);
+    EXPECT_EQ(thing_size->GetValue(1), 1);
+    EXPECT_EQ(thing_color->GetValue(0), 1);
+    EXPECT_EQ(thing_color->GetValue(1), 0);
 }

@@ -91,17 +91,20 @@ namespace cement
                     m_values.Delete(a_instance);
                     for (auto index : m_index_references)
                     {
-                        dynamic_cast<Instances<unsigned long> *>(index)->ReplaceValues(a_instance, last_index); // Due to the swap we have to update all the pointers to the last value
+                        dynamic_cast<Instances<unsigned long> *>(index)->ReplaceValues(last_index, a_instance);
+                        // Due to the swap we have to update all the pointers to the last value
                     }
                 }
             }
             else
             {
-                if (m_index_references.size() == 0) // Nobody points on this property
+                auto last_index = m_values.Size() - 1;
+                m_values.Delete(a_instance);
+                for (auto index : m_index_references)
                 {
-                    m_values.Delete(a_instance);
+                    dynamic_cast<Instances<unsigned long> *>(index)->ReplaceValues(last_index, a_instance);
+                    // Due to the swap we have to update all the pointers to the last value
                 }
-                // Else the value is owned by someone and can't be deleted
             }
             // TODO error logs
         }

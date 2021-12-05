@@ -1,5 +1,6 @@
 #include "../Model.h"
 #include "../StringConversions.h"
+#include "../Log.h"
 
 namespace cement
 {
@@ -42,17 +43,22 @@ namespace cement
 
                 for (auto index : m_index_references)
                 {
-                    index->ReplaceValues(a_instance, last_index); // Due to the swap we have to update all the pointers to the last value
+                    index->ReplaceValues(last_index, a_instance);
+                    // Due to the swap we have to update all the pointers to the last value
                 }
             }
         }
         else
         {
-            if (m_index_references.size() == 0) // Nobody points on this property
+            auto last_index = Size() - 1;
+
+            DeleteSubInstance(a_instance);
+
+            for (auto index : m_index_references)
             {
-                DeleteSubInstance(a_instance);
+                index->ReplaceValues(last_index, a_instance);
+                // Due to the swap we have to update all the pointers to the last value
             }
-            // Else the value is owned by someœone and can't be deleted
         }
         // TODO error logs
     }
