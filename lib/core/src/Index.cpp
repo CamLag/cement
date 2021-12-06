@@ -11,6 +11,11 @@ namespace cement
         Instances<unsigned long>::SetValue(a_pos, a_val);
     }
 
+    int Index::Type() const
+    {
+        return 7;
+    }
+
     Property *Index::GetIndexed() const
     {
         return m_indexed;

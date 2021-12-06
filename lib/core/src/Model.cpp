@@ -58,7 +58,7 @@ namespace cement
         return result;
     }
 
-    const int Model::Type() const
+    int Model::Type() const
     {
         return 1;
     }

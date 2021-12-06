@@ -29,7 +29,10 @@ namespace cement
 
         for (auto &pair : m_registry->m_properties)
         {
-            size += pair.second->PropertyCount();
+            if (pair.second->Type() > 1)
+            {
+                size++;
+            }
         }
 
         setRowCount(size);
@@ -50,8 +53,11 @@ namespace cement
                     name += QString::fromStdString(model->m_name);
                     name += " / ";
                     name += QString::fromStdString(index->m_name);
+                    name += "->";
+                    name += QString::fromStdString(index->GetIndexed()->m_name);
                     setVerticalHeaderItem(counter, new QTableWidgetItem(name));
                     SetValues(counter, index->GetValues());
+
                     counter++;
                 }
 
@@ -79,10 +85,23 @@ namespace cement
                 break;
             }
             case 5: // string
+            {
                 setVerticalHeaderItem(counter, new QTableWidgetItem(QString::fromStdString(pair.second->m_name)));
                 SetValues(counter, dynamic_cast<Instances<std::string> *>(pair.second)->GetValues());
                 counter++;
                 break;
+            }
+            case 6: // unsigned long
+            {
+                setVerticalHeaderItem(counter, new QTableWidgetItem(QString::fromStdString(pair.second->m_name)));
+                SetValues(counter, dynamic_cast<Instances<unsigned long> *>(pair.second)->GetValues());
+                counter++;
+                break;
+            }
+            case 7: // Index
+            {
+                break;
+            }
             }
         }
     }

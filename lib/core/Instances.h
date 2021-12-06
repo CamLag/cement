@@ -78,7 +78,7 @@ namespace cement
         virtual void SelfDeleteInstance(size_t a_instance) override
         {
             m_values.Delete(a_instance);
-           }
+        }
 
         virtual const size_t Size() const override
         {
@@ -103,7 +103,7 @@ namespace cement
             return result;
         }
 
-        virtual const int Type() const override;
+        virtual int Type() const override;
 
         const Pool<T> &GetValues() const
         {

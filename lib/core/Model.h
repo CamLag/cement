@@ -16,7 +16,7 @@ namespace cement
         virtual size_t Instanciate() override;
         virtual const size_t Size() const override;
         virtual std::string Print() const override;
-        virtual const int Type() const override;
+        virtual int Type() const override;
         virtual const size_t Depth() const override;
         virtual const size_t PropertyCount() const override;
         virtual std::vector<std::vector<Property *>> VisitProperties() override;

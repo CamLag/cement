@@ -26,7 +26,7 @@ namespace cement
         virtual const size_t Size() const = 0;
         virtual const size_t Depth() const;
         virtual const size_t PropertyCount() const;
-        virtual const int Type() const = 0;
+        virtual int Type() const = 0;
         virtual std::vector<std::vector<Property *>> VisitProperties();
         bool IsShared() const;
 
