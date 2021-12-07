@@ -10,10 +10,12 @@ namespace cement
         Q_OBJECT
 
     public:
-        ModelWidget(Model *a_model, size_t a_instance, QWidget *a_parent = nullptr);
+        ModelWidget(Property *a_model, size_t a_instance, QWidget *a_parent = nullptr);
+
+        // virtual QSize sizeHint() const override;
 
     protected:
-        Model *m_model;
+        Property *m_model;
         size_t m_instance;
     };
 } // end namespace cement

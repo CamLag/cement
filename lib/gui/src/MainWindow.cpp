@@ -11,7 +11,7 @@ namespace cement
         auto size = m_registry.CreateProperty<long>("Size", false);
         auto color = m_registry.CreateProperty<std::string>("Color", true);
         auto thing = m_registry.CreateModel("Thing", true);
-        auto nothing = m_registry.CreateModel("NoThing", true);
+        // auto nothing = m_registry.CreateModel("NoThing", true);
         auto thing_size = m_registry.AddProperty(thing, size, "Thing_Size");
         auto thing_color = m_registry.AddProperty(thing, color, "Thing_Color");
 

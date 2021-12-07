@@ -26,7 +26,6 @@ namespace cement
         std::vector<std::vector<Property *>> Visit();
 
         std::unordered_map<std::string, Property *> m_properties;
-        std::unordered_map<std::string, Model *> m_models;
     };
 
 } // end namespace cement

@@ -1,11 +1,11 @@
 #pragma once
 
-#include <QWidget>
+#include <QScrollArea>
 #include "lib/core/Registry.h"
 
 namespace cement
 {
-    class ConcreteWidget : public QWidget
+    class ConcreteWidget : public QScrollArea
     {
         Q_OBJECT
 
