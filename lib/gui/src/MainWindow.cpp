@@ -11,6 +11,7 @@ namespace cement
         auto size = m_registry.CreateProperty<long>("Size", false);
         auto color = m_registry.CreateProperty<std::string>("Color", true);
         auto thing = m_registry.CreateModel("Thing", true);
+        auto nothing = m_registry.CreateModel("NoThing", true);
         auto thing_size = m_registry.AddProperty(thing, size, "Thing_Size");
         auto thing_color = m_registry.AddProperty(thing, color, "Thing_Color");
 
@@ -31,10 +32,16 @@ namespace cement
         thing_color->SetValue(th3, blue_instance);
         size->SetValue(thing_size->GetValue(th3), 3);
 
-        m_registry_widget = new RegistryWidget(&m_registry);
-        setCentralWidget(m_registry_widget);
-
         std::cout << m_registry.Print() << std::endl;
+
+        QTabWidget *m_tab_bar = new QTabWidget();
+
+        m_registry_widget = new RegistryWidget(&m_registry);
+        m_concrete_widget = new ConcreteWidget(&m_registry);
+        m_tab_bar->addTab(m_registry_widget, "Core Interface");
+        m_tab_bar->addTab(m_concrete_widget, "Concrete Interface");
+
+        setCentralWidget(m_tab_bar);
     }
 
 } // end namespace cement

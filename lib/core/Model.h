@@ -21,7 +21,7 @@ namespace cement
         virtual const size_t PropertyCount() const override;
         virtual std::vector<std::vector<Property *>> VisitProperties() override;
         void AddIndex(Index *a_index);
-        const std::set<Index *> &GetIndexes() const;
+        virtual const std::set<Index *> &GetIndexes() const override;
 
     protected:
         virtual void SelfDeleteInstance(size_t a_instance) override;

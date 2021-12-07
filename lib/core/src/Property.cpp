@@ -71,4 +71,29 @@ namespace cement
         return m_shared;
     }
 
+    const std::string &Property::GetName() const
+    {
+        return m_name;
+    }
+
+    const std::set<Index *> &Property::GetIndexReferences() const
+    {
+        return m_index_references;
+    }
+
+    void Property::AddIndexReference(Index *a_index)
+    {
+        m_index_references.insert(a_index);
+    }
+
+    void Property::GetValue(size_t a_instance, std::string &a_string_value)
+    {
+    }
+
+    const std::set<Index *> &Property::GetIndexes() const
+    {
+        static const std::set<Index *> blank_index;
+        return blank_index;
+    }
+
 } // end namespace cement

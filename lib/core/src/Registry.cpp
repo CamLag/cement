@@ -7,7 +7,7 @@ namespace cement
         auto index = new Index(a_name, a_property);
         m_properties[a_name] = index;
         a_model->AddIndex(index);
-        a_property->m_index_references.insert(index);
+        a_property->AddIndexReference(index);
         return index;
     }
 
@@ -21,9 +21,12 @@ namespace cement
     std::string Registry::Print()
     {
         std::string result;
-        for (auto &prop : m_properties)
+        for (auto &pair : m_properties)
         {
-            result += prop.second->Print();
+            if (pair.second->Type() != 7) // Indexes ar printed within the model
+            {
+                result += pair.second->Print();
+            }
         }
         return result;
     }

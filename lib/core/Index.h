@@ -13,6 +13,15 @@ namespace cement
         virtual int Type() const override;
         Property *GetIndexed() const;
 
+        virtual std::string Print() const override
+        {
+            std::string result = "(";
+            result += m_indexed->GetName();
+            result += ") ";
+            result += Instances::Print();
+            return result;
+        }
+
     private:
         Index(const std::string &a_name, Property *a_indexed);
 

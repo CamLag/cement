@@ -39,6 +39,11 @@ namespace cement
             return m_values[a_pos];
         }
 
+        virtual void GetValue(size_t a_instance, std::string &a_string_value)
+        {
+            StringConversions::ToString<T>(m_values[a_instance], a_string_value);
+        }
+
         int CountValues(const T &a_value)
         {
             // TODO improve with std::count after iterator addition in pool

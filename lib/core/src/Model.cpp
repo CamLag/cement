@@ -48,12 +48,12 @@ namespace cement
 
         result += Property::Print();
 
+        result += "\n";
         for (auto &index : m_indexes)
         {
-            result += "\n  ";
+            result += "  ";
             result += index->Print();
         }
-        result += "\n";
 
         return result;
     }

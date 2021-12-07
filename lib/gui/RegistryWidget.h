@@ -14,18 +14,12 @@ namespace cement
     public:
         RegistryWidget(Registry *a_registry, QWidget *a_parent = nullptr);
 
-        void UpdateColumnCount();
+        void UpdateTableSize();
         void Update();
+        void SetValue(size_t a_row, size_t a_column, const std::string &a_value);
+        void SetValues(size_t a_row, Property *a_property);
 
-        template <typename T>
-        void SetValues(size_t a_row, const Pool<T> &a_vector)
-        {
-            for (size_t i = 0; i < a_vector.Size(); i++)
-            {
-                setItem(a_row, i, new QTableWidgetItem(QString::fromStdString(StringConversions::ToString<T>(a_vector[i]))));
-            }
-        }
-
+    protected:
         Registry *m_registry;
     };
 } // end namespace cement

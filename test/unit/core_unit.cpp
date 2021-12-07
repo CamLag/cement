@@ -49,10 +49,10 @@ TEST_F(CoreTest, SimpleTest)
     EXPECT_TRUE(thing->GetIndexes().find(thing_size) != thing->GetIndexes().end());
     EXPECT_TRUE(thing->GetIndexes().find(thing_color) != thing->GetIndexes().end());
 
-    EXPECT_EQ(size->m_index_references.size(), 1);
-    EXPECT_TRUE(size->m_index_references.find(thing_size) != size->m_index_references.end());
-    EXPECT_EQ(color->m_index_references.size(), 1);
-    EXPECT_TRUE(color->m_index_references.find(thing_color) != color->m_index_references.end());
+    EXPECT_EQ(size->GetIndexReferences().size(), 1);
+    EXPECT_TRUE(size->GetIndexReferences().find(thing_size) != size->GetIndexReferences().end());
+    EXPECT_EQ(color->GetIndexReferences().size(), 1);
+    EXPECT_TRUE(color->GetIndexReferences().find(thing_color) != color->GetIndexReferences().end());
 
     EXPECT_EQ(size->GetValue(0), 1);
     EXPECT_EQ(size->GetValue(1), 2);

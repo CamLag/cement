@@ -1,9 +1,11 @@
 #pragma once
 
 #include <QMainWindow>
+#include <QTabBar>
 
 #include "lib/core/Registry.h"
 #include "lib/gui/RegistryWidget.h"
+#include "lib/gui/ConcreteWidget.h"
 
 namespace cement
 {
@@ -15,5 +17,6 @@ namespace cement
         MainWindow(QWidget *a_parent = nullptr);
         Registry m_registry;
         RegistryWidget *m_registry_widget;
+        ConcreteWidget *m_concrete_widget;
     };
-} //end namespace cement
+} // end namespace cement
