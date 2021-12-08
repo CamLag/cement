@@ -5,14 +5,15 @@
 
 namespace cement
 {
-    class ModelWidget : public QWidget
+    class InstanceWidget : public QWidget
     {
         Q_OBJECT
 
     public:
-        ModelWidget(Property *a_model, QWidget *a_parent = nullptr);
+        InstanceWidget(Property *a_model, size_t a_instance, QWidget *a_parent = nullptr);
 
     protected:
         Property *m_model;
+        size_t m_instance;
     };
 } // end namespace cement

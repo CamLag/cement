@@ -1,42 +1,41 @@
 #include "../ModelWidget.h"
+#include "../InstanceWidget.h"
 
-#include <QFormLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
 
 namespace cement
 {
-    ModelWidget::ModelWidget(Property *a_model, size_t a_instance, QWidget *a_parent) : QWidget(a_parent),
-                                                                                        m_instance(a_instance),
-                                                                                        m_model(a_model)
+    ModelWidget::ModelWidget(Property *a_model, QWidget *a_parent) : QWidget(a_parent),
+                                                                     m_model(a_model)
     {
-        const auto &indexes = m_model->GetIndexes();
-        std::string value;
+        QHBoxLayout *h_layout = new QHBoxLayout();
+
+        auto &indexes = a_model->GetIndexes();
+
         if (indexes.empty())
         {
-            m_model->GetValue(a_instance, value);
-            new QLabel(QString::fromStdString(value), this);
+            h_layout->addStretch();
+            h_layout->addWidget(new QLabel(QString::fromStdString(a_model->GetName())));
         }
         else
         {
-            QFormLayout *layout = new QFormLayout();
+            h_layout->addWidget(new QLabel(QString::fromStdString(a_model->GetName())));
+            QVBoxLayout *v_layout = new QVBoxLayout();
             for (auto index : indexes)
             {
-                QString name = QString::fromStdString(index->GetName());
-                index->GetValue(a_instance, value);
-                layout->addRow(name, new QLabel(QString::fromStdString(value)));
+                v_layout->addWidget(new QLabel(QString::fromStdString(index->GetName())));
             }
-            setLayout(layout);
+            h_layout->addLayout(v_layout);
         }
 
-        // setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
-        // setStyleSheet("background-color:black;");
-        // setStyleSheet("QWidget {border-width: 1px;border-style: solid;border-color: white;}");
+        for (size_t i = 0; i < a_model->Size(); i++)
+        {
+            h_layout->addWidget(new InstanceWidget(a_model, i, this));
+        }
+
+        setLayout(h_layout);
     }
 
-    // QSize ModelWidget::sizeHint() const
-    // {
-    //     return QSize(0, 0);
-    // }
 } // end namespace cement
