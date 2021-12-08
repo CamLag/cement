@@ -11,24 +11,25 @@ namespace cement
                                                                      m_model(a_model)
     {
         QHBoxLayout *h_layout = new QHBoxLayout();
-
+        QVBoxLayout *v_layout = new QVBoxLayout();
+        v_layout->addWidget(new QLabel("Index"));
         auto &indexes = a_model->GetIndexes();
 
         if (indexes.empty())
         {
             h_layout->addStretch();
-            h_layout->addWidget(new QLabel(QString::fromStdString(a_model->GetName())));
+            v_layout->addWidget(new QLabel(QString::fromStdString(a_model->GetName())));
         }
         else
         {
             h_layout->addWidget(new QLabel(QString::fromStdString(a_model->GetName())));
-            QVBoxLayout *v_layout = new QVBoxLayout();
             for (auto index : indexes)
             {
                 v_layout->addWidget(new QLabel(QString::fromStdString(index->GetName())));
             }
-            h_layout->addLayout(v_layout);
         }
+
+        h_layout->addLayout(v_layout);
 
         for (size_t i = 0; i < a_model->Size(); i++)
         {

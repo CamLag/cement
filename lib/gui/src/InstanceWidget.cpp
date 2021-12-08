@@ -12,6 +12,7 @@ namespace cement
         const auto &indexes = m_model->GetIndexes();
         std::string value;
         QVBoxLayout *layout = new QVBoxLayout();
+        layout->addWidget(new QLabel(QString::number(a_instance)));
         if (indexes.empty())
         {
             m_model->GetValue(a_instance, value);
