@@ -2,8 +2,10 @@
 
 namespace cement
 {
-    RegistryWidget::RegistryWidget(Registry *a_registry, QWidget *a_parent) : m_registry(a_registry), QTableWidget(a_parent)
+    RegistryWidget::RegistryWidget(Registry *a_registry, QWidget *a_parent) : m_registry(a_registry), QTableView(a_parent)
     {
+        m_q_model = new QStandardItemModel();
+        setModel(m_q_model);
         Update();
     }
 
@@ -27,8 +29,11 @@ namespace cement
             }
         }
 
-        setColumnCount(column_count);
-        setRowCount(row_count);
+        m_q_model->setColumnCount(column_count);
+        m_q_model->setRowCount(row_count);
+
+        // setColumnCount(column_count);
+        // setRowCount(row_count);
     }
 
     void RegistryWidget::Update()
@@ -48,7 +53,8 @@ namespace cement
 
             if (indexes.empty()) // Instances or empty model
             {
-                setVerticalHeaderItem(row, new QTableWidgetItem(QString::fromStdString(pair.second->GetName())));
+                m_q_model->setVerticalHeaderItem(row, new QStandardItem(QString::fromStdString(pair.second->GetName())));
+                // setVerticalHeaderItem(row, new QTableWidgetItem(QString::fromStdString(pair.second->GetName())));
                 SetValues(row, pair.second);
                 row++;
             }
@@ -62,7 +68,8 @@ namespace cement
                     name += QString::fromStdString(index->GetName());
                     name += "->";
                     name += QString::fromStdString(index->GetIndexed()->GetName());
-                    setVerticalHeaderItem(row, new QTableWidgetItem(name));
+                    m_q_model->setVerticalHeaderItem(row, new QStandardItem(name));
+                    // setVerticalHeaderItem(row, new QTableWidgetItem(name));
                     SetValues(row, index);
                     row++;
                 }
@@ -72,7 +79,8 @@ namespace cement
 
     void RegistryWidget::SetValue(size_t a_row, size_t a_column, const std::string &a_value)
     {
-        setItem(a_row, a_column, new QTableWidgetItem(QString::fromStdString(a_value)));
+        m_q_model->setItem(a_row, a_column, new QStandardItem(QString::fromStdString(a_value)));
+        // setItem(a_row, a_column, new QTableWidgetItem(QString::fromStdString(a_value)));
     }
 
     void RegistryWidget::SetValues(size_t a_row, Property *a_property)

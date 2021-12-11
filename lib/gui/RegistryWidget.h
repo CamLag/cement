@@ -4,10 +4,12 @@
 #include "lib/core/Registry.h"
 
 #include <QTableWidget>
+#include <QTableView>
+#include <QStandardItemModel>
 
 namespace cement
 {
-    class RegistryWidget : public QTableWidget
+    class RegistryWidget : public QTableView
     {
         Q_OBJECT
 
@@ -21,5 +23,6 @@ namespace cement
 
     protected:
         Registry *m_registry;
+        QStandardItemModel *m_q_model;
     };
 } // end namespace cement
