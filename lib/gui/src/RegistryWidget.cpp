@@ -29,11 +29,17 @@ namespace cement
             }
         }
 
-        m_q_model->setColumnCount(column_count);
+        m_q_model->setColumnCount(column_count + 3);
         m_q_model->setRowCount(row_count);
 
-        // setColumnCount(column_count);
-        // setRowCount(row_count);
+        m_q_model->setHorizontalHeaderItem(0, new QStandardItem("Model"));
+        m_q_model->setHorizontalHeaderItem(1, new QStandardItem("Property"));
+        m_q_model->setHorizontalHeaderItem(2, new QStandardItem("Indexed"));
+
+        for (int i = 0; i < column_count; i++)
+        {
+            m_q_model->setHorizontalHeaderItem(i + 3, new QStandardItem(QString::number(i)));
+        }
     }
 
     void RegistryWidget::Update()
@@ -50,11 +56,14 @@ namespace cement
             }
 
             auto &indexes = pair.second->GetIndexes();
+            auto color = QColor(52, 16, 41);
 
             if (indexes.empty()) // Instances or empty model
             {
-                m_q_model->setVerticalHeaderItem(row, new QStandardItem(QString::fromStdString(pair.second->GetName())));
-                // setVerticalHeaderItem(row, new QTableWidgetItem(QString::fromStdString(pair.second->GetName())));
+                auto item = new QStandardItem(QString::fromStdString(pair.second->GetName()));
+                item->setBackground(color);
+                m_q_model->setItem(row, 0, item);
+                setSpan(row, 0, 1, 3);
                 SetValues(row, pair.second);
                 row++;
             }
@@ -62,14 +71,16 @@ namespace cement
             {
                 for (auto &index : indexes)
                 {
-                    QString name;
-                    name += QString::fromStdString(pair.second->GetName());
-                    name += " / ";
-                    name += QString::fromStdString(index->GetName());
-                    name += "->";
-                    name += QString::fromStdString(index->GetIndexed()->GetName());
-                    m_q_model->setVerticalHeaderItem(row, new QStandardItem(name));
-                    // setVerticalHeaderItem(row, new QTableWidgetItem(name));
+                    auto item = new QStandardItem(QString::fromStdString(pair.second->GetName()));
+                    item->setBackground(color);
+                    m_q_model->setItem(row, 0, item);
+                    item = new QStandardItem(QString::fromStdString(index->GetName()));
+                    item->setBackground(color);
+                    m_q_model->setItem(row, 1, item);
+                    item = new QStandardItem(QString::fromStdString(index->GetIndexed()->GetName()));
+                    item->setBackground(color);
+                    m_q_model->setItem(row, 2, item);
+                    // m_q_model->setVerticalHeaderItem(row, new QStandardItem(name));
                     SetValues(row, index);
                     row++;
                 }
@@ -89,7 +100,7 @@ namespace cement
         for (size_t i = 0; i < a_property->Size(); i++)
         {
             a_property->GetValue(i, value);
-            SetValue(a_row, i, value);
+            SetValue(a_row, i + 3, value);
         }
     }
 
