@@ -14,15 +14,19 @@ namespace cement
         Q_OBJECT
 
     public:
-        RegistryWidget(Registry *a_registry, QWidget *a_parent = nullptr);
+        RegistryWidget(Registry *a_registry, bool a_core, QWidget *a_parent = nullptr);
 
         void UpdateTableSize();
         void Update();
-        void SetValue(size_t a_row, size_t a_column, const std::string &a_value);
+        void SetValue(size_t a_row, size_t a_column, Property *a_property, size_t a_instance);
         void SetValues(size_t a_row, Property *a_property);
+        int StartingIndex();
 
     protected:
         Registry *m_registry;
         QStandardItemModel *m_q_model;
+
+    private:
+        const bool m_core;
     };
 } // end namespace cement

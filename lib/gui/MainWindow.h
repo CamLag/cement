@@ -17,6 +17,6 @@ namespace cement
         MainWindow(QWidget *a_parent = nullptr);
         Registry m_registry;
         RegistryWidget *m_registry_widget;
-        ConcreteWidget *m_concrete_widget;
+        RegistryWidget *m_concrete_widget;
     };
 } // end namespace cement
