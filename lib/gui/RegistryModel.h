@@ -1,16 +1,17 @@
 #pragma once
 
-#include <QScrollArea>
+#include <QWidget>
+#include <QStandardItemModel>
 #include "lib/core/Registry.h"
 
 namespace cement
 {
-    class ConcreteWidget : public QScrollArea
+    class RegistryModel : public QStandardItemModel
     {
         Q_OBJECT
 
     public:
-        ConcreteWidget(Registry *a_registry, QWidget *a_parent = nullptr);
+        RegistryModel(Registry *a_registry, QObject *a_parent = nullptr);
 
     protected:
         Registry *m_registry;

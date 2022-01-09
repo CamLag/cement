@@ -5,7 +5,6 @@
 
 #include "lib/core/Registry.h"
 #include "lib/gui/RegistryWidget.h"
-#include "lib/gui/ConcreteWidget.h"
 
 namespace cement
 {

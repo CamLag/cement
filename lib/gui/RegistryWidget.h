@@ -3,6 +3,8 @@
 #include "lib/core/StringConversions.h"
 #include "lib/core/Registry.h"
 
+#include "lib/gui/RegistryModel.h"
+
 #include <QTableWidget>
 #include <QTableView>
 #include <QStandardItemModel>
@@ -24,7 +26,7 @@ namespace cement
 
     protected:
         Registry *m_registry;
-        QStandardItemModel *m_q_model;
+        RegistryModel *m_q_model;
 
     private:
         const bool m_core;

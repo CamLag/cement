@@ -5,7 +5,7 @@ namespace cement
 {
     RegistryWidget::RegistryWidget(Registry *a_registry, bool a_core, QWidget *a_parent) : m_registry(a_registry), m_core(a_core), QTableView(a_parent)
     {
-        m_q_model = new QStandardItemModel();
+        m_q_model = new RegistryModel(a_registry, this);
         setModel(m_q_model);
         Update();
     }
