@@ -10,7 +10,7 @@ namespace cement
 
     public:
         virtual void SetValue(size_t a_pos, const unsigned long &a_val = NO_VALUE) override;
-        virtual int Type() const override;
+        virtual PropertyType Type() const override;
         Property *GetIndexed() const;
 
         virtual std::string Print() const override

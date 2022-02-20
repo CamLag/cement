@@ -108,7 +108,7 @@ namespace cement
             return result;
         }
 
-        virtual int Type() const override;
+        virtual PropertyType Type() const override;
 
         const Pool<T> &GetValues() const
         {

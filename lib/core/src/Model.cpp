@@ -58,9 +58,9 @@ namespace cement
         return result;
     }
 
-    int Model::Type() const
+    PropertyType Model::Type() const
     {
-        return 1;
+        return pt_model;
     }
 
     const size_t Model::Depth() const

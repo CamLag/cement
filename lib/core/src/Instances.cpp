@@ -3,33 +3,33 @@
 namespace cement
 {
     template <>
-    int Instances<long>::Type() const
+    PropertyType Instances<long>::Type() const
     {
-        return 2;
+        return pt_long;
     }
 
     template <>
-    int Instances<bool>::Type() const
+    PropertyType Instances<bool>::Type() const
     {
-        return 3;
+        return pt_bool;
     }
 
     template <>
-    int Instances<double>::Type() const
+    PropertyType Instances<double>::Type() const
     {
-        return 4;
+        return pt_double;
     }
 
     template <>
-    int Instances<std::string>::Type() const
+    PropertyType Instances<std::string>::Type() const
     {
-        return 5;
+        return pt_string;
     }
 
     template <>
-    int Instances<unsigned long>::Type() const
+    PropertyType Instances<unsigned long>::Type() const
     {
-        return 6;
+        return pt_u_long;
     }
 
 } // end namespace cement

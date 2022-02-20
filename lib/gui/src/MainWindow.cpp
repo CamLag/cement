@@ -36,8 +36,9 @@ namespace cement
 
         QTabWidget *m_tab_bar = new QTabWidget();
 
-        m_registry_widget = new RegistryWidget(&m_registry, true);
-        m_concrete_widget = new RegistryWidget(&m_registry, false);
+        m_registry_model = new RegistryModel(&m_registry);
+        m_registry_widget = new RegistryWidget(m_registry_model, true);
+        m_concrete_widget = new RegistryWidget(m_registry_model, false);
         m_tab_bar->addTab(m_registry_widget, "Core Interface");
         m_tab_bar->addTab(m_concrete_widget, "Concrete Interface");
 

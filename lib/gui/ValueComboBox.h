@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QComboBox>
-#include "lib/core/Index.h"
+#include "RegistryModel.h"
 
 namespace cement
 {
@@ -10,9 +10,9 @@ namespace cement
         Q_OBJECT
 
     public:
-        ValueComboBox(Index *a_index, size_t a_instance, QWidget *a_parent = nullptr);
+        ValueComboBox(RegistryModel *a_model, size_t a_row, size_t a_column, QWidget *a_parent = nullptr);
 
     protected:
-        Index *m_index;
+        RegistryModel *m_model;
     };
 } // end namespace cement

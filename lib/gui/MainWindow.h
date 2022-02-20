@@ -17,5 +17,6 @@ namespace cement
         Registry m_registry;
         RegistryWidget *m_registry_widget;
         RegistryWidget *m_concrete_widget;
+        RegistryModel *m_registry_model;
     };
 } // end namespace cement

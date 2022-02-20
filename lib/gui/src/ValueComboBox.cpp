@@ -2,16 +2,22 @@
 
 namespace cement
 {
-
-    ValueComboBox::ValueComboBox(Index *a_index, size_t a_instance, QWidget *a_parent) : QComboBox(a_parent),
-                                                                                         m_index(a_index)
+    ValueComboBox::ValueComboBox(RegistryModel *a_model, size_t a_row, size_t a_column, QWidget *a_parent) : QComboBox(a_parent),
+                                                                                                             m_model(a_model)
     {
-        for (size_t i = 0; i < a_index->GetIndexed()->Size(); i++)
+        for (size_t i = 2; i < a_model->columnCount(); i++)
         {
-            std::string value;
-            a_index->GetIndexed()->GetValue(i, value);
-            addItem(QString::fromStdString(value));
-            setCurrentIndex(a_index->GetValue(a_instance));
+            auto pointed_row = m_model->headerData(a_row, Qt::Vertical, RegistryModel::dr_pointed_row).toULongLong();
+            std::cout << "ValueComboBox ctr : row " << a_row << " pointing to row " << pointed_row << " name " << m_model->GetValue(a_row, 0).toStdString() << std::endl;
+
+            for (auto column = 3; column < m_model->columnCount(); column++)
+            {
+                addItem(m_model->GetValue(pointed_row, column));
+            }
+            // a_index->GetIndexed()->GetValue(i, value);
+            // addItem();
+            // setModel(a_model);
+            // setCurrentIndex(a_column);
         }
     }
 

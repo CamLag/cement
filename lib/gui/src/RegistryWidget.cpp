@@ -1,122 +1,58 @@
 #include "../RegistryWidget.h"
 #include "../ValueComboBox.h"
 
+#include <QComboBox>
+#include <QStyledItemDelegate>
+
 namespace cement
 {
-    RegistryWidget::RegistryWidget(Registry *a_registry, bool a_core, QWidget *a_parent) : m_registry(a_registry), m_core(a_core), QTableView(a_parent)
+    RegistryWidget::RegistryWidget(RegistryModel *a_registry_model, bool a_core, QWidget *a_parent) : m_registry_model(a_registry_model), m_core(a_core), QTableView(a_parent)
     {
-        m_q_model = new RegistryModel(a_registry, this);
-        setModel(m_q_model);
-        Update();
-    }
+        setModel(m_registry_model);
 
-    void RegistryWidget::UpdateTableSize()
-    {
-        size_t column_count = 0;
-
-        for (auto &pair : m_registry->m_properties)
+        // debugging purpose
+        for (size_t row = 0; row < a_registry_model->rowCount(); row++)
         {
-            size_t size = pair.second->Size();
-            column_count = std::max(column_count, size);
+            for (size_t col = 0; col < a_registry_model->columnCount(); col++)
+            {
+                a_registry_model->GetValue(row, col);
+            }
         }
 
-        m_q_model->setHorizontalHeaderItem(0, new QStandardItem("Model"));
-        m_q_model->setHorizontalHeaderItem(1, new QStandardItem("Property"));
-
-        if (m_core)
+        if (!m_core)
         {
-            m_q_model->setHorizontalHeaderItem(2, new QStandardItem("Indexed"));
-        }
+            hideColumn(2);
 
-        for (int i = 0; i < column_count; i++)
-        {
-            m_q_model->setHorizontalHeaderItem(i + StartingIndex(), new QStandardItem(QString::number(i)));
-        }
-    }
-
-    void RegistryWidget::Update()
-    {
-        UpdateTableSize();
-
-        size_t row = 0;
-
-        for (auto &pair : m_registry->m_properties)
-        {
-            if (pair.second->Type() == 7)
+            for (size_t row = 0; row < m_registry_model->rowCount(); row++)
             {
-                continue;
-            }
-
-            if (!m_core && !pair.second->IsShared())
-            {
-                continue;
-            }
-
-            auto &indexes = pair.second->GetIndexes();
-            auto color = QColor(52, 16, 41);
-
-            if (indexes.empty()) // Instances or empty model
-            {
-                auto item = new QStandardItem(QString::fromStdString(pair.second->GetName()));
-                item->setBackground(color);
-                m_q_model->setItem(row, 0, item);
-                setSpan(row, 0, 1, StartingIndex());
-                SetValues(row, pair.second);
-                row++;
-            }
-            else
-            {
-                for (auto &index : indexes)
+                auto hide = !m_registry_model->headerData(row, Qt::Vertical, RegistryModel::dr_shown).toBool();
+                if (hide)
                 {
-                    auto item = new QStandardItem(QString::fromStdString(pair.second->GetName()));
-                    item->setBackground(color);
-                    m_q_model->setItem(row, 0, item);
-                    item = new QStandardItem(QString::fromStdString(index->GetName()));
-                    item->setBackground(color);
-                    m_q_model->setItem(row, 1, item);
+                    hideRow(row);
+                }
+                else
+                {
+                    auto type = m_registry_model->headerData(row, Qt::Vertical, RegistryModel::dr_type).toInt();
 
-                    if (m_core)
+                    std::cout << "registryWidget Update row = " << row << " type = " << type << std::endl;
+
+                    if (type != pt_index) // cannot be model
                     {
-                        item = new QStandardItem(QString::fromStdString(index->GetIndexed()->GetName()));
-                        item->setBackground(color);
-                        m_q_model->setItem(row, 2, item);
+                        setSpan(row, 0, 1, 2);
                     }
+                    else if (m_registry_model->headerData(row, Qt::Vertical, RegistryModel::dr_sub_shared).toBool())
+                    {
+                        for (int column = 2; column < m_registry_model->columnCount(); column++)
+                        {
+                            // auto del = new QStyledItemDelegate();
+                            // setItemDelegate();
 
-                    SetValues(row, index);
-                    row++;
+                            auto combo_box = new ValueComboBox(m_registry_model, row, column);
+                            setIndexWidget(m_registry_model->index(row, column), combo_box);
+                        }
+                    }
                 }
             }
         }
     }
-
-    void RegistryWidget::SetValue(size_t a_row, size_t a_column, Property *a_property, size_t a_instance)
-    {
-        std::string value;
-        a_property->GetValue(a_instance, value);
-        m_q_model->setItem(a_row, a_column, new QStandardItem(QString::fromStdString(value)));
-
-        if (!m_core && !a_property->IsShared() && a_property->Type() == 7)
-        {
-            setIndexWidget(m_q_model->index(a_row, a_column), new ValueComboBox(dynamic_cast<Index *>(a_property), a_instance));
-        }
-    }
-
-    void RegistryWidget::SetValues(size_t a_row, Property *a_property)
-    {
-        for (size_t i = 0; i < a_property->Size(); i++)
-        {
-            SetValue(a_row, i + StartingIndex(), a_property, i);
-        }
-    }
-
-    int RegistryWidget::StartingIndex()
-    {
-        if (m_core)
-        {
-            return 3;
-        }
-
-        return 2;
-    }
-
 } // end namespace cement

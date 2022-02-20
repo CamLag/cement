@@ -1,7 +1,6 @@
 #pragma once
 
 #include "lib/core/StringConversions.h"
-#include "lib/core/Registry.h"
 
 #include "lib/gui/RegistryModel.h"
 
@@ -16,17 +15,10 @@ namespace cement
         Q_OBJECT
 
     public:
-        RegistryWidget(Registry *a_registry, bool a_core, QWidget *a_parent = nullptr);
-
-        void UpdateTableSize();
-        void Update();
-        void SetValue(size_t a_row, size_t a_column, Property *a_property, size_t a_instance);
-        void SetValues(size_t a_row, Property *a_property);
-        int StartingIndex();
+        RegistryWidget(RegistryModel *a_registry_model, bool a_core, QWidget *a_parent = nullptr);
 
     protected:
-        Registry *m_registry;
-        RegistryModel *m_q_model;
+        RegistryModel *m_registry_model;
 
     private:
         const bool m_core;

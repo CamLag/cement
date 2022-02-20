@@ -13,6 +13,17 @@ namespace cement
 {
     class Index;
 
+    enum PropertyType
+    {
+        pt_model,
+        pt_long,
+        pt_bool,
+        pt_double,
+        pt_string,
+        pt_u_long,
+        pt_index
+    };
+
     class Property
     {
     public:
@@ -24,7 +35,7 @@ namespace cement
         virtual const size_t Size() const = 0;
         virtual const size_t Depth() const;
         virtual const size_t PropertyCount() const;
-        virtual int Type() const = 0;
+        virtual PropertyType Type() const = 0;
         virtual std::vector<std::vector<Property *>> VisitProperties();
         bool IsShared() const;
         const std::string &GetName() const;
