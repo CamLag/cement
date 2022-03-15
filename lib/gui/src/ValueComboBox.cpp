@@ -8,9 +8,9 @@ namespace cement
         for (size_t i = 2; i < a_model->columnCount(); i++)
         {
             auto pointed_row = m_model->headerData(a_row, Qt::Vertical, RegistryModel::dr_pointed_row).toULongLong();
-            std::cout << "ValueComboBox ctr : row " << a_row << " pointing to row " << pointed_row << " name " << m_model->GetValue(a_row, 0).toStdString() << std::endl;
+            std::cout << "ValueComboBox ctr : row " << a_row << " pointing to row " << pointed_row << std::endl;
 
-            for (auto column = 3; column < m_model->columnCount(); column++)
+            for (auto column = 3; column < m_model->ColumnCount(pointed_row); column++)
             {
                 addItem(m_model->GetValue(pointed_row, column));
             }

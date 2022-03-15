@@ -103,6 +103,14 @@ namespace cement
         }
     }
 
+    size_t RegistryModel::ColumnCount(size_t a_row)
+    {
+        auto it = m_registry->m_properties.begin();
+        std::advance(it, a_row);
+        std::cout << "RowCount row = " << a_row << " prop name = " << it->second->GetName() << std::endl;
+        return it->second->Size();
+    }
+
     void RegistryModel::SetValue(size_t a_row, size_t a_column, Property *a_property, size_t a_instance)
     {
         std::string value;
