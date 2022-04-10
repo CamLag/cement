@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(Cement VERSION 0.1.0)
 
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+include(conan/conanbuildinfo.cmake)
 conan_basic_setup()
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)

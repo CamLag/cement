@@ -14,14 +14,16 @@ namespace cement
         Model(const std::string &a_name, bool a_shared);
 
         virtual size_t Instanciate() override;
-        virtual const size_t Size() const override;
+        virtual size_t Size() const override;
         virtual std::string Print() const override;
         virtual PropertyType Type() const override;
-        virtual const size_t Depth() const override;
-        virtual const size_t PropertyCount() const override;
+        virtual size_t Depth() const override;
+        virtual size_t PropertyCount() const override;
         virtual std::vector<std::vector<Property *>> VisitProperties() override;
         void AddIndex(Index *a_index);
         virtual const std::set<Index *> &GetIndexes() const override;
+
+        virtual void GetPointedValue(size_t a_instance, std::string &a_string_value) override;
 
     protected:
         virtual void SelfDeleteInstance(size_t a_instance) override;

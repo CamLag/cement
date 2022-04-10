@@ -29,12 +29,13 @@ namespace cement
     public:
         Property(const std::string &a_name, bool a_shared);
 
+        // core
         virtual std::string Print() const;
         virtual size_t Instanciate() = 0;
         void DeleteInstance(size_t a_instance);
-        virtual const size_t Size() const = 0;
-        virtual const size_t Depth() const;
-        virtual const size_t PropertyCount() const;
+        virtual size_t Size() const = 0;
+        virtual size_t Depth() const;
+        virtual size_t PropertyCount() const;
         virtual PropertyType Type() const = 0;
         virtual std::vector<std::vector<Property *>> VisitProperties();
         bool IsShared() const;
@@ -43,6 +44,9 @@ namespace cement
         void AddIndexReference(Index *a_index);
         virtual void GetValue(size_t a_instance, std::string &a_string_value);
         virtual const std::set<Index *> &GetIndexes() const;
+
+        // concrete
+        virtual void GetPointedValue(size_t a_instance, std::string &a_string_value);
 
     protected:
         virtual void SelfDeleteInstance(size_t a_instance) = 0;

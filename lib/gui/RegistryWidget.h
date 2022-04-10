@@ -2,7 +2,7 @@
 
 #include "lib/core/StringConversions.h"
 
-#include "lib/gui/RegistryModel.h"
+#include "lib/gui/IndexDelegate.h"
 
 #include <QTableWidget>
 #include <QTableView>
@@ -22,5 +22,6 @@ namespace cement
 
     private:
         const bool m_core;
+        SharedValueDelegate *m_delegate;
     };
 } // end namespace cement

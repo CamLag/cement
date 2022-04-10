@@ -24,8 +24,9 @@ namespace cement
         };
 
         size_t GetRow(Property *a_property);
-        QString GetValue(size_t a_row, size_t a_column);
+        QString GetValue(size_t a_row, size_t a_column) const;
         size_t ColumnCount(size_t a_row);
+        void SetValue(size_t a_row, size_t a_column, QString a_value);
 
     protected:
         void SetValue(size_t a_row, size_t a_column, Property *a_property, size_t a_instance);

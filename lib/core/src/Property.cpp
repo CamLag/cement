@@ -51,12 +51,12 @@ namespace cement
         // TODO error logs
     }
 
-    const size_t Property::Depth() const
+    size_t Property::Depth() const
     {
         return 1;
     }
 
-    const size_t Property::PropertyCount() const
+    size_t Property::PropertyCount() const
     {
         return 1;
     }
@@ -86,7 +86,7 @@ namespace cement
         m_index_references.insert(a_index);
     }
 
-    void Property::GetValue(size_t a_instance, std::string &a_string_value)
+    void Property::GetValue(size_t /*a_instance*/, std::string &/*a_string_value*/)
     {
     }
 
@@ -94,6 +94,11 @@ namespace cement
     {
         static const std::set<Index *> blank_index;
         return blank_index;
+    }
+
+    void Property::GetPointedValue(size_t /*a_instance*/, std::string &/*a_string_value*/)
+    {
+
     }
 
 } // end namespace cement

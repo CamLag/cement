@@ -1,5 +1,4 @@
 #include "../RegistryWidget.h"
-#include "../ValueComboBox.h"
 
 #include <QComboBox>
 #include <QStyledItemDelegate>
@@ -8,6 +7,7 @@ namespace cement
 {
     RegistryWidget::RegistryWidget(RegistryModel *a_registry_model, bool a_core, QWidget *a_parent) : m_registry_model(a_registry_model), m_core(a_core), QTableView(a_parent)
     {
+        m_delegate = new SharedValueDelegate(a_registry_model);
         setModel(m_registry_model);
 
         // debugging purpose
@@ -44,11 +44,11 @@ namespace cement
                     {
                         for (int column = 2; column < m_registry_model->columnCount(); column++)
                         {
-                            // auto del = new QStyledItemDelegate();
-                            // setItemDelegate();
 
-                            auto combo_box = new ValueComboBox(m_registry_model, row, column);
-                            setIndexWidget(m_registry_model->index(row, column), combo_box);
+                            setItemDelegateForRow(row, m_delegate);
+
+                            // auto combo_box = new ValueComboBox(m_registry_model, row, column);
+                            // setIndexWidget(m_registry_model->index(row, column), combo_box);
                         }
                     }
                 }

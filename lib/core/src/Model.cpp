@@ -37,7 +37,7 @@ namespace cement
         }
     }
 
-    const size_t Model::Size() const
+    size_t Model::Size() const
     {
         return m_size;
     }
@@ -63,7 +63,7 @@ namespace cement
         return pt_model;
     }
 
-    const size_t Model::Depth() const
+    size_t Model::Depth() const
     {
         size_t counter = 1;
         size_t max = 1;
@@ -80,7 +80,7 @@ namespace cement
         return counter;
     }
 
-    const size_t Model::PropertyCount() const
+    size_t Model::PropertyCount() const
     {
         return m_indexes.size();
     }
@@ -110,5 +110,10 @@ namespace cement
     const std::set<Index *> &Model::GetIndexes() const
     {
         return m_indexes;
+    }
+
+    void Model::GetPointedValue(size_t a_instance, std::string &a_string_value)
+    {
+        a_string_value = GetName() + "#" + std::to_string(a_instance);
     }
 } // end namespace cement

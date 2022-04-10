@@ -39,9 +39,14 @@ namespace cement
             return m_values[a_pos];
         }
 
-        virtual void GetValue(size_t a_instance, std::string &a_string_value)
+        virtual void GetValue(size_t a_instance, std::string &a_string_value) override
         {
             StringConversions::ToString<T>(m_values[a_instance], a_string_value);
+        }
+
+        virtual void GetPointedValue(size_t a_instance, std::string &a_string_value) override
+        {
+            GetValue(a_instance, a_string_value);
         }
 
         int CountValues(const T &a_value)
@@ -85,7 +90,7 @@ namespace cement
             m_values.Delete(a_instance);
         }
 
-        virtual const size_t Size() const override
+        virtual size_t Size() const override
         {
             return m_values.Size();
         }

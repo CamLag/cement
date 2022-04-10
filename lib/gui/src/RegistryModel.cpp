@@ -86,7 +86,7 @@ namespace cement
         }
     }
 
-    QString RegistryModel::GetValue(size_t a_row, size_t a_column)
+    QString RegistryModel::GetValue(size_t a_row, size_t a_column) const
     {
         auto item = this->item(a_row, a_column);
 
@@ -109,6 +109,11 @@ namespace cement
         std::advance(it, a_row);
         std::cout << "RowCount row = " << a_row << " prop name = " << it->second->GetName() << std::endl;
         return it->second->Size();
+    }
+
+    void RegistryModel::SetValue(size_t a_row, size_t a_column, QString a_value)
+    {
+        item(a_row, a_column)->setData(a_value);
     }
 
     void RegistryModel::SetValue(size_t a_row, size_t a_column, Property *a_property, size_t a_instance)
