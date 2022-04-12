@@ -1,5 +1,3 @@
-add_subdirectory(src)
-
 file(GLOB_RECURSE HEADER *.h)
 file(GLOB_RECURSE SRC src/*.cpp)
 

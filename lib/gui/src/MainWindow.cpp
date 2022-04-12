@@ -1,6 +1,7 @@
 #include "../MainWindow.h"
 
 #include <QHBoxLayout>
+#include <QKeyEvent>
 
 namespace cement
 {
@@ -8,7 +9,8 @@ namespace cement
     {
         setMinimumSize(1000, 800);
 
-        auto size = m_registry.CreateProperty<long>("Size", false);
+        size = m_registry.CreateProperty<long>("Size", false);
+//        auto size = m_registry.CreateProperty<long>("Size", false);
         auto color = m_registry.CreateProperty<std::string>("Color", true);
         auto thing = m_registry.CreateModel("Thing", true);
         // auto nothing = m_registry.CreateModel("NoThing", true);
@@ -43,6 +45,14 @@ namespace cement
         m_tab_bar->addTab(m_concrete_widget, "Concrete Interface");
 
         setCentralWidget(m_tab_bar);
+    }
+
+    void MainWindow::keyPressEvent(QKeyEvent *event)
+    {
+        if (event->key() == Qt::Key_T)
+        {
+            size->SetValue(0, size->GetValue(0)++);
+        }
     }
 
 } // end namespace cement

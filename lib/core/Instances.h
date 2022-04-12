@@ -27,6 +27,7 @@ namespace cement
         {
             std::cout << "Instances SetValue position " << a_pos << " value " << StringConversions::ToString(a_val) << " size : " << m_values.Size() << std::endl;
             m_values[a_pos] = a_val;
+            m_value_modified.Emit(a_pos);
         }
 
         const T &GetValue(size_t a_pos) const

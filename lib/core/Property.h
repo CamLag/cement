@@ -2,6 +2,7 @@
 
 #include "Value.h"
 #include "Pool.h"
+#include "Callback.h"
 
 #include <string>
 #include <vector>
@@ -47,6 +48,8 @@ namespace cement
 
         // concrete
         virtual void GetPointedValue(size_t a_instance, std::string &a_string_value);
+
+        Callback<size_t> m_value_modified;
 
     protected:
         virtual void SelfDeleteInstance(size_t a_instance) = 0;

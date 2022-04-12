@@ -20,7 +20,7 @@ namespace cement
         setHorizontalHeaderItem(1, new QStandardItem("Property"));
         setHorizontalHeaderItem(2, new QStandardItem("Indexed"));
 
-        for (int i = 0; i < column_count; i++)
+        for (size_t i = 0; i < column_count; i++)
         {
             setHorizontalHeaderItem(i + 3, new QStandardItem(QString::number(i)));
         }
@@ -116,7 +116,7 @@ namespace cement
         item(a_row, a_column)->setData(a_value);
     }
 
-    void RegistryModel::SetValue(size_t a_row, size_t a_column, Property *a_property, size_t a_instance)
+    void RegistryModel::SetValueFromModel(size_t a_row, size_t a_column, Property *a_property, size_t a_instance)
     {
         std::string value;
         a_property->GetValue(a_instance, value);
@@ -127,7 +127,14 @@ namespace cement
     {
         for (size_t i = 0; i < a_property->Size(); i++)
         {
-            SetValue(a_row, i + 3, a_property, i);
+            SetValueFromModel(a_row, i + 3, a_property, i);
+
+            a_property->m_value_modified.Connect(
+//                        std::bind(&RegistryModel::SetValueFromModel, *this, a_row, i + 3, std::placeholders::_1)
+                        [&](size_t index){SetValueFromModel(a_row, i+3, a_property, index);}
+                        );
+
+
         }
     }
 

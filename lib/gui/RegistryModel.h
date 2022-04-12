@@ -29,7 +29,7 @@ namespace cement
         void SetValue(size_t a_row, size_t a_column, QString a_value);
 
     protected:
-        void SetValue(size_t a_row, size_t a_column, Property *a_property, size_t a_instance);
+        void SetValueFromModel(size_t a_row, size_t a_column, Property *a_property, size_t a_instance);
         void SetValues(size_t a_row, Property *a_property);
         Registry *m_registry;
     };

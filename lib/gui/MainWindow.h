@@ -18,5 +18,10 @@ namespace cement
         RegistryWidget *m_registry_widget;
         RegistryWidget *m_concrete_widget;
         RegistryModel *m_registry_model;
+        // test
+        Instances<long> *size;
+
+    protected:
+        void keyPressEvent(QKeyEvent *event);
     };
 } // end namespace cement
