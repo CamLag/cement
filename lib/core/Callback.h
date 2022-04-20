@@ -21,10 +21,9 @@ namespace cement
 
         void Emit(Args ... args)
         {
-            std::cout <<"fsq";
+            std::cout <<"Emitting " << m_slots.size() << std::endl;;
             for (auto slot : m_slots)
             {
-                std::cout <<"hoy";
                 slot(args ...);
             }
         }

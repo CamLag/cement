@@ -120,6 +120,7 @@ namespace cement
     {
         std::string value;
         a_property->GetValue(a_instance, value);
+        std::cout << "RegistryModel::SetValueFromModel " << value << std::endl;
         setItem(a_row, a_column, new QStandardItem(QString::fromStdString(value)));
     }
 
@@ -128,14 +129,10 @@ namespace cement
         for (size_t i = 0; i < a_property->Size(); i++)
         {
             SetValueFromModel(a_row, i + 3, a_property, i);
-
-            a_property->m_value_modified.Connect(
-//                        std::bind(&RegistryModel::SetValueFromModel, *this, a_row, i + 3, std::placeholders::_1)
-                        [&](size_t index){SetValueFromModel(a_row, i+3, a_property, index);}
-                        );
-
-
         }
+
+        auto slot = [=](size_t index){ SetValueFromModel(a_row, index + 3, a_property, index); };
+        a_property->m_value_modified.Connect(slot);
     }
 
 } // end namespace cement

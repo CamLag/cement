@@ -49,9 +49,11 @@ namespace cement
 
     void MainWindow::keyPressEvent(QKeyEvent *event)
     {
-        if (event->key() == Qt::Key_T)
+        if (event->key() == Qt::Key_Alt)
         {
-            size->SetValue(0, size->GetValue(0)++);
+            long val = size->GetValue(0);
+            val++;
+            size->SetValue(0, val);
         }
     }
 
