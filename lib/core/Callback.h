@@ -3,6 +3,7 @@
 #include <functional>
 #include <list>
 #include <iostream>
+#include <memory>
 
 namespace cement
 {
@@ -15,28 +16,33 @@ namespace cement
 
         class Connection
         {
+            using Iterator = typename std::list<Slot>::iterator;
+            friend class Callback;
+
+            Connection(Iterator a_it): m_it(a_it) {}
+
         private:
-            typename std::list<Slot>::iterator it;
+            Iterator m_it;
         };
 
         void Emit(Args ... args)
         {
-            std::cout <<"Emitting " << m_slots.size() << std::endl;;
+            std::cout << "Emitting " << m_slots.size() << std::endl;
             for (auto slot : m_slots)
             {
                 slot(args ...);
             }
         }
 
-        /*Connection*/void Connect(Slot a_slot)
+        Connection Connect(Slot a_slot)
         {
             m_slots.push_back(a_slot);
-//            return Connection(m_slots.end());
+            return { m_slots.end() };
         }
 
         void Disconnect(Connection a_connection)
         {
-            m_slots.erase(a_connection.it);
+            m_slots.erase(a_connection.m_it);
         }
 
     private:

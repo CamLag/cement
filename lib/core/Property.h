@@ -49,10 +49,13 @@ namespace cement
         // concrete
         virtual void GetPointedValue(size_t a_instance, std::string &a_string_value);
 
-        Callback<size_t> m_value_modified;
+        Callback<size_t> m_instance_added;
+        Callback<size_t> m_instance_changed;
+        Callback<size_t> m_instance_deleted;
+        Callback<size_t, size_t> m_instances_swapped;
 
     protected:
-        virtual void SelfDeleteInstance(size_t a_instance) = 0;
+        virtual void InternalDeleteInstance(size_t a_instance) = 0;
 
     private:
         std::set<Index *> m_index_references;

@@ -19,8 +19,9 @@ namespace cement
         size_t AddValue(const T &a_val = T{})
         {
             m_values.PushBack(a_val);
-            size_t size = m_values.Size() - 1;
-            return size;
+            size_t pos = m_values.Size() - 1;
+            m_instance_added.Emit(pos);
+            return pos;
         }
 
         virtual void SetValue(size_t a_pos, const T &a_val = T{})
@@ -29,7 +30,7 @@ namespace cement
             if (a_val != m_values[a_pos])
             {
                 m_values[a_pos] = a_val;
-                m_value_modified.Emit(a_pos);
+                m_instance_changed.Emit(a_pos);
             }
         }
 
@@ -38,6 +39,7 @@ namespace cement
             return m_values[a_pos];
         }
 
+        // TODO delete, breaks signals
         T &GetValue(size_t a_pos)
         {
             return m_values[a_pos];
@@ -53,7 +55,7 @@ namespace cement
             GetValue(a_instance, a_string_value);
         }
 
-        int CountValues(const T &a_value)
+        int CountValues(const T &a_value) const
         {
             // TODO improve with std::count after iterator addition in pool
             int count = 0;
@@ -89,9 +91,13 @@ namespace cement
             return AddValue();
         }
 
-        virtual void SelfDeleteInstance(size_t a_instance) override
+        virtual void InternalDeleteInstance(size_t a_instance) override
         {
-            m_values.Delete(a_instance);
+            auto size = Size();
+            if (m_values.SwapWithLast(a_instance))
+            {
+                m_instances_swapped.Emit(a_instance, size);
+            }
         }
 
         virtual size_t Size() const override

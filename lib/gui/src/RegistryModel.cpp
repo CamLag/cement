@@ -132,7 +132,7 @@ namespace cement
         }
 
         auto slot = [=](size_t index){ SetValueFromModel(a_row, index + 3, a_property, index); };
-        a_property->m_value_modified.Connect(slot);
+        auto connection = a_property->m_instance_changed.Connect(slot);
     }
 
 } // end namespace cement

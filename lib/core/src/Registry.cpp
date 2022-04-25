@@ -8,6 +8,7 @@ namespace cement
         m_properties[a_name] = index;
         a_model->AddIndex(index);
         a_property->AddIndexReference(index);
+        m_property_created.Emit(index);
         return index;
     }
 
@@ -23,7 +24,7 @@ namespace cement
         std::string result;
         for (auto &pair : m_properties)
         {
-            if (pair.second->Type() != 7) // Indexes ar printed within the model
+            if (pair.second->Type() != 7) // Indexes ar eprinted within the model
             {
                 result += pair.second->Print();
             }

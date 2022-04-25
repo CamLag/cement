@@ -26,7 +26,7 @@ namespace cement
         virtual void GetPointedValue(size_t a_instance, std::string &a_string_value) override;
 
     protected:
-        virtual void SelfDeleteInstance(size_t a_instance) override;
+        virtual void InternalDeleteInstance(size_t a_instance) override;
 
     private:
         std::set<Index *> m_indexes;

@@ -2,6 +2,7 @@
 
 #include "Model.h"
 #include "Instances.h"
+#include "Callback.h"
 
 #include <unordered_map>
 
@@ -15,6 +16,7 @@ namespace cement
         {
             auto property = new Instances<T>(a_name, a_shared);
             m_properties[a_name] = property;
+            m_property_created.Emit(property);
             return property;
         }
 
@@ -24,6 +26,9 @@ namespace cement
         Model *CreateModel(const std::string &a_name, bool a_shared);
         std::string Print();
         std::vector<std::vector<Property *>> Visit();
+
+        Callback<Property*> m_property_created;
+        Callback<Property*> m_property_deleted;
 
         std::unordered_map<std::string, Property *> m_properties;
     };

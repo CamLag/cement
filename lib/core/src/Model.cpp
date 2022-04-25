@@ -22,10 +22,11 @@ namespace cement
             index->SetValue(position, instance);
         }
         m_size++;
+        m_instance_added.Emit(m_size - 1);
         return m_size - 1;
     }
 
-    void Model::SelfDeleteInstance(size_t a_instance)
+    void Model::InternalDeleteInstance(size_t a_instance)
     {
         for (auto index : m_indexes)
         {

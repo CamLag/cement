@@ -30,13 +30,15 @@ namespace cement
             m_sinks.back().reserve(m_sink_size);
         }
 
-        void Delete(const size_t a_position)
+        bool SwapWithLast(size_t a_position)
         {
-            if (Size() != 1 && a_position < Size() - 1)
+            auto size = Size();
+            if (size >= 1 && a_position < size - 1)
             {
                 std::swap(operator[](a_position), Back());
+                return true;
             }
-            PopBack();
+            return false;
         }
 
         void PushBack(const T &a_value)

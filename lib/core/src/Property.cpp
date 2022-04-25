@@ -27,7 +27,7 @@ namespace cement
             {
                 auto last_index = Size() - 1;
 
-                SelfDeleteInstance(a_instance);
+                InternalDeleteInstance(a_instance);
 
                 for (auto index : m_index_references)
                 {
@@ -40,7 +40,7 @@ namespace cement
         {
             auto last_index = Size() - 1;
 
-            SelfDeleteInstance(a_instance);
+            InternalDeleteInstance(a_instance);
 
             for (auto index : m_index_references)
             {
