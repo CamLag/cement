@@ -116,6 +116,52 @@ namespace cement
         item(a_row, a_column)->setData(a_value);
     }
 
+    void RegistryModel::AddProperty(Property *a_property)
+    {
+        auto &indexes = a_property->GetIndexes();
+        auto color = QColor(52, 16, 41);
+
+        int row = rowCount();
+        setRowCount(row);
+
+        if (indexes.empty()) // Instances or empty model
+        {
+            auto item = new QStandardItem(QString::fromStdString(a_property->GetName()));
+            item->setBackground(color);
+            setItem(row, 0, item);
+            SetValues(row, a_property);
+            setHeaderData(row, Qt::Vertical, a_property->IsShared(), dr_shown);
+            setHeaderData(row, Qt::Vertical, a_property->Type(), dr_type);
+            setHeaderData(row, Qt::Vertical, false, dr_sub_shared);
+            SetValues(rowCount() + 1, a_property);
+        }
+        else
+        {
+            for (auto &index : indexes)
+            {
+                auto item = new QStandardItem(QString::fromStdString(a_property->GetName()));
+                item->setBackground(color);
+                setItem(row, 0, item);
+                item = new QStandardItem(QString::fromStdString(index->GetName()));
+                item->setBackground(color);
+                setItem(row, 1, item);
+                item = new QStandardItem(QString::fromStdString(index->GetIndexed()->GetName()));
+                item->setBackground(color);
+                setItem(row, 2, item);
+                setHeaderData(row, Qt::Vertical, true, dr_shown);
+                setHeaderData(row, Qt::Vertical, index->Type(), dr_type);
+                setHeaderData(row, Qt::Vertical, index->GetIndexed()->IsShared(), dr_sub_shared);
+                setHeaderData(row, Qt::Vertical, static_cast<qulonglong>(GetRow(index->GetIndexed())), dr_pointed_row);
+                SetValues(row, index);
+            }
+        }
+    }
+
+    void RegistryModel::RemoveProperty(Property *a_property)
+    {
+
+    }
+
     void RegistryModel::SetValueFromModel(size_t a_row, size_t a_column, Property *a_property, size_t a_instance)
     {
         std::string value;

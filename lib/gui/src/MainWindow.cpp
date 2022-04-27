@@ -45,6 +45,8 @@ namespace cement
         m_tab_bar->addTab(m_concrete_widget, "Concrete Interface");
 
         setCentralWidget(m_tab_bar);
+
+        m_registry.m_property_created.Connect([=](Property* a_property){m_registry_model->AddProperty(a_property);});
     }
 
     void MainWindow::keyPressEvent(QKeyEvent *event)
@@ -54,6 +56,11 @@ namespace cement
             long val = size->GetValue(0);
             val++;
             size->SetValue(0, val);
+        }
+
+        if (event->key() == Qt::Key_AltGr)
+        {
+            m_registry.CreateProperty<std::string>("hello", false);
         }
     }
 

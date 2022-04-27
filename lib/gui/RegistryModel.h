@@ -28,6 +28,10 @@ namespace cement
         size_t ColumnCount(size_t a_row);
         void SetValue(size_t a_row, size_t a_column, QString a_value);
 
+    public slots:
+        void AddProperty(Property *a_property);
+        void RemoveProperty(Property *a_property);
+
     protected:
         void SetValueFromModel(size_t a_row, size_t a_column, Property *a_property, size_t a_instance);
         void SetValues(size_t a_row, Property *a_property);
