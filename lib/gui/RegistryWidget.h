@@ -17,6 +17,9 @@ namespace cement
     public:
         RegistryWidget(RegistryModel *a_registry_model, bool a_core, QWidget *a_parent = nullptr);
 
+        QSet<Property*> SelectedProperties();
+        QVector<Value> SelectedValues();
+
     protected:
         RegistryModel *m_registry_model;
 

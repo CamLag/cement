@@ -55,4 +55,31 @@ namespace cement
             }
         }
     }
+
+
+    QSet<Property*> RegistryWidget::SelectedProperties()
+    {
+        QSet<Property*> result;
+        auto list = selectionModel()->selection().indexes();
+        for (auto& item : list)
+        {
+            size_t row = item.row();
+            result.insert(m_registry_model->GetProperty(row));
+        }
+
+        return result;
+    }
+
+    QVector<Value> RegistryWidget::SelectedValues()
+    {
+        QVector<Value> result;
+        auto list = selectionModel()->selection().indexes();
+        for (auto& item : list)
+        {
+            result.push_back(m_registry_model->ValueFromIndex(item));
+        }
+
+        return result;
+    }
+
 } // end namespace cement

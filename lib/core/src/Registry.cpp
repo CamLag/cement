@@ -12,6 +12,13 @@ namespace cement
         return index;
     }
 
+    Property *Registry::GetProperty(size_t a_row)
+    {
+        auto it = m_properties.begin();
+        std::advance(it, a_row);
+        return it->second;
+    }
+
     Model *Registry::CreateModel(const std::string &a_name, bool a_shared)
     {
         auto model = new Model(a_name, a_shared);
@@ -24,7 +31,7 @@ namespace cement
         std::string result;
         for (auto &pair : m_properties)
         {
-            if (pair.second->Type() != 7) // Indexes ar eprinted within the model
+            if (pair.second->Type() != 7) // Indexes are printed within the model
             {
                 result += pair.second->Print();
             }

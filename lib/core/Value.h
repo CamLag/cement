@@ -6,7 +6,7 @@ namespace cement
 {
     class Property;
 
-    class Value
+    struct Value
     {
         Property *m_property{nullptr};
         size_t m_index{};

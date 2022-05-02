@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QStandardItemModel>
 #include "lib/core/Registry.h"
+#include "lib/core/Value.h"
 
 namespace cement
 {
@@ -24,6 +25,9 @@ namespace cement
         };
 
         size_t GetRow(Property *a_property);
+        Property* GetProperty(size_t a_row);
+        Value ValueFromIndex(QModelIndex a_index);
+
         QString GetValue(size_t a_row, size_t a_column) const;
         size_t ColumnCount(size_t a_row);
         void SetValue(size_t a_row, size_t a_column, QString a_value);

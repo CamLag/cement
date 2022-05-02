@@ -33,6 +33,20 @@ namespace cement
         return std::distance(m_registry->m_properties.begin(), m_registry->m_properties.find(a_property->GetName())) - 1;
     }
 
+    Property *RegistryModel::GetProperty(size_t a_row)
+    {
+        return m_registry->GetProperty(a_row);
+    }
+
+    Value RegistryModel::ValueFromIndex(QModelIndex a_index)
+    {
+        return
+        {
+            GetProperty(a_index.row()),
+            static_cast<size_t>(a_index.column())
+        };
+    }
+
     void RegistryModel::Update()
     {
         size_t row = 0;
