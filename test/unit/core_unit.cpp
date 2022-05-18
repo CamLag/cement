@@ -25,15 +25,15 @@ TEST_F(CoreTest, SimpleTest)
 
     auto th1 = thing->Instanciate(); // size 1, red
     thing_color->SetValue(th1, red_instance);
-    size->SetValue(thing_size->GetValue(th1), 1);
+    size->SetValue(thing_size->Get(th1), 1);
 
     auto th2 = thing->Instanciate(); // size 2, red
     thing_color->SetValue(th2, red_instance);
-    size->SetValue(thing_size->GetValue(th2), 2);
+    size->SetValue(thing_size->Get(th2), 2);
 
     auto th3 = thing->Instanciate(); // size 3, blue
     thing_color->SetValue(th3, blue_instance);
-    size->SetValue(thing_size->GetValue(th3), 3);
+    size->SetValue(thing_size->Get(th3), 3);
 
     std::cout << m_registry.Print() << std::endl;
 
@@ -54,17 +54,17 @@ TEST_F(CoreTest, SimpleTest)
     EXPECT_EQ(color->GetIndexReferences().size(), 1);
     EXPECT_TRUE(color->GetIndexReferences().find(thing_color) != color->GetIndexReferences().end());
 
-    EXPECT_EQ(size->GetValue(0), 1);
-    EXPECT_EQ(size->GetValue(1), 2);
-    EXPECT_EQ(size->GetValue(2), 3);
-    EXPECT_EQ(color->GetValue(0), "Blue");
-    EXPECT_EQ(color->GetValue(1), "Red");
-    EXPECT_EQ(thing_size->GetValue(0), 0);
-    EXPECT_EQ(thing_size->GetValue(1), 1);
-    EXPECT_EQ(thing_size->GetValue(2), 2);
-    EXPECT_EQ(thing_color->GetValue(0), 1);
-    EXPECT_EQ(thing_color->GetValue(1), 1);
-    EXPECT_EQ(thing_color->GetValue(2), 0);
+    EXPECT_EQ(size->Get(0), 1);
+    EXPECT_EQ(size->Get(1), 2);
+    EXPECT_EQ(size->Get(2), 3);
+    EXPECT_EQ(color->Get(0), "Blue");
+    EXPECT_EQ(color->Get(1), "Red");
+    EXPECT_EQ(thing_size->Get(0), 0);
+    EXPECT_EQ(thing_size->Get(1), 1);
+    EXPECT_EQ(thing_size->Get(2), 2);
+    EXPECT_EQ(thing_color->Get(0), 1);
+    EXPECT_EQ(thing_color->Get(1), 1);
+    EXPECT_EQ(thing_color->Get(2), 0);
 
     // Removing test
 
@@ -78,12 +78,12 @@ TEST_F(CoreTest, SimpleTest)
      * thing_color [1,0]
      */
 
-    EXPECT_EQ(size->GetValue(0), 1);
-    EXPECT_EQ(size->GetValue(1), 3);
-    EXPECT_EQ(color->GetValue(0), "Blue");
-    EXPECT_EQ(color->GetValue(1), "Red");
-    EXPECT_EQ(thing_size->GetValue(0), 0);
-    EXPECT_EQ(thing_size->GetValue(1), 1);
-    EXPECT_EQ(thing_color->GetValue(0), 1);
-    EXPECT_EQ(thing_color->GetValue(1), 0);
+    EXPECT_EQ(size->Get(0), 1);
+    EXPECT_EQ(size->Get(1), 3);
+    EXPECT_EQ(color->Get(0), "Blue");
+    EXPECT_EQ(color->Get(1), "Red");
+    EXPECT_EQ(thing_size->Get(0), 0);
+    EXPECT_EQ(thing_size->Get(1), 1);
+    EXPECT_EQ(thing_color->Get(0), 1);
+    EXPECT_EQ(thing_color->Get(1), 0);
 }

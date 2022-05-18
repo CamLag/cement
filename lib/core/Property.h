@@ -43,7 +43,8 @@ namespace cement
         const std::string &GetName() const;
         const std::set<Index *> &GetIndexReferences() const;
         void AddIndexReference(Index *a_index);
-        virtual void GetValue(size_t a_instance, std::string &a_string_value);
+        virtual void Get(size_t a_instance, std::string &a_string_value);
+        virtual void Set(size_t a_instance, const std::string &a_string_value);
         virtual const std::set<Index *> &GetIndexes() const;
 
         // concrete

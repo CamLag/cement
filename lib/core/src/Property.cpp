@@ -86,8 +86,13 @@ namespace cement
         m_index_references.insert(a_index);
     }
 
-    void Property::GetValue(size_t /*a_instance*/, std::string &/*a_string_value*/)
+    void Property::Get(size_t /*a_instance*/, std::string &/*a_string_value*/)
     {
+    }
+
+    void Property::Set(size_t /*a_instance*/, const std::string &/*a_string_value*/)
+    {
+
     }
 
     const std::set<Index *> &Property::GetIndexes() const

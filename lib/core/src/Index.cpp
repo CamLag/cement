@@ -18,7 +18,7 @@ namespace cement
 
     void Index::GetPointedValue(size_t a_instance, std::string &a_string_value)
     {
-        m_indexed->GetValue(m_values[a_instance], a_string_value);
+        m_indexed->Get(m_values[a_instance], a_string_value);
     }
 
     Property *Index::GetIndexed() const

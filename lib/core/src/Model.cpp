@@ -32,7 +32,7 @@ namespace cement
         {
             if (!index->GetIndexed()->IsShared()) // the property value is owned by this model and can be deleted
             {
-                index->GetIndexed()->DeleteInstance(index->GetValue(a_instance));
+                index->GetIndexed()->DeleteInstance(index->Get(a_instance));
             }
             index->DeleteInstance(a_instance);
         }

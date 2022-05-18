@@ -10,15 +10,6 @@ namespace cement
         m_delegate = new SharedValueDelegate(a_registry_model);
         setModel(m_registry_model);
 
-        // debugging purpose
-        for (size_t row = 0; row < a_registry_model->rowCount(); row++)
-        {
-            for (size_t col = 0; col < a_registry_model->columnCount(); col++)
-            {
-                a_registry_model->GetValue(row, col);
-            }
-        }
-
         if (!m_core)
         {
             hideColumn(2);

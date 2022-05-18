@@ -28,15 +28,15 @@ namespace cement
 
         auto th1 = thing->Instanciate(); // size 1, red
         thing_color->SetValue(th1, red_instance);
-        size->SetValue(thing_size->GetValue(th1), 1);
+        size->SetValue(thing_size->Get(th1), 1);
 
         auto th2 = thing->Instanciate(); // size 2, red
         thing_color->SetValue(th2, red_instance);
-        size->SetValue(thing_size->GetValue(th2), 2);
+        size->SetValue(thing_size->Get(th2), 2);
 
         auto th3 = thing->Instanciate(); // size 3, blue
         thing_color->SetValue(th3, blue_instance);
-        size->SetValue(thing_size->GetValue(th3), 3);
+        size->SetValue(thing_size->Get(th3), 3);
 
         std::cout << m_registry.Print() << std::endl;
 
@@ -129,14 +129,14 @@ namespace cement
     {
         if (event->key() == Qt::Key_Alt)
         {
-            long val = size->GetValue(0);
+            long val = size->Get(0);
             val++;
             size->SetValue(0, val);
         }
 
-        if (event->key() == Qt::Key_AltGr)
+        if (event->key() == Qt::Key_F1)
         {
-            m_registry.CreateProperty<std::string>("hello", false);
+            std::cout << m_registry.Print() << std::endl;
         }
     }
 

@@ -4,7 +4,6 @@
 
 namespace cement
 {
-
     RegistryModel::RegistryModel(Registry *a_registry, QObject *a_parent) : QStandardItemModel(a_parent),
                                                                             m_registry(a_registry)
     {
@@ -26,6 +25,8 @@ namespace cement
         }
 
         Update();
+
+        connect(this, &RegistryModel::itemChanged, this, &RegistryModel::WriteFromItem);
     }
 
     size_t RegistryModel::GetRow(Property *a_property)
@@ -66,7 +67,7 @@ namespace cement
                 auto item = new QStandardItem(QString::fromStdString(pair.second->GetName()));
                 item->setBackground(color);
                 setItem(row, 0, item);
-                SetValues(row, pair.second);
+                FillRow(row, pair.second);
 
                 setHeaderData(row, Qt::Vertical, pair.second->IsShared(), dr_shown);
                 setHeaderData(row, Qt::Vertical, pair.second->Type(), dr_type);
@@ -88,7 +89,7 @@ namespace cement
                     item->setBackground(color);
                     setItem(row, 2, item);
 
-                    SetValues(row, index);
+                    FillRow(row, index);
 
                     setHeaderData(row, Qt::Vertical, true, dr_shown);
                     setHeaderData(row, Qt::Vertical, index->Type(), dr_type);
@@ -130,6 +131,19 @@ namespace cement
         item(a_row, a_column)->setData(a_value);
     }
 
+    void RegistryModel::WriteFromCell(size_t a_row, size_t a_column)
+    {
+        auto prop = GetProperty(a_row);
+        auto val = GetValue(a_row, a_column);
+        prop->Set(a_column - 3, val.toStdString());
+    }
+
+    void RegistryModel::WriteFromItem(QStandardItem *a_item)
+    {
+        auto index = a_item->index();
+        WriteFromCell(index.row(), index.column());
+    }
+
     void RegistryModel::AddProperty(Property *a_property)
     {
         auto &indexes = a_property->GetIndexes();
@@ -143,11 +157,11 @@ namespace cement
             auto item = new QStandardItem(QString::fromStdString(a_property->GetName()));
             item->setBackground(color);
             setItem(row, 0, item);
-            SetValues(row, a_property);
+            FillRow(row, a_property);
             setHeaderData(row, Qt::Vertical, a_property->IsShared(), dr_shown);
             setHeaderData(row, Qt::Vertical, a_property->Type(), dr_type);
             setHeaderData(row, Qt::Vertical, false, dr_sub_shared);
-            SetValues(rowCount() + 1, a_property);
+            FillRow(rowCount() + 1, a_property);
         }
         else
         {
@@ -166,7 +180,7 @@ namespace cement
                 setHeaderData(row, Qt::Vertical, index->Type(), dr_type);
                 setHeaderData(row, Qt::Vertical, index->GetIndexed()->IsShared(), dr_sub_shared);
                 setHeaderData(row, Qt::Vertical, static_cast<qulonglong>(GetRow(index->GetIndexed())), dr_pointed_row);
-                SetValues(row, index);
+                FillRow(row, index);
             }
         }
     }
@@ -176,22 +190,22 @@ namespace cement
 
     }
 
-    void RegistryModel::SetValueFromModel(size_t a_row, size_t a_column, Property *a_property, size_t a_instance)
+    void RegistryModel::SetValueFromModel(size_t a_row, Property *a_property, size_t a_instance)
     {
         std::string value;
-        a_property->GetValue(a_instance, value);
+        a_property->Get(a_instance, value);
         std::cout << "RegistryModel::SetValueFromModel " << value << std::endl;
-        setItem(a_row, a_column, new QStandardItem(QString::fromStdString(value)));
+        setItem(a_row, a_instance + 3, new QStandardItem(QString::fromStdString(value)));
     }
 
-    void RegistryModel::SetValues(size_t a_row, Property *a_property)
+    void RegistryModel::FillRow(size_t a_row, Property *a_property)
     {
         for (size_t i = 0; i < a_property->Size(); i++)
         {
-            SetValueFromModel(a_row, i + 3, a_property, i);
+            SetValueFromModel(a_row, a_property, i);
         }
 
-        auto slot = [=](size_t index){ SetValueFromModel(a_row, index + 3, a_property, index); };
+        auto slot = [=](size_t index){ SetValueFromModel(a_row, a_property, index); };
         auto connection = a_property->m_instance_changed.Connect(slot);
     }
 
