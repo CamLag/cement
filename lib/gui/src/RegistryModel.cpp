@@ -36,7 +36,16 @@ namespace cement
 
     Property *RegistryModel::GetProperty(size_t a_row)
     {
-        return m_registry->GetProperty(a_row);
+        // we get the property or index if property is a model. maybe this is not the reight behaviour for this method?
+        auto type = headerData(a_row, Qt::Vertical, dr_type).toInt();
+        int col = 0;
+        if (type == PropertyType::pt_index)
+        {
+            col = 1;
+        }
+        auto name_item = item(a_row, col);
+        auto name = name_item->text();
+        return m_registry->GetProperty(name.toStdString());
     }
 
     Value RegistryModel::ValueFromIndex(QModelIndex a_index)

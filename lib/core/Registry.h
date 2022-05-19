@@ -29,6 +29,7 @@ namespace cement
         // TODO Manage addition of property to an already instanciated model (instanciation of the property?)
 
         Property* GetProperty(size_t a_row);
+        Property* GetProperty(const std::string &a_name);
 
         Model *CreateModel(const std::string &a_name, bool a_shared);
         std::string Print();

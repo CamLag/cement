@@ -19,6 +19,18 @@ namespace cement
         return it->second;
     }
 
+    Property *Registry::GetProperty(const std::string &a_name)
+    {
+        auto it = m_properties.find(a_name);
+
+        if (it == m_properties.end())
+        {
+            return nullptr;
+        }
+
+        return it->second;
+    }
+
     Model *Registry::CreateModel(const std::string &a_name, bool a_shared)
     {
         auto model = new Model(a_name, a_shared);

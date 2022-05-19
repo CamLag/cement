@@ -10,7 +10,7 @@ namespace cement
 
     public:
         // TODO check if useful
-        virtual void SetValue(size_t a_pos, const unsigned long &a_val = NO_VALUE) override;
+//        virtual void SetValue(size_t a_pos, const unsigned long &a_val = NO_VALUE) override;
         virtual PropertyType Type() const override;
 
         virtual void GetPointedValue(size_t a_instance, std::string &a_string_value) override;
