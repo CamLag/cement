@@ -4,9 +4,28 @@
 
 namespace cement
 {
+    class DisabledItem : public QStandardItem
+    {
+    public:
+        DisabledItem()
+        {
+            setEditable(false);
+            setForeground(QBrush(Qt::red));
+            setBackground(QBrush(Qt::red));
+        }
+
+        virtual QStandardItem* clone() const override
+        {
+            return new DisabledItem();
+        }
+    };
+
     RegistryModel::RegistryModel(Registry *a_registry, QObject *a_parent) : QStandardItemModel(a_parent),
                                                                             m_registry(a_registry)
     {
+        auto prototype = new DisabledItem();
+        setItemPrototype(prototype);
+
         size_t column_count = 0;
 
         for (auto &pair : m_registry->m_properties)
@@ -199,6 +218,11 @@ namespace cement
 
     }
 
+    void RegistryModel::AddColumn(size_t a_row)
+    {
+
+    }
+
     void RegistryModel::SetValueFromModel(size_t a_row, Property *a_property, size_t a_instance)
     {
         std::string value;
@@ -209,7 +233,8 @@ namespace cement
 
     void RegistryModel::FillRow(size_t a_row, Property *a_property)
     {
-        for (size_t i = 0; i < a_property->Size(); i++)
+        size_t i = 0;
+        for (; i < a_property->Size(); i++)
         {
             SetValueFromModel(a_row, a_property, i);
         }

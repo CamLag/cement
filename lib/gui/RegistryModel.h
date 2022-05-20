@@ -32,12 +32,12 @@ namespace cement
         size_t ColumnCount(size_t a_row);
         void SetValue(size_t a_row, size_t a_column, QString a_value);
 
+    public slots:
         void WriteFromCell(size_t a_row, size_t a_column);
         void WriteFromItem(QStandardItem *a_item);
-
-    public slots:
         void AddProperty(Property *a_property);
         void RemoveProperty(Property *a_property);
+        void AddColumn(size_t a_row);
 
     protected:
         void SetValueFromModel(size_t a_row, Property *a_property, size_t a_instance);
