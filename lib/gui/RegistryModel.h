@@ -26,6 +26,7 @@ namespace cement
 
         size_t GetRow(Property *a_property);
         Property* GetProperty(size_t a_row);
+        Property* GetModel(size_t a_row);
         Value ValueFromIndex(QModelIndex a_index);
 
         QString GetValue(size_t a_row, size_t a_column) const;
@@ -36,14 +37,16 @@ namespace cement
         void WriteFromCell(size_t a_row, size_t a_column);
         void WriteFromItem(QStandardItem *a_item);
         void AddProperty(Property *a_property);
+        void AddIndex(Index *a_index);
         void RemoveProperty(Property *a_property);
         void AddColumn(size_t a_row);
 
     protected:
-        void SetValueFromModel(size_t a_row, Property *a_property, size_t a_instance);
-        void FillRow(size_t a_row, Property *a_property);
+        void SetValueFromModel(Property *a_property, size_t a_instance);
+        void FillRow(Property *a_property);
 
         Registry *m_registry;
+        QColor m_header_color;
 
     private:
 

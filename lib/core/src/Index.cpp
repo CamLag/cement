@@ -6,11 +6,6 @@ namespace cement
     {
     }
 
-//    void Index::SetValue(size_t a_pos, const unsigned long &a_val)
-//    {
-//        Instances<unsigned long>::SetValue(a_pos, a_val);
-//    }
-
     PropertyType Index::Type() const
     {
         return pt_index;

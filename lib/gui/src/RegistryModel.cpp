@@ -10,8 +10,9 @@ namespace cement
         DisabledItem()
         {
             setEditable(false);
-            setForeground(QBrush(Qt::red));
-            setBackground(QBrush(Qt::red));
+            setText("WHOO");
+//            setForeground(QBrush(Qt::red));
+//            setBackground(QBrush(Qt::red));
         }
 
         virtual QStandardItem* clone() const override
@@ -21,7 +22,8 @@ namespace cement
     };
 
     RegistryModel::RegistryModel(Registry *a_registry, QObject *a_parent) : QStandardItemModel(a_parent),
-                                                                            m_registry(a_registry)
+                                                                            m_registry(a_registry),
+                                                                            m_header_color{52, 16, 41}
     {
         auto prototype = new DisabledItem();
         setItemPrototype(prototype);
@@ -55,7 +57,6 @@ namespace cement
 
     Property *RegistryModel::GetProperty(size_t a_row)
     {
-        // we get the property or index if property is a model. maybe this is not the reight behaviour for this method?
         auto type = headerData(a_row, Qt::Vertical, dr_type).toInt();
         int col = 0;
         if (type == PropertyType::pt_index)
@@ -63,6 +64,13 @@ namespace cement
             col = 1;
         }
         auto name_item = item(a_row, col);
+        auto name = name_item->text();
+        return m_registry->GetProperty(name.toStdString());
+    }
+
+    Property *RegistryModel::GetModel(size_t a_row)
+    {
+        auto name_item = item(a_row);
         auto name = name_item->text();
         return m_registry->GetProperty(name.toStdString());
     }
@@ -95,11 +103,11 @@ namespace cement
                 auto item = new QStandardItem(QString::fromStdString(pair.second->GetName()));
                 item->setBackground(color);
                 setItem(row, 0, item);
-                FillRow(row, pair.second);
 
                 setHeaderData(row, Qt::Vertical, pair.second->IsShared(), dr_shown);
                 setHeaderData(row, Qt::Vertical, pair.second->Type(), dr_type);
                 setHeaderData(row, Qt::Vertical, false, dr_sub_shared);
+                FillRow(pair.second);
                 std::cout << "set " << pair.second->Type() << std::endl;
                 row++;
             }
@@ -117,12 +125,11 @@ namespace cement
                     item->setBackground(color);
                     setItem(row, 2, item);
 
-                    FillRow(row, index);
-
                     setHeaderData(row, Qt::Vertical, true, dr_shown);
                     setHeaderData(row, Qt::Vertical, index->Type(), dr_type);
                     setHeaderData(row, Qt::Vertical, index->GetIndexed()->IsShared(), dr_sub_shared);
                     setHeaderData(row, Qt::Vertical, static_cast<qulonglong>(GetRow(index->GetIndexed())), dr_pointed_row);
+                    FillRow(index);
                     row++;
                 }
             }
@@ -175,7 +182,6 @@ namespace cement
     void RegistryModel::AddProperty(Property *a_property)
     {
         auto &indexes = a_property->GetIndexes();
-        auto color = QColor(52, 16, 41);
 
         int row = rowCount();
         setRowCount(row);
@@ -183,34 +189,51 @@ namespace cement
         if (indexes.empty()) // Instances or empty model
         {
             auto item = new QStandardItem(QString::fromStdString(a_property->GetName()));
-            item->setBackground(color);
+            item->setBackground(m_header_color);
             setItem(row, 0, item);
-            FillRow(row, a_property);
             setHeaderData(row, Qt::Vertical, a_property->IsShared(), dr_shown);
             setHeaderData(row, Qt::Vertical, a_property->Type(), dr_type);
             setHeaderData(row, Qt::Vertical, false, dr_sub_shared);
-            FillRow(rowCount() + 1, a_property);
+            FillRow(a_property);
         }
         else
         {
             for (auto &index : indexes)
             {
                 auto item = new QStandardItem(QString::fromStdString(a_property->GetName()));
-                item->setBackground(color);
+                item->setBackground(m_header_color);
                 setItem(row, 0, item);
                 item = new QStandardItem(QString::fromStdString(index->GetName()));
-                item->setBackground(color);
+                item->setBackground(m_header_color);
                 setItem(row, 1, item);
                 item = new QStandardItem(QString::fromStdString(index->GetIndexed()->GetName()));
-                item->setBackground(color);
+                item->setBackground(m_header_color);
                 setItem(row, 2, item);
                 setHeaderData(row, Qt::Vertical, true, dr_shown);
                 setHeaderData(row, Qt::Vertical, index->Type(), dr_type);
                 setHeaderData(row, Qt::Vertical, index->GetIndexed()->IsShared(), dr_sub_shared);
                 setHeaderData(row, Qt::Vertical, static_cast<qulonglong>(GetRow(index->GetIndexed())), dr_pointed_row);
-                FillRow(row, index);
+                FillRow(index);
             }
         }
+    }
+
+    void RegistryModel::AddIndex(Index */*a_index*/)
+    {
+//        auto item = new QStandardItem(QString::fromStdString(a_property->GetName()));
+//        item->setBackground(m_header_color);
+//        setItem(row, 0, item);
+//        item = new QStandardItem(QString::fromStdString(a_index->GetName()));
+//        item->setBackground(m_header_color);
+//        setItem(row, 1, item);
+//        item = new QStandardItem(QString::fromStdString(a_index->GetIndexed()->GetName()));
+//        item->setBackground(m_header_color);
+//        setItem(row, 2, item);
+//        setHeaderData(row, Qt::Vertical, true, dr_shown);
+//        setHeaderData(row, Qt::Vertical, a_index->Type(), dr_type);
+//        setHeaderData(row, Qt::Vertical, a_index->GetIndexed()->IsShared(), dr_sub_shared);
+//        setHeaderData(row, Qt::Vertical, static_cast<qulonglong>(GetRow(a_index->GetIndexed())), dr_pointed_row);
+//        FillRow(a_index);
     }
 
     void RegistryModel::RemoveProperty(Property *a_property)
@@ -223,23 +246,25 @@ namespace cement
 
     }
 
-    void RegistryModel::SetValueFromModel(size_t a_row, Property *a_property, size_t a_instance)
+    void RegistryModel::SetValueFromModel(Property *a_property, size_t a_instance)
     {
         std::string value;
         a_property->Get(a_instance, value);
         std::cout << "RegistryModel::SetValueFromModel " << value << std::endl;
-        setItem(a_row, a_instance + 3, new QStandardItem(QString::fromStdString(value)));
+        size_t row = GetRow(a_property);
+        setItem(row, a_instance + 3, new QStandardItem(QString::fromStdString(value)));
     }
 
-    void RegistryModel::FillRow(size_t a_row, Property *a_property)
+    void RegistryModel::FillRow(Property *a_property)
     {
+        size_t row = GetRow(a_property);
         size_t i = 0;
         for (; i < a_property->Size(); i++)
         {
-            SetValueFromModel(a_row, a_property, i);
+            SetValueFromModel(a_property, i);
         }
 
-        auto slot = [=](size_t index){ SetValueFromModel(a_row, a_property, index); };
+        auto slot = [=](size_t index){ SetValueFromModel(a_property, index); };
         auto connection = a_property->m_instance_changed.Connect(slot);
     }
 
