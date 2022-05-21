@@ -2,9 +2,9 @@
 
 namespace cement
 {
-    Index *Registry::AddProperty(Model *a_model, Property *a_property, const std::string &a_name)
+    Index* Registry::AddProperty(Model* a_model, Property *a_property, const std::string &a_name)
     {
-        auto index = new Index(a_name, a_property);
+        auto index = new Index(a_name, a_property, a_model);
         m_properties[a_name] = index;
         a_model->AddIndex(index);
         a_property->AddIndexReference(index);

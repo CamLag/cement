@@ -2,7 +2,10 @@
 
 namespace cement
 {
-    Index::Index(const std::string &a_name, Property *a_indexed) : Instances<unsigned long>(a_name, false), m_indexed(a_indexed)
+    Index::Index(const std::string &a_name, Property *a_indexed, Model *a_model) :
+        Instances<unsigned long>(a_name, false),
+        m_indexed(a_indexed),
+        m_model(a_model)
     {
     }
 
@@ -16,9 +19,14 @@ namespace cement
         m_indexed->Get(m_values[a_instance], a_string_value);
     }
 
-    Property *Index::GetIndexed() const
+    Property* Index::GetIndexed() const
     {
         return m_indexed;
+    }
+
+    Model* Index::GetModel() const
+    {
+        return m_model;
     }
 
     std::string Index::Print() const
