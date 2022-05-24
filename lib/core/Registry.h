@@ -20,6 +20,8 @@ namespace cement
             return property;
         }
 
+        Property* CreateProperty(PropertyType a_type, const std::string &a_name, bool a_shared);
+
         Index *AddProperty(Model *a_model, Property *a_property, const std::string &a_name);
         // TODO Manage addition of property to an already instanciated model (instanciation of the property?)
 
