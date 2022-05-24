@@ -2,6 +2,40 @@
 
 namespace cement
 {
+    Property *Registry::CreateProperty(PropertyType a_type, const std::string &a_name, bool a_shared)
+    {
+        switch (a_type) {
+        case pt_model:
+        {
+            return CreateModel(a_name, a_shared);
+        }
+        case pt_long:
+        {
+            return CreateProperty<long>(a_name, a_shared);
+        }
+        case pt_bool:
+        {
+            return CreateProperty<bool>(a_name, a_shared);
+        }
+        case pt_double:
+        {
+            return CreateProperty<double>(a_name, a_shared);
+        }
+        case pt_string:
+        {
+            return CreateProperty<std::string>(a_name, a_shared);
+        }
+        case pt_u_long:
+        {
+            return CreateProperty<unsigned long>(a_name, a_shared);
+        }
+        default:
+        {
+            return nullptr;
+        }
+    }
+    }
+
     Index* Registry::AddProperty(Model* a_model, Property *a_property, const std::string &a_name)
     {
         auto index = new Index(a_name, a_property, a_model);

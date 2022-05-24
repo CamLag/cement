@@ -20,6 +20,9 @@ namespace cement
         //     std::vector<T>::iterator m_it;
         // };
 
+        using Ref = typename std::vector<T>::reference;
+        using Const_Ref = typename std::vector<T>::const_reference;
+
         Pool(size_t a_size) : m_sink_size(a_size)
         {
         }
@@ -64,17 +67,17 @@ namespace cement
             m_sinks.clear();
         }
 
-        T &operator[](const size_t a_position)
+        Ref operator[](const size_t a_position)
         {
             return m_sinks[a_position / m_sink_size][a_position % m_sink_size];
         }
 
-        const T &operator[](const size_t a_position) const
+        Const_Ref operator[](const size_t a_position) const
         {
             return m_sinks[a_position / m_sink_size][a_position % m_sink_size];
         }
 
-        T &At(const size_t a_position)
+        Ref At(const size_t a_position)
         {
             if (a_position >= Size())
             {
@@ -84,12 +87,12 @@ namespace cement
             return operator[](a_position);
         }
 
-        T &Back()
+        Ref Back()
         {
             return m_sinks.back().back();
         }
 
-        const T &Back() const
+        Const_Ref Back() const
         {
             return m_sinks.back().back();
         }
@@ -107,5 +110,4 @@ namespace cement
         std::vector<Sink> m_sinks;
         const size_t m_sink_size;
     };
-
 } // end namespace cement
