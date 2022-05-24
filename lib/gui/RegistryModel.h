@@ -24,9 +24,12 @@ namespace cement
             dr_pointed_row
         };
 
-        size_t GetRow(Property *a_property);
+        size_t GetFirstRow(Property *a_property);
+        std::pair<size_t, size_t> GetRows(Property *a_property);
+        size_t GetEndRow(size_t a_row);
         Property* GetProperty(size_t a_row);
         Property* GetModel(size_t a_row);
+        bool IsModelEmpty(size_t a_row);
         Value ValueFromIndex(QModelIndex a_index);
 
         QString GetValue(size_t a_row, size_t a_column) const;
@@ -40,6 +43,7 @@ namespace cement
         void AddIndex(Index *a_index);
         void RemoveProperty(Property *a_property);
         void AddColumn(size_t a_row);
+        void CreateProperty();
 
     protected:
         void SetValueFromModel(Property *a_property, size_t a_instance);
