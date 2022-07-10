@@ -9,10 +9,7 @@ namespace cement
     public:
         DisabledItem()
         {
-            setEditable(false);
-            setText("WHOO");
-//            setForeground(QBrush(Qt::red));
-//            setBackground(QBrush(Qt::red));
+            setBackground(QBrush(Qt::red));
         }
 
         virtual QStandardItem* clone() const override
@@ -25,7 +22,7 @@ namespace cement
                                                                             m_registry(a_registry),
                                                                             m_header_color{52, 16, 41}
     {
-        auto prototype = new DisabledItem();
+        auto prototype = new DisabledItem(); // TODO make it work
         setItemPrototype(prototype);
 
         size_t column_count = 0;
@@ -48,6 +45,7 @@ namespace cement
         Update();
 
         connect(this, &RegistryModel::itemChanged, this, &RegistryModel::WriteFromItem);
+        m_registry->m_property_created.Connect([=](Property* a_property){AddProperty(a_property);});
     }
 
     size_t RegistryModel::GetFirstRow(Property *a_property)
@@ -165,6 +163,11 @@ namespace cement
 
     void RegistryModel::WriteFromCell(size_t a_row, size_t a_column)
     {
+        if (a_column < 3)
+        {
+            return;
+        }
+
         auto prop = GetProperty(a_row);
         auto val = GetValue(a_row, a_column);
         prop->Set(a_column - 3, val.toStdString());
@@ -277,6 +280,7 @@ namespace cement
     {
         size_t row = GetFirstRow(a_property);
         std::cout << "RegistryModel::SetValueFromModel" << a_property->GetName() << " row " << row;
+
         if (row == -1ul)
         {
             std::cout << std::endl;
