@@ -25,8 +25,8 @@ namespace cement
         };
 
         size_t GetFirstRow(Property *a_property);
-        std::pair<size_t, size_t> GetRows(Property *a_property);
-        size_t GetEndRow(size_t a_row);
+        //std::pair<size_t, size_t> GetRows(Property *a_property);
+        //size_t GetEndRow(size_t a_row);
         Property* GetProperty(size_t a_row);
         Property* GetModel(size_t a_row);
         bool IsModelEmpty(size_t a_row);
@@ -34,12 +34,13 @@ namespace cement
 
         QString GetValue(size_t a_row, size_t a_column) const;
         size_t ColumnCount(size_t a_row);
+        size_t RowCount();
         void SetValue(size_t a_row, size_t a_column, QString a_value);
 
     public slots:
         void WriteFromCell(size_t a_row, size_t a_column);
         void WriteFromItem(QStandardItem *a_item);
-        void AddProperty(Property *a_property);
+        void AddProperty(Property *a_property, bool a_add_indexes = true);
         void AddIndex(Index *a_index);
         void RemoveProperty(Property *a_property);
         void AddColumn(size_t a_row);
