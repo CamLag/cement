@@ -7,6 +7,8 @@
 #include <QPushButton>
 #include <QToolButton>
 
+#include "lib/gui/Dialogs.h"
+
 namespace cement
 {
     MainWindow::MainWindow(QWidget *a_parent) : QMainWindow(a_parent)
@@ -97,7 +99,13 @@ namespace cement
 
     void MainWindow::AddProperty()
     {
-        m_registry.CreateProperty<std::string>("Hello", true);
+        //m_registry.CreateProperty<std::string>("Hello", true);
+        PropertyCreationDialog dialog(this);
+        if (dialog.exec() == QDialog::Accepted)
+        {
+            auto prop_desc = dialog.GetResult();
+            m_registry.CreateProperty(prop_desc.m_type, prop_desc.m_name, prop_desc.m_shared);
+        }
     }
 
     void MainWindow::DeleteProperty()

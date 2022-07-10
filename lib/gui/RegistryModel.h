@@ -43,7 +43,6 @@ namespace cement
         void AddProperty(Property *a_property, bool a_add_indexes = true);
         void RemoveProperty(Property *a_property);
         void AddColumn(size_t a_row);
-        void CreateProperty();
 
     protected:
         void SetValueFromModel(Property *a_property, size_t a_instance);

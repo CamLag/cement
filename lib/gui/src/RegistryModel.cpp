@@ -271,11 +271,6 @@ namespace cement
 
     }
 
-    void RegistryModel::CreateProperty()
-    {
-//        m_registry->CreateProperty()
-    }
-
     void RegistryModel::SetValueFromModel(Property *a_property, size_t a_instance)
     {
         size_t row = GetFirstRow(a_property);
