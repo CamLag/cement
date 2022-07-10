@@ -68,30 +68,7 @@ namespace cement
 
         return -1;
     }
-/*
-    std::pair<size_t, size_t> RegistryModel::GetRows(Property *a_property)
-    {
-        auto first = GetFirstRow(a_property);
-        if (first == -1ul)
-        {
-            return {-1ul, -1ul};
-        }
-        return {first, GetEndRow(first)};
-    }
 
-    size_t RegistryModel::GetEndRow(size_t a_row)
-    {
-        size_t end = a_row;
-        auto name_item = item(a_row);
-        auto name = name_item->text();
-
-        while (end < RowCount() and name == item(end)->text())
-        {
-            end++;
-        }
-        return end;
-    }
-*/
     Property *RegistryModel::GetProperty(size_t a_row)
     {
         auto type = headerData(a_row, Qt::Vertical, dr_type).toInt();
@@ -279,43 +256,6 @@ namespace cement
         default:
             break;
         }
-    }
-
-    void RegistryModel::AddIndex(Index *a_index)
-    {
- //       auto model = a_index->GetModel();
-//        auto span = GetRows(model);
-
-//        if (span.first == - 1ul)
-//        {
-//            AddProperty(model);
-//            span = GetRows(model);
-//        }
-
-//        auto model_item = new QStandardItem(QString::fromStdString(model->GetName()));
-//        model_item->setBackground(m_header_color);
-//        auto index_item = new QStandardItem(QString::fromStdString(a_index->GetName()));
-//        index_item->setBackground(m_header_color);
-//        auto indexed_item = new QStandardItem(QString::fromStdString(a_index->GetIndexed()->GetName()));
-//        indexed_item->setBackground(m_header_color);
-
-//        auto row = span.second;
-
-//        if (IsModelEmpty(GetFirstRow(model)))
-//        {
-//            setItem(row, 1, index_item);
-//            setItem(row, 2, indexed_item);
-//        }
-//        else
-//        {
-//            insertRow(span.second, {model_item, index_item, indexed_item});
-//        }
-
-//        setHeaderData(row, Qt::Vertical, true, dr_shown);
-//        setHeaderData(row, Qt::Vertical, a_index->Type(), dr_type);
-//        setHeaderData(row, Qt::Vertical, a_index->GetIndexed()->IsShared(), dr_sub_shared);
-//        setHeaderData(row, Qt::Vertical, static_cast<qulonglong>(GetFirstRow(a_index->GetIndexed())), dr_pointed_row);
-//        FillRow(a_index);
     }
 
     void RegistryModel::RemoveProperty(Property *a_property)

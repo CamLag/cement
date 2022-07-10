@@ -41,7 +41,6 @@ namespace cement
         void WriteFromCell(size_t a_row, size_t a_column);
         void WriteFromItem(QStandardItem *a_item);
         void AddProperty(Property *a_property, bool a_add_indexes = true);
-        void AddIndex(Index *a_index);
         void RemoveProperty(Property *a_property);
         void AddColumn(size_t a_row);
         void CreateProperty();
