@@ -22,7 +22,8 @@ namespace cement
         pt_double,
         pt_string,
         pt_u_long,
-        pt_index
+        pt_index,
+        pt_property
     };
 
     class Property

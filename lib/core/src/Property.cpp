@@ -3,15 +3,16 @@
 
 namespace cement
 {
-    Property::Property(size_t a_id, const std::string &a_name, bool a_shared) : m_name(a_name),
-                                                                   m_shared(a_shared),
-                                                                   m_id(a_id)
+    Property::Property(size_t a_id, const std::string &a_name, bool a_shared) :
+                                                                    m_id(a_id),
+                                                                    m_name(a_name),
+                                                                    m_shared(a_shared)
     {
     }
 
     std::string Property::Print() const
     {
-        return m_name;
+        return "PROP_ID " + std::to_string(m_id) + " " + m_name;
     }
 
     void Property::DeleteInstance(size_t a_instance)
