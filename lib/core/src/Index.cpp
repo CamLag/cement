@@ -2,8 +2,8 @@
 
 namespace cement
 {
-    Index::Index(const std::string &a_name, Property *a_indexed, Model *a_model) :
-        Instances<unsigned long>(a_name, false),
+    Index::Index(size_t a_id, const std::string &a_name, Property *a_indexed, Model *a_model) :
+        Instances<unsigned long>(a_id, a_name, false),
         m_indexed(a_indexed),
         m_model(a_model)
     {

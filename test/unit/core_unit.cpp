@@ -2,16 +2,10 @@
 
 #include "lib/core/Registry.h"
 
-class CoreTest : public ::testing::Test
-{
-public:
-    static cement::Registry m_registry;
-};
 
-cement::Registry CoreTest::m_registry;
-
-TEST_F(CoreTest, SimpleTest)
+TEST(Core, SimpleTest)
 {
+    cement::Registry m_registry;
     auto size = m_registry.CreateProperty<long>("Size", false);
     auto color = m_registry.CreateProperty<std::string>("Color", true);
     auto thing = m_registry.CreateModel("Thing", true);
@@ -86,4 +80,14 @@ TEST_F(CoreTest, SimpleTest)
     EXPECT_EQ(thing_size->Get(1), 1);
     EXPECT_EQ(thing_color->Get(0), 1);
     EXPECT_EQ(thing_color->Get(1), 0);
+}
+
+TEST(Core, idtest)
+{
+    cement::Registry registry;
+    auto prop1 = registry.CreateProperty<bool>("prop", false);
+    auto id = prop1->m_id;
+    auto prop2 = registry.CreateProperty<bool>("prop2", false);
+    ASSERT_EQ(prop2->m_id, id + 1);
+    //TODO delete
 }

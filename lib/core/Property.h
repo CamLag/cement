@@ -28,7 +28,7 @@ namespace cement
     class Property
     {
     public:
-        Property(const std::string &a_name, bool a_shared);
+        Property(size_t a_id, const std::string &a_name, bool a_shared);
 
         // core
         virtual std::string Print() const;
@@ -54,6 +54,8 @@ namespace cement
         Callback<size_t> m_instance_changed;
         Callback<size_t> m_instance_deleted;
         Callback<size_t, size_t> m_instances_swapped;
+
+        const size_t m_id;
 
     protected:
         virtual void InternalDeleteInstance(size_t a_instance) = 0;

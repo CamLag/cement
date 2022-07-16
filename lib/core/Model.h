@@ -11,7 +11,7 @@ namespace cement
     class Model : public Property
     {
     public:
-        Model(const std::string &a_name, bool a_shared);
+        Model(size_t a_id, const std::string &a_name, bool a_shared);
 
         virtual size_t Instanciate() override;
         virtual size_t Size() const override;

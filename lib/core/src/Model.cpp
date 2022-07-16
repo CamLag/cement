@@ -4,7 +4,7 @@
 
 namespace cement
 {
-    Model::Model(const std::string &a_name, bool a_shared) : Property(a_name, a_shared),
+    Model::Model(size_t a_id, const std::string &a_name, bool a_shared) : Property(a_id, a_name, a_shared),
                                                              m_size(0)
     {
     }

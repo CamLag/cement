@@ -4,6 +4,7 @@
 #include "Instances.h"
 #include "Callback.h"
 
+#include <stack>
 #include <unordered_map>
 
 namespace cement
@@ -19,7 +20,7 @@ namespace cement
                 return nullptr;
             }
 
-            auto property = new Instances<T>(a_name, a_shared);
+            auto property = new Instances<T>(GetCurrentId(), a_name, a_shared);
             m_properties[a_name] = property;
             m_property_created.Emit(property);
             return property;
@@ -41,6 +42,12 @@ namespace cement
         Callback<Property*> m_property_deleted;
 
         std::unordered_map<std::string, Property *> m_properties;
+
+    private:
+        size_t GetCurrentId();
+        void SetFree(size_t a_id);
+        std::stack<size_t> m_available_ids;
+        size_t m_last_id{0};
     };
 
 } // end namespace cement

@@ -3,8 +3,9 @@
 
 namespace cement
 {
-    Property::Property(const std::string &a_name, bool a_shared) : m_name(a_name),
-                                                                   m_shared(a_shared)
+    Property::Property(size_t a_id, const std::string &a_name, bool a_shared) : m_name(a_name),
+                                                                   m_shared(a_shared),
+                                                                   m_id(a_id)
     {
     }
 

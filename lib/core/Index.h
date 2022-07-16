@@ -20,7 +20,7 @@ namespace cement
         virtual std::string Print() const override;
 
     private:
-        Index(const std::string &a_name, Property *a_indexed, Model* a_model);
+        Index(size_t a_id, const std::string &a_name, Property *a_indexed, Model* a_model);
 
         Property* m_indexed{ nullptr };
         Model* m_model{ nullptr };
