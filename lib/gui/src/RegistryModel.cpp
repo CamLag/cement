@@ -27,7 +27,7 @@ namespace cement
 
         size_t column_count = 0;
 
-        for (auto &pair : m_registry->m_properties)
+        for (auto &pair : m_registry->m_properties->GetProperties())
         {
             size_t size = pair.second->Size();
             column_count = std::max(column_count, size);
@@ -107,7 +107,7 @@ namespace cement
     {
 //        std::cout << m_registry->Print();
 
-        for (auto &pair : m_registry->m_properties)
+        for (auto &pair : m_registry->m_properties->GetProperties())
         {
             AddProperty(pair.second);
 
@@ -145,7 +145,7 @@ namespace cement
 
     size_t RegistryModel::ColumnCount(size_t a_row)
     {
-        auto it = m_registry->m_properties.begin();
+        auto it = m_registry->m_properties->GetProperties().begin();
         std::advance(it, a_row);
         std::cout << "RowCount row = " << a_row << " prop name = " << it->second->GetName() << std::endl;
         return it->second->Size();

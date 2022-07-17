@@ -10,6 +10,10 @@ namespace cement
     {
     }
 
+    Property::~Property()
+    {
+    }
+
     std::string Property::Print() const
     {
         return "PROP_ID " + std::to_string(m_id) + " " + m_name;

@@ -2,6 +2,17 @@
 
 namespace cement
 {
+    Registry::Registry()
+    {
+        m_properties = new Properties(GetCurrentId());
+        m_properties->AddProperty(m_properties);
+    }
+
+    Registry::~Registry()
+    {
+        delete m_properties;
+    }
+
     Property *Registry::CreateProperty(PropertyType a_type, const std::string &a_name, bool a_shared)
     {
         switch (a_type) {
@@ -39,57 +50,40 @@ namespace cement
     Index* Registry::AddProperty(Model* a_model, Property *a_property, const std::string &a_name)
     {
         auto index = new Index(GetCurrentId(), a_name, a_property, a_model);
-        m_properties[a_name] = index;
+        m_properties->AddProperty(index);
         a_model->AddIndex(index);
         a_property->AddIndexReference(index);
         m_property_created.Emit(index);
         return index;
     }
 
-    Property *Registry::GetProperty(size_t a_row)
+    Property* Registry::GetProperty(size_t a_id)
     {
-        auto it = m_properties.begin();
-        std::advance(it, a_row);
-        return it->second;
+        return m_properties->GetProperty(a_id);
     }
 
-    Property *Registry::GetProperty(const std::string &a_name)
+    Property* Registry::GetProperty(const std::string &/*a_name*/)
     {
-        auto it = m_properties.find(a_name);
-
-        if (it == m_properties.end())
-        {
-            return nullptr;
-        }
-
-        return it->second;
+        return nullptr;
     }
 
     Model *Registry::CreateModel(const std::string &a_name, bool a_shared)
     {
         auto model = new Model(GetCurrentId(), a_name, a_shared);
-        m_properties[a_name] = model;
+        m_properties->AddProperty(model);
         return model;
     }
 
     std::string Registry::Print()
     {
-        std::string result;
-        for (auto &pair : m_properties)
-        {
-            if (pair.second->Type() != 7) // Indexes are printed within the model
-            {
-                result += pair.second->Print();
-            }
-        }
-        return result;
+        return m_properties->Print();
     }
 
     std::vector<std::vector<Property *>> Registry::Visit()
     {
         std::vector<std::vector<Property *>> result;
 
-        for (auto &pair : m_properties)
+        for (auto &pair : m_properties->GetProperties())
         {
             for (auto &child : pair.second->VisitProperties())
             {

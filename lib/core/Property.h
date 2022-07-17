@@ -30,7 +30,7 @@ namespace cement
     {
     public:
         Property(size_t a_id, const std::string &a_name, bool a_shared);
-
+        virtual ~Property();
         // core
         virtual std::string Print() const;
         virtual size_t Instanciate() = 0;

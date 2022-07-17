@@ -6,6 +6,17 @@ namespace cement
     {
     }
 
+    Properties::~Properties()
+    {
+        for (auto pair : m_properties)
+        {
+            if (pair.second != this)
+            {
+                delete pair.second;
+            }
+        }
+    }
+
     size_t Properties::AddProperty(Property *a_property)
     {
         m_properties[a_property->m_id] = a_property;
@@ -21,6 +32,16 @@ namespace cement
         }
 
         return it->second;
+    }
+
+    const std::unordered_map<size_t, Property *> &Properties::GetProperties()
+    {
+        return m_properties;
+    }
+
+    size_t Properties::Instanciate()
+    {
+        return 0;
     }
 
     void Properties::Get(size_t a_id, std::string &a_string_value)
@@ -57,7 +78,14 @@ namespace cement
 
         for (auto elem : m_properties)
         {
-            result += elem.second->Print();
+            if (elem.second != this)
+            {
+                result += elem.second->Print();
+            }
+            else
+            {
+                result += elem.second->Property::Print();
+            }
             result += ", ";
         }
 
