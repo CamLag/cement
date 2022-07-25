@@ -5,6 +5,8 @@
 namespace cement
 {
     class Model;
+
+    //TODO change to public Instances<Id>
     class Index : public Instances<unsigned long>
     {
         friend class Registry;

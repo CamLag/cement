@@ -37,6 +37,4 @@ namespace cement
         result += Instances::Print();
         return result;
     }
-
-
 } // end namespace cement
