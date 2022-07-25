@@ -12,7 +12,7 @@ namespace cement
     public:
         virtual PropertyType Type() const override;
 
-        virtual void GetPointedValue(size_t a_instance, std::string &a_string_value) override;
+        virtual void GetPointedValue(Id a_instance, std::string &a_string_value) override;
 
         Property* GetIndexed() const;
         Model* GetModel() const;
@@ -20,7 +20,7 @@ namespace cement
         virtual std::string Print() const override;
 
     private:
-        Index(size_t a_id, const std::string &a_name, Property *a_indexed, Model* a_model);
+        Index(Id a_id, const std::string &a_name, Property *a_indexed, Model* a_model);
 
         Property* m_indexed{ nullptr };
         Model* m_model{ nullptr };

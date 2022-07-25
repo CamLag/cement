@@ -19,7 +19,7 @@ namespace cement
         return "PROP_ID " + std::to_string(m_id) + " " + m_name;
     }
 
-    void Property::DeleteInstance(size_t a_instance)
+    void Property::DeleteInstance(Id a_instance)
     {
         if (IsShared())
         {
@@ -92,11 +92,11 @@ namespace cement
         m_index_references.insert(a_index);
     }
 
-    void Property::Get(size_t /*a_instance*/, std::string &/*a_string_value*/)
+    void Property::Get(Id /*a_instance*/, std::string &/*a_string_value*/)
     {
     }
 
-    void Property::Set(size_t /*a_instance*/, const std::string &/*a_string_value*/)
+    void Property::Set(Id /*a_instance*/, const std::string &/*a_string_value*/)
     {
 
     }
@@ -107,7 +107,7 @@ namespace cement
         return blank_index;
     }
 
-    void Property::GetPointedValue(size_t /*a_instance*/, std::string &/*a_string_value*/)
+    void Property::GetPointedValue(Id /*a_instance*/, std::string &/*a_string_value*/)
     {
 
     }

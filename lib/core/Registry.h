@@ -27,7 +27,7 @@ namespace cement
         }
 
         Property* CreateProperty(PropertyType a_type, const std::string &a_name, bool a_shared);
-        Property* GetProperty(size_t a_row);
+        Property* GetProperty(Id a_row);
         Property* GetProperty(const std::string &a_name);
 
         Index *AddProperty(Model *a_model, Property *a_property, const std::string &a_name);

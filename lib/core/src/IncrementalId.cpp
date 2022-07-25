@@ -2,12 +2,12 @@
 
 namespace cement
 {
-    void IncrementalId::SetFree(size_t a_id)
+    void IncrementalId::SetFree(Id a_id)
     {
         m_available_ids.push(a_id);
     }
 
-    size_t IncrementalId::NextId()
+    Id IncrementalId::NextId()
     {
         if (m_available_ids.empty())
         {

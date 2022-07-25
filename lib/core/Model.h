@@ -13,7 +13,7 @@ namespace cement
     public:
         Model(size_t a_id, const std::string &a_name, bool a_shared);
 
-        virtual size_t Instanciate() override;
+        virtual Id Instanciate() override;
         virtual size_t Size() const override;
         virtual std::string Print() const override;
         virtual PropertyType Type() const override;
@@ -23,10 +23,10 @@ namespace cement
         void AddIndex(Index *a_index);
         virtual const std::set<Index *> &GetIndexes() const override;
 
-        virtual void GetPointedValue(size_t a_instance, std::string &a_string_value) override;
+        virtual void GetPointedValue(Id a_instance, std::string &a_string_value) override;
 
     protected:
-        virtual void InternalDeleteInstance(size_t a_instance) override;
+        virtual void InternalDeleteInstance(Id a_instance) override;
 
     private:
         std::set<Index *> m_indexes;

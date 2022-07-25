@@ -8,20 +8,20 @@ namespace cement
     class Properties : public Property
     {
     public:
-        Properties(size_t a_id);
+        Properties(Id a_id);
         virtual ~Properties();
-        size_t AddProperty(Property* a_property);
-        Property* GetProperty(size_t a_id) const;
-        const std::unordered_map<size_t, Property*>& GetProperties();
-        virtual size_t Instanciate() override;
-        virtual void Get(size_t a_id, std::string &a_string_value) override;
-        virtual void GetPointedValue(size_t a_instance, std::string &a_string_value) override;
-        virtual void InternalDeleteInstance(size_t a_id) override;
+        Id AddProperty(Property* a_property);
+        Property* GetProperty(Id a_id) const;
+        const std::unordered_map<Id, Property*>& GetProperties();
+        virtual Id Instanciate() override;
+        virtual void Get(Id a_id, std::string &a_string_value) override;
+        virtual void GetPointedValue(Id a_instance, std::string &a_string_value) override;
+        virtual void InternalDeleteInstance(Id a_id) override;
         virtual size_t Size() const override;
         virtual std::string Print() const override;
         virtual PropertyType Type() const override;
 
     protected:
-        std::unordered_map<size_t, Property*> m_properties;
+        std::unordered_map<Id, Property*> m_properties;
     };
 } // end namespace cement

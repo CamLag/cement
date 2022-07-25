@@ -3,6 +3,7 @@
 #include "Value.h"
 #include "Pool.h"
 #include "Callback.h"
+#include "IncrementalId.h"
 
 #include <string>
 #include <vector>
@@ -33,8 +34,8 @@ namespace cement
         virtual ~Property();
         // core
         virtual std::string Print() const;
-        virtual size_t Instanciate() = 0;
-        void DeleteInstance(size_t a_instance);
+        virtual Id Instanciate() = 0;
+        void DeleteInstance(Id a_instance);
         virtual size_t Size() const = 0;
         virtual size_t Depth() const;
         virtual size_t PropertyCount() const;
@@ -44,12 +45,12 @@ namespace cement
         const std::string &GetName() const;
         const std::set<Index *> &GetIndexReferences() const;
         void AddIndexReference(Index *a_index);
-        virtual void Get(size_t a_instance, std::string &a_string_value);
-        virtual void Set(size_t a_instance, const std::string &a_string_value);
+        virtual void Get(Id a_instance, std::string &a_string_value);
+        virtual void Set(Id a_instance, const std::string &a_string_value);
         virtual const std::set<Index *> &GetIndexes() const;
 
         // concrete
-        virtual void GetPointedValue(size_t a_instance, std::string &a_string_value);
+        virtual void GetPointedValue(Id a_instance, std::string &a_string_value);
 
         Callback<size_t> m_instance_added;
         Callback<size_t> m_instance_changed;
@@ -59,9 +60,10 @@ namespace cement
         const size_t m_id;
 
     protected:
-        virtual void InternalDeleteInstance(size_t a_instance) = 0;
+        virtual void InternalDeleteInstance(Id a_instance) = 0;
 
     private:
+        IncrementalId m_inc_id;
         std::set<Index *> m_index_references;
         std::string m_name;
         bool m_shared;

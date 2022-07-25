@@ -2,7 +2,7 @@
 
 namespace cement
 {
-    Index::Index(size_t a_id, const std::string &a_name, Property *a_indexed, Model *a_model) :
+    Index::Index(Id a_id, const std::string &a_name, Property *a_indexed, Model *a_model) :
         Instances<unsigned long>(a_id, a_name, false),
         m_indexed(a_indexed),
         m_model(a_model)
@@ -14,7 +14,7 @@ namespace cement
         return pt_index;
     }
 
-    void Index::GetPointedValue(size_t a_instance, std::string &a_string_value)
+    void Index::GetPointedValue(Id a_instance, std::string &a_string_value)
     {
         m_indexed->Get(m_values[a_instance], a_string_value);
     }

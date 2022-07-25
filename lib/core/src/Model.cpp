@@ -9,7 +9,7 @@ namespace cement
     {
     }
 
-    size_t Model::Instanciate()
+    Id Model::Instanciate()
     {
         for (auto &index : m_indexes)
         {
@@ -26,7 +26,7 @@ namespace cement
         return m_size - 1;
     }
 
-    void Model::InternalDeleteInstance(size_t a_instance)
+    void Model::InternalDeleteInstance(Id a_instance)
     {
         for (auto index : m_indexes)
         {
@@ -113,7 +113,7 @@ namespace cement
         return m_indexes;
     }
 
-    void Model::GetPointedValue(size_t a_instance, std::string &a_string_value)
+    void Model::GetPointedValue(Id a_instance, std::string &a_string_value)
     {
         a_string_value = GetName() + "#" + std::to_string(a_instance);
     }

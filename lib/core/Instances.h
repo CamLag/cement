@@ -45,19 +45,19 @@ namespace cement
             return m_values[a_pos];
         }
 
-        virtual void Get(size_t a_instance, std::string &a_string_value) override
+        virtual void Get(Id a_instance, std::string &a_string_value) override
         {
             StringConversions::ToString<T>(m_values[a_instance], a_string_value);
         }
 
-        virtual void Set(size_t a_instance, const std::string &a_string_value) override
+        virtual void Set(Id a_instance, const std::string &a_string_value) override
         {
             T val;
             StringConversions::FromString<T>(val, a_string_value);
             SetValue(a_instance, val);
         }
 
-        virtual void GetPointedValue(size_t a_instance, std::string &a_string_value) override
+        virtual void GetPointedValue(Id a_instance, std::string &a_string_value) override
         {
             Get(a_instance, a_string_value);
         }
@@ -93,12 +93,12 @@ namespace cement
             return count;
         }
 
-        virtual size_t Instanciate() override
+        virtual Id Instanciate() override
         {
             return AddValue();
         }
 
-        virtual void InternalDeleteInstance(size_t a_instance) override
+        virtual void InternalDeleteInstance(Id a_instance) override
         {
             auto size = Size();
             if (m_values.SwapWithLast(a_instance))

@@ -57,7 +57,7 @@ namespace cement
         return index;
     }
 
-    Property* Registry::GetProperty(size_t a_id)
+    Property* Registry::GetProperty(Id a_id)
     {
         return m_properties->GetProperty(a_id);
     }
