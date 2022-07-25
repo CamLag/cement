@@ -4,6 +4,7 @@
 #include "Instances.h"
 #include "Properties.h"
 #include "Callback.h"
+#include "IncrementalId.h"
 
 #include <stack>
 #include <unordered_map>
@@ -19,7 +20,7 @@ namespace cement
         template <typename T>
         Instances<T> *CreateProperty(const std::string &a_name, bool a_shared)
         {
-            auto property = new Instances<T>(GetCurrentId(), a_name, a_shared);
+            auto property = new Instances<T>(m_inc_id.NextId(), a_name, a_shared);
             m_properties->AddProperty(property);
             m_property_created.Emit(property);
             return property;
@@ -42,10 +43,7 @@ namespace cement
         Properties* m_properties;
 
     private:
-        size_t GetCurrentId();
-        void SetFree(size_t a_id);
-        std::stack<size_t> m_available_ids;
-        size_t m_last_id{0};
+        IncrementalId m_inc_id;
     };
 
 } // end namespace cement

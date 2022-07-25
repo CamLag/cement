@@ -4,7 +4,7 @@ namespace cement
 {
     Registry::Registry()
     {
-        m_properties = new Properties(GetCurrentId());
+        m_properties = new Properties(m_inc_id.NextId());
         m_properties->AddProperty(m_properties);
     }
 
@@ -49,7 +49,7 @@ namespace cement
 
     Index* Registry::AddProperty(Model* a_model, Property *a_property, const std::string &a_name)
     {
-        auto index = new Index(GetCurrentId(), a_name, a_property, a_model);
+        auto index = new Index(m_inc_id.NextId(), a_name, a_property, a_model);
         m_properties->AddProperty(index);
         a_model->AddIndex(index);
         a_property->AddIndexReference(index);
@@ -69,7 +69,7 @@ namespace cement
 
     Model *Registry::CreateModel(const std::string &a_name, bool a_shared)
     {
-        auto model = new Model(GetCurrentId(), a_name, a_shared);
+        auto model = new Model(m_inc_id.NextId(), a_name, a_shared);
         m_properties->AddProperty(model);
         return model;
     }
@@ -92,25 +92,5 @@ namespace cement
         }
 
         return result;
-    }
-
-    size_t Registry::GetCurrentId()
-    {
-        if (m_available_ids.empty())
-        {
-            ++m_last_id;
-            return m_last_id - 1;
-        }
-        else
-        {
-            auto id = m_available_ids.top();
-            m_available_ids.pop();
-            return id;
-        }
-    }
-
-    void Registry::SetFree(size_t a_id)
-    {
-        m_available_ids.push(a_id);
     }
 } // end namespace cement
