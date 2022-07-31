@@ -24,7 +24,8 @@ namespace cement
         pt_string,
         pt_u_long,
         pt_index,
-        pt_property
+        pt_property,
+        pt_none
     };
 
     class Property
@@ -32,6 +33,7 @@ namespace cement
     public:
         Property(size_t a_id, const std::string &a_name, bool a_shared);
         virtual ~Property();
+
         // core
         virtual std::string Print() const;
         virtual Id Instanciate() = 0;
@@ -39,6 +41,13 @@ namespace cement
         virtual size_t Size() const = 0;
         virtual size_t Depth() const;
         virtual size_t PropertyCount() const;
+
+        template<typename T>
+        static PropertyType GetPropType()
+        {
+            return pt_none;
+        }
+
         virtual PropertyType Type() const = 0;
         virtual std::vector<std::vector<Property *>> VisitProperties();
         bool IsShared() const;
@@ -47,6 +56,7 @@ namespace cement
         void AddIndexReference(Index *a_index);
         virtual void Get(Id a_instance, std::string &a_string_value);
         virtual void Set(Id a_instance, const std::string &a_string_value);
+
         virtual const std::set<Index *> &GetIndexes() const;
 
         // concrete

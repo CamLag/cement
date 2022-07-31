@@ -52,7 +52,14 @@ namespace cement
         result += "\n";
         for (auto &index : m_indexes)
         {
-            result += "  ";
+            if (index == *--m_indexes.end())
+            {
+                result += "└";
+            }
+            else
+            {
+                result += "├";
+            }
             result += index->Print();
         }
 

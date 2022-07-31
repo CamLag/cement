@@ -16,7 +16,7 @@ namespace cement
 
     std::string Property::Print() const
     {
-        return "PROP_ID " + std::to_string(m_id) + " " + m_name;
+        return "PROP " + std::to_string(m_id) + " " + StringConversions::ToString(Type()) + " \"" + m_name + "\"";
     }
 
     void Property::DeleteInstance(Id a_instance)
@@ -65,6 +65,36 @@ namespace cement
     size_t Property::PropertyCount() const
     {
         return 1;
+    }
+
+    template <>
+    PropertyType Property::GetPropType<long>()
+    {
+        return pt_long;
+    }
+
+    template <>
+    PropertyType Property::GetPropType<bool>()
+    {
+        return pt_bool;
+    }
+
+    template <>
+    PropertyType Property::GetPropType<double>()
+    {
+        return pt_double;
+    }
+
+    template <>
+    PropertyType Property::GetPropType<std::string>()
+    {
+        return pt_string;
+    }
+
+    template <>
+    PropertyType Property::GetPropType<unsigned long>()
+    {
+        return pt_u_long;
     }
 
     std::vector<std::vector<Property *>> Property::VisitProperties()

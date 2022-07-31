@@ -6,8 +6,7 @@ namespace cement
 {
     class Model;
 
-    //TODO change to public Instances<Id>
-    class Index : public Instances<unsigned long>
+    class Index : public Instances<Id>
     {
         friend class Registry;
 
@@ -20,6 +19,17 @@ namespace cement
         Model* GetModel() const;
 
         virtual std::string Print() const override;
+
+        template<typename T>
+        void SetPointedValue(Id a_model_instance, const T& a_val)
+        {
+            if (GetPropType<T>() == m_indexed->Type())
+            {
+                auto prop = static_cast<Instances<T>*>(m_indexed);
+                auto sub_instance = Get(a_model_instance);
+                prop->SetValue(sub_instance, a_val);
+            }
+        }
 
     private:
         Index(Id a_id, const std::string &a_name, Property *a_indexed, Model* a_model);

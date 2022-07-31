@@ -82,6 +82,41 @@ TEST(Core, SimpleTest)
     EXPECT_EQ(thing_color->Get(1), 0);
 }
 
+TEST(Core, propertytest)
+{
+
+}
+
+TEST(Core, modeltest)
+{
+    cement::Registry reg;
+    auto day_p = reg.CreateProperty<long>("day", false);
+    auto month_p = reg.CreateProperty<long>("month", false);
+    auto year_p = reg.CreateProperty<long>("year", false);
+
+    auto date_m = reg.CreateModel("date", false);
+    auto date_day_i = reg.AddProperty(date_m, day_p, "day");
+    auto date_month_i = reg.AddProperty(date_m, month_p, "month");
+    auto date_year_i = reg.AddProperty(date_m, year_p, "year");
+
+    auto firstname_p = reg.CreateProperty<std::string>("firstname", false);
+    auto surname_p = reg.CreateProperty<std::string>("surname", false);
+    auto isfemale_p = reg.CreateProperty<bool>("isfemale", false);
+
+    auto person_m = reg.CreateModel("person", false);
+    auto person_firstname_i = reg.AddProperty(person_m, firstname_p, "firstname");
+    auto person_surname_i = reg.AddProperty(person_m, surname_p, "surname");
+    auto person_isfemale_i = reg.AddProperty(person_m, isfemale_p, "isfemale");
+    auto person_birthdate_i = reg.AddProperty(person_m, date_m, "birthdate");
+
+    auto patricia = person_m->Instanciate();
+    person_firstname_i->SetPointedValue<std::string>(patricia, "patricia");
+    person_surname_i->SetPointedValue<std::string>(patricia, "porter");
+    person_isfemale_i->SetPointedValue(patricia, true);
+//    person_birthdate_i->
+    std::cout << reg.Print();
+}
+
 TEST(Core, idtest)
 {
     cement::Registry registry;

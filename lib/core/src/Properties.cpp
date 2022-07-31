@@ -34,7 +34,7 @@ namespace cement
         return it->second;
     }
 
-    const std::unordered_map<Id, Property *> &Properties::GetProperties()
+    const std::map<Id, Property *> &Properties::GetProperties()
     {
         return m_properties;
     }
@@ -73,25 +73,26 @@ namespace cement
     std::string Properties::Print() const
     {
         std::string result;
-        result += Property::Print();
-        result += " [";
 
         for (auto elem : m_properties)
         {
-            if (elem.second != this)
+            if (elem.second->Type() == pt_index)
+            {
+                continue;
+            }
+
+            if (elem.second != this) // avoid infinite loop
             {
                 result += elem.second->Print();
             }
             else
             {
                 result += elem.second->Property::Print();
+                result += "\n";
             }
-            result += ", ";
         }
-
         result.pop_back();
-        result.pop_back();
-        result += "]\n";
+        result += "\n";
 
         return result;
     }

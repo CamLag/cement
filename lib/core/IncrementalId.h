@@ -5,7 +5,7 @@
 
 namespace cement
 {
-    typedef uint32_t Id;
+    typedef uint64_t Id;
 
     class IncrementalId
     {

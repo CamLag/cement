@@ -12,7 +12,7 @@ namespace cement
     class Instances : public Property
     {
     public:
-        Instances(size_t a_id,const std::string &a_name, bool a_shared) : Property(a_id, a_name, a_shared), m_values(1000)
+        Instances(Id a_id,const std::string &a_name, bool a_shared) : Property(a_id, a_name, a_shared), m_values(1000)
         {
         }
 
@@ -24,7 +24,7 @@ namespace cement
             return pos;
         }
 
-        virtual void SetValue(size_t a_pos, const T &a_val = T{})
+        void SetValue(Id a_pos, const T &a_val = T{})
         {
             std::cout << "Instances SetValue position " << a_pos << " value " << StringConversions::ToString(a_val) << " size : " << m_values.Size() << std::endl;
             if (a_val != m_values[a_pos])
@@ -34,13 +34,13 @@ namespace cement
             }
         }
 
-        const T &Get(size_t a_pos) const
+        const T& Get(Id a_pos) const
         {
             return m_values[a_pos];
         }
 
         // TODO delete, breaks signals
-        T &Get(size_t a_pos)
+        T& Get(Id a_pos)
         {
             return m_values[a_pos];
         }
@@ -116,6 +116,13 @@ namespace cement
         {
             std::string result;
             result += Property::Print();
+
+            if (m_values.Size() == 0)
+            {
+                result += "\n";
+                return result;
+            }
+
             result += " [";
 
             for (size_t i = 0; i != m_values.Size() - 1; i++)
@@ -130,7 +137,10 @@ namespace cement
             return result;
         }
 
-        virtual PropertyType Type() const override;
+        virtual PropertyType Type() const override
+        {
+            return Property::GetPropType<T>();
+        }
 
         const Pool<T> &GetValues() const
         {
