@@ -13,27 +13,19 @@ namespace cement
     {
         for (auto &index : m_indexes)
         {
-            unsigned long instance = NO_VALUE;
-            if (!index->GetIndexed()->IsShared())
-            {
-                instance = index->GetIndexed()->Instanciate();
-            }
-            auto position = index->Instanciate();
-            index->SetValue(position, instance);
+            index->Instanciate();
         }
+
+        auto id = m_sparse.AddElem(m_size);
+        m_instance_added.Emit(id);
         m_size++;
-        m_instance_added.Emit(m_size - 1);
-        return m_size - 1;
+        return id;
     }
 
     void Model::InternalDeleteInstance(Id a_instance)
     {
         for (auto index : m_indexes)
         {
-            if (!index->GetIndexed()->IsShared()) // the property value is owned by this model and can be deleted
-            {
-                index->GetIndexed()->DeleteInstance(index->Get(a_instance));
-            }
             index->DeleteInstance(a_instance);
         }
     }

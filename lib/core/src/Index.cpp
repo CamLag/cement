@@ -29,6 +29,28 @@ namespace cement
         return m_model;
     }
 
+    Id Index::Instanciate()
+    {
+        unsigned long instance = NO_VALUE;
+        if (!m_indexed->IsShared())
+        {
+            instance = m_indexed->Instanciate();
+        }
+        auto id = Instances<Id>::Instanciate();
+        SetValue(id, instance);
+        return id;
+    }
+
+    void Index::InternalDeleteInstance(Id a_instance)
+    {
+        if (!GetIndexed()->IsShared()) // the property value is owned by this model and can be deleted
+        {
+            GetIndexed()->DeleteInstance(Get(a_instance));
+        }
+
+        Instances<Id>::DeleteInstance(a_instance);
+    }
+
     std::string Index::Print() const
     {
         std::string result = "(";

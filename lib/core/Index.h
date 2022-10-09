@@ -18,6 +18,9 @@ namespace cement
         Property* GetIndexed() const;
         Model* GetModel() const;
 
+        virtual Id Instanciate() override;
+        virtual void InternalDeleteInstance(Id a_instance) override;
+
         virtual std::string Print() const override;
 
         template<typename T>
