@@ -61,6 +61,9 @@ namespace cement
 
         // concrete
         virtual void GetPointedValue(Id a_instance, std::string &a_string_value);
+        virtual std::string PrettyPrint(Id a_instance, int a_depth = 0);
+
+        bool IsLeaf();
 
         Callback<size_t> m_instance_added;
         Callback<size_t> m_instance_changed;

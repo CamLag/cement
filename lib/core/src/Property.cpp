@@ -142,4 +142,61 @@ namespace cement
 
     }
 
+    std::string Property::PrettyPrint(Id a_instance, int a_depth)
+    {
+        std::string result;
+
+        auto indexes = GetIndexes();
+
+        if (!IsLeaf())
+        {
+            result += GetName();
+            result += "\r\n";
+            ++a_depth;
+        }
+        else
+        {
+            std::string temp;
+            Get(a_instance, temp);
+            result += temp;
+        }
+
+        auto makeIndent = [=](bool a_last)
+        {
+            std::string indent_result(a_depth - 1, ' ');
+
+            if (a_last)
+            {
+                indent_result.append("└");
+            }
+            else
+            {
+                indent_result.append("├");
+            }
+
+            return indent_result;
+        };
+
+        int count = GetIndexes().size();
+        for (auto index : GetIndexes())
+        {
+            Property* child_prop = index->GetIndexed();
+            auto child_index = index->Get(a_instance);
+            result += makeIndent(count == 1);
+            result += index->GetName();
+            result += ": ";
+            result += child_prop->PrettyPrint(child_index, a_depth);
+            result += "\r\n";
+
+            --count;
+        }
+
+        return result;
+    }
+
+    bool Property::IsLeaf()
+    {
+        return Type() == pt_bool || Type() == pt_double || Type() == pt_long || Type() == pt_string || Type() == pt_u_long;
+    }
+
 } // end namespace cement

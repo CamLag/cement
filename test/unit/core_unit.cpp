@@ -113,8 +113,18 @@ TEST(Core, modeltest)
     person_firstname_i->SetPointedValue<std::string>(patricia, "patricia");
     person_surname_i->SetPointedValue<std::string>(patricia, "porter");
     person_isfemale_i->SetPointedValue(patricia, true);
-//    person_birthdate_i->
+
+    auto patricia_birthday = person_birthdate_i->Get(patricia);
+    auto patricia_birthday_day = date_day_i->Get(patricia_birthday);
+    auto patricia_birthday_month = date_month_i->Get(patricia_birthday);
+    auto patricia_birthday_year = date_year_i->Get(patricia_birthday);
+
+    day_p->SetValue(patricia_birthday_day, 10);
+    month_p->SetValue(patricia_birthday_month, 11);
+    year_p->SetValue(patricia_birthday_year, 1992);
+
     std::cout << reg.Print();
+    std::cout << person_m->PrettyPrint(patricia);
 }
 
 TEST(Core, idtest)
