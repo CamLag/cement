@@ -3,6 +3,7 @@
 #include "Property.h"
 #include "Common.h"
 #include "StringConversions.h"
+#include "Sparse.h"
 #include <vector>
 #include <iostream>
 
@@ -12,42 +13,46 @@ namespace cement
     class Instances : public Property
     {
     public:
-        Instances(Id a_id,const std::string &a_name, bool a_shared) : Property(a_id, a_name, a_shared), m_values(1000)
+        Instances(Id a_id, const std::string &a_name, bool a_shared) : Property(a_id, a_name, a_shared), m_values(1000)
         {
         }
 
-        size_t AddValue(const T &a_val = T{})
+        Id AddValue(const T &a_val = T{})
         {
             m_values.PushBack(a_val);
             size_t pos = m_values.Size() - 1;
-            m_instance_added.Emit(pos);
-            return pos;
+            auto id = m_sparse.AddElem(pos);
+            m_instance_added.Emit(id);
+            return id;
         }
 
-        void SetValue(Id a_pos, const T &a_val = T{})
+        void SetValue(Id a_instance, const T &a_val = T{})
         {
-            std::cout << "Instances SetValue position " << a_pos << " value " << StringConversions::ToString(a_val) << " size : " << m_values.Size() << std::endl;
-            if (a_val != m_values[a_pos])
+            std::cout << "Instances SetValue id " << a_instance << " value " << StringConversions::ToString(a_val) << " size : " << m_values.Size() << std::endl;
+
+            auto pos = m_sparse[a_instance];
+
+            if (a_val != m_values[pos])
             {
-                m_values[a_pos] = a_val;
-                m_instance_changed.Emit(a_pos);
+                m_values[pos] = a_val;
+                m_instance_changed.Emit(a_instance);
             }
         }
 
         const T& Get(Id a_pos) const
         {
-            return m_values[a_pos];
+            return m_values[m_sparse[a_pos]];
         }
 
         // TODO delete, breaks signals
         T& Get(Id a_pos)
         {
-            return m_values[a_pos];
+            return m_values[m_sparse[a_pos]];
         }
 
         virtual void Get(Id a_instance, std::string &a_string_value) override
         {
-            StringConversions::ToString<T>(m_values[a_instance], a_string_value);
+            StringConversions::ToString<T>(m_values[m_sparse[a_instance]], a_string_value);
         }
 
         virtual void Set(Id a_instance, const std::string &a_string_value) override
@@ -101,10 +106,13 @@ namespace cement
         virtual void InternalDeleteInstance(Id a_instance) override
         {
             auto size = Size();
-            if (m_values.SwapWithLast(a_instance))
-            {
-                m_instances_swapped.Emit(a_instance, size);
-            }
+            auto pos = m_sparse[a_instance];
+            m_values.SwapWithLast(pos);
+            m_values.PopBack();
+            m_sparse.RemoveElem(a_instance);
+            auto last_id = m_sparse.Find(size - 1);
+            m_sparse.SetElem(last_id, pos);
+            m_instance_deleted.Emit(a_instance);
         }
 
         virtual size_t Size() const override
@@ -148,6 +156,7 @@ namespace cement
         }
 
     protected:
+        Sparse m_sparse;
         Pool<T> m_values;
     };
 } // end namespace cement

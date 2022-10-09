@@ -1,14 +1,26 @@
 #include "../Sparse.h"
+#include <algorithm>
+#include "Common.h"
 
 namespace cement
 {
+    Sparse::Sparse()
+    {
+
+    }
+
+    Sparse::Elem Sparse::operator[](Id a_id) const
+    {
+        return m_sparse[a_id];
+    }
+
     Id Sparse::AddElem(Sparse::Elem a_index)
     {
         auto id = m_inc_ids.NextId();
 
         assert(id <= m_sparse.Size() && "id can't be greater than the sparse size");
 
-        if (m_sparse.Size() == id - 1) // new ids
+        if (m_sparse.Size() == id) // new ids
         {
             m_sparse.PushBack(a_index);
         }
@@ -20,7 +32,7 @@ namespace cement
         return id;
     }
 
-    Sparse::Elem Sparse::GetElem(Id a_id)
+    Sparse::Elem Sparse::GetElem(Id a_id) const
     {
         return m_sparse[a_id];
     }
@@ -33,5 +45,17 @@ namespace cement
     void Sparse::RemoveElem(Id a_id)
     {
         m_inc_ids.SetFree(a_id);
+    }
+
+    Id Sparse::Find(Sparse::Elem a_elem) const
+    {
+        for (size_t i = m_sparse.Size() - 1; i >= 0; --i)
+        {
+            if (m_sparse[i] == a_elem)
+            {
+                return i;
+            }
+        }
+        return NO_VALUE;
     }
 } // end namespace cement
