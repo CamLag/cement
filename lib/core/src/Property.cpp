@@ -191,6 +191,8 @@ namespace cement
             --count;
         }
 
+        --a_depth;
+
         return result;
     }
 

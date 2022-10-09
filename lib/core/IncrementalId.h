@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stack>
+#include <vector>
 #include <stdint.h>
 
 namespace cement
@@ -11,10 +11,11 @@ namespace cement
     {
     public:
         Id NextId();
+        void SetFree(Id a_id);
+        bool IsAvailable(Id a_id);
 
     private:
-        void SetFree(Id a_id);
-        std::stack<Id> m_available_ids;
+        std::vector<Id> m_available_ids;
         Id m_next_id{0};
     };
 } // end namespace cement

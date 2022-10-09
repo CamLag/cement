@@ -15,6 +15,7 @@ namespace cement
         Id AddElem(Elem a_index);
         Elem GetElem(Id a_id);
         void SetElem(Id a_id, Elem a_elem);
+        void RemoveElem(Id a_id);
 
     private:
         Pool<Elem> m_sparse{100};
