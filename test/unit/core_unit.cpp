@@ -1,7 +1,21 @@
 #include "gtest/gtest.h"
 
 #include "lib/core/Registry.h"
+#include "lib/core/IncrementalId.h"
 
+TEST(IncrementalIdTest, simple_test)
+{
+    cement::IncrementalId incid;
+    incid.NextId(); //0
+    incid.NextId(); //1
+    incid.NextId(); //2
+    ASSERT_EQ(incid.IsAvailable(2), false);
+    ASSERT_EQ(incid.IsAvailable(3), true);
+    incid.SetFree(1);
+    ASSERT_EQ(incid.IsAvailable(1), true);
+    incid.NextId(); //1
+    ASSERT_EQ(incid.IsAvailable(1), false);
+}
 
 TEST(Core, SimpleTest)
 {
