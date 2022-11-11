@@ -126,6 +126,13 @@ namespace cement
     {
     }
 
+    std::string Property::Get(Id a_instance)
+    {
+        std::string result;
+        Get(a_instance, result);
+        return result;
+    }
+
     void Property::Set(Id /*a_instance*/, const std::string &/*a_string_value*/)
     {
 

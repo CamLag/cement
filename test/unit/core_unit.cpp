@@ -17,6 +17,11 @@ TEST(IncrementalIdTest, simple_test)
     ASSERT_EQ(incid.IsAvailable(1), false);
 }
 
+TEST(SparseTest, simple_test)
+{
+
+}
+
 TEST(Core, SimpleTest)
 {
     cement::Registry m_registry;

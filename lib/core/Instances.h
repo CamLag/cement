@@ -6,6 +6,7 @@
 #include "Sparse.h"
 #include <vector>
 #include <iostream>
+#include <plog/Log.h>
 
 namespace cement
 {
@@ -23,6 +24,7 @@ namespace cement
             size_t pos = m_values.Size() - 1;
             auto id = m_sparse.AddElem(pos);
             m_instance_added.Emit(id);
+            PLOGD << "Value=" << a_val << " " << Print();
             return id;
         }
 
@@ -31,6 +33,7 @@ namespace cement
             std::cout << "Instances SetValue id " << a_instance << " value " << StringConversions::ToString(a_val) << " size : " << m_values.Size() << std::endl;
 
             auto pos = m_sparse[a_instance];
+            PLOGD << "Instance=" << a_instance << " Value="<< a_val << " " << Print();
 
             if (a_val != m_values[pos])
             {
@@ -85,6 +88,8 @@ namespace cement
         int ReplaceValues(const T &a_old_value, const T &a_new_value)
         {
             // TODO improve with std::count after iterator addition in pool
+            PLOGD << "a_old_value=" << a_old_value << " a_new_value="<< a_new_value << " " << Print();
+
             int count = 0;
             for (size_t i = 0; i < m_values.Size(); i++)
             {
@@ -94,6 +99,8 @@ namespace cement
                     count++;
                 }
             }
+
+            PLOGD << Print();
 
             return count;
         }
@@ -105,6 +112,7 @@ namespace cement
 
         virtual void InternalDeleteInstance(Id a_instance) override
         {
+            PLOGD << "a_instance=" << a_instance << Print();
             auto size = Size();
             auto pos = m_sparse[a_instance];
             m_values.SwapWithLast(pos);
@@ -113,6 +121,7 @@ namespace cement
             auto last_id = m_sparse.Find(size - 1);
             m_sparse.SetElem(last_id, pos);
             m_instance_deleted.Emit(a_instance);
+            PLOGD << Print();
         }
 
         virtual size_t Size() const override

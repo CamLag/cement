@@ -1,6 +1,6 @@
 #include "../Model.h"
 #include "../StringConversions.h"
-#include "../Log.h"
+
 
 namespace cement
 {

@@ -1,5 +1,7 @@
 #include "../Properties.h"
 
+#include "plog/Logger.h"
+
 namespace cement
 {
     Properties::Properties(Id a_id) : Property(a_id, "Properties", true)
