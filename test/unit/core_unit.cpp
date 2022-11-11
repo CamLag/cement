@@ -4,10 +4,10 @@
 #include "lib/core/IncrementalId.h"
 #include <plog/Appenders/ColorConsoleAppender.h>
 
-TEST(IncrementalIdTest, simple_test)
+TEST(IncrementalIdTest, adding_few_ids_test)
 {
     cement::IncrementalId incid;
-    incid.NextId(); //0
+    ASSERT_EQ(0, incid.NextId()); //0
     incid.NextId(); //1
     incid.NextId(); //2
     ASSERT_EQ(incid.IsAvailable(2), false);
@@ -18,9 +18,28 @@ TEST(IncrementalIdTest, simple_test)
     ASSERT_EQ(incid.IsAvailable(1), false);
 }
 
-TEST(SparseTest, simple_test)
+TEST(SparseTest, add_and_remove_ids_test)
 {
+    cement::Sparse sparse;
+    cement::Sparse::Elem elem = 56;
+    cement::Sparse::Elem elem2 = 85;
+    sparse.AddElem(23);
+    sparse.AddElem(41);
+    cement::Id id = sparse.AddElem(elem);
 
+    ASSERT_EQ(id, 2);
+    ASSERT_EQ(sparse[id], elem);
+    ASSERT_EQ(sparse.GetElem(id), elem);
+    ASSERT_EQ(id, sparse.Find(elem));
+    ASSERT_EQ(sparse.Find(elem2), NO_VALUE);
+
+    sparse.SetElem(id, elem2);
+    ASSERT_EQ(sparse.GetElem(id), elem2);
+    ASSERT_EQ(sparse.Find(elem2), id);
+
+    sparse.RemoveElem(id);
+    auto id2 = sparse.Find(elem2);
+    ASSERT_EQ(id2, NO_VALUE);
 }
 
 TEST(Core, SimpleTest)
@@ -85,7 +104,7 @@ TEST(Core, SimpleTest)
 
     // Removing test
 
-    thing->DeleteInstance(th2);
+    //thing->DeleteInstance(th2);
     std::cout << m_registry.Print() << std::endl;
 
     /** At this stage we should have this :

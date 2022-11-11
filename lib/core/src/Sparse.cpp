@@ -49,9 +49,9 @@ namespace cement
 
     Id Sparse::Find(Sparse::Elem a_elem) const
     {
-        for (size_t i = m_sparse.Size() - 1; i >= 0; --i)
+        for (size_t i = m_sparse.Size() - 1; i != NO_VALUE; --i)
         {
-            if (m_sparse[i] == a_elem)
+            if (m_sparse[i] == a_elem && !m_inc_ids.IsAvailable(i))
             {
                 return i;
             }

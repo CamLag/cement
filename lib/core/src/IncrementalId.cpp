@@ -9,7 +9,7 @@ namespace cement
         m_available_ids.push_back(a_id);
     }
 
-    bool IncrementalId::IsAvailable(Id a_id)
+    bool IncrementalId::IsAvailable(Id a_id) const
     {
         if (a_id >= m_next_id)
         {

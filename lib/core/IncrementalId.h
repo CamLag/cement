@@ -12,7 +12,7 @@ namespace cement
     public:
         Id NextId();
         void SetFree(Id a_id);
-        bool IsAvailable(Id a_id);
+        bool IsAvailable(Id a_id) const;
 
     private:
         std::vector<Id> m_available_ids;
