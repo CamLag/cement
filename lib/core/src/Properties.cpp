@@ -90,11 +90,10 @@ namespace cement
             else
             {
                 result += elem.second->Property::Print();
-                result += "\n";
             }
+            result += "\n";
         }
         result.pop_back();
-        result += "\n";
 
         return result;
     }

@@ -53,6 +53,7 @@ namespace cement
                 result += "├";
             }
             result += index->Print();
+            result += "\n";
         }
 
         return result;

@@ -2,6 +2,7 @@
 
 #include "lib/core/Registry.h"
 #include "lib/core/IncrementalId.h"
+#include <plog/Appenders/ColorConsoleAppender.h>
 
 TEST(IncrementalIdTest, simple_test)
 {
@@ -24,6 +25,9 @@ TEST(SparseTest, simple_test)
 
 TEST(Core, SimpleTest)
 {
+    static plog::ConsoleAppender<plog::TxtFormatter> consoleAppender; // Create the 2nd appender.
+    plog::init(plog::debug, &consoleAppender);
+
     cement::Registry m_registry;
     auto size = m_registry.CreateProperty<long>("Size", false);
     auto color = m_registry.CreateProperty<std::string>("Color", true);

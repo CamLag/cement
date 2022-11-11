@@ -30,10 +30,8 @@ namespace cement
 
         void SetValue(Id a_instance, const T &a_val = T{})
         {
-            std::cout << "Instances SetValue id " << a_instance << " value " << StringConversions::ToString(a_val) << " size : " << m_values.Size() << std::endl;
-
             auto pos = m_sparse[a_instance];
-            PLOGD << "Instance=" << a_instance << " Value="<< a_val << " " << Print();
+            PLOGD << "Instance=" << a_instance << " Value=" << a_val << " " << Print();
 
             if (a_val != m_values[pos])
             {
@@ -112,7 +110,7 @@ namespace cement
 
         virtual void InternalDeleteInstance(Id a_instance) override
         {
-            PLOGD << "a_instance=" << a_instance << Print();
+            PLOGD << "a_instance=" << a_instance << " " << Print();
             auto size = Size();
             auto pos = m_sparse[a_instance];
             m_values.SwapWithLast(pos);
@@ -136,7 +134,6 @@ namespace cement
 
             if (m_values.Size() == 0)
             {
-                result += "\n";
                 return result;
             }
 
@@ -149,7 +146,7 @@ namespace cement
             }
 
             result += StringConversions::ToString(m_values.Back());
-            result += "]\n";
+            result += "]";
 
             return result;
         }
