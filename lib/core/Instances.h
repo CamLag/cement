@@ -30,6 +30,12 @@ namespace cement
 
         void SetValue(Id a_instance, const T &a_val = T{})
         {
+            if (!HasId(a_instance))
+            {
+                PLOGE << "instance " << a_instance << " does not exist in this pool";
+                return;
+            }
+
             auto pos = m_sparse[a_instance];
             PLOGD << "Instance=" << a_instance << " Value=" << a_val << " " << Print();
 
@@ -40,16 +46,23 @@ namespace cement
             }
         }
 
-        const T& Get(Id a_pos) const
+        const T& Get(Id a_instance) const
         {
-            return m_values[m_sparse[a_pos]];
+            if (!HasId(a_instance))
+            {
+                PLOGE << "instance " << a_instance << " does not exist in this pool";
+                static T default_val{};
+                return default_val;
+            }
+
+            return m_values[m_sparse[a_instance]];
         }
 
         // TODO delete, breaks signals
-        T& Get(Id a_pos)
-        {
-            return m_values[m_sparse[a_pos]];
-        }
+//        T& Get(Id a_pos)
+//        {
+//            return m_values[m_sparse[a_pos]];
+//        }
 
         virtual void Get(Id a_instance, std::string &a_string_value) override
         {
@@ -110,6 +123,12 @@ namespace cement
 
         virtual void InternalDeleteInstance(Id a_instance) override
         {
+            if (!HasId(a_instance))
+            {
+                PLOGE << "instance " << a_instance << " does not exist in this pool";
+                return;
+            }
+
             PLOGD << "a_instance=" << a_instance << " " << Print();
             auto size = Size();
             auto pos = m_sparse[a_instance];
@@ -162,7 +181,6 @@ namespace cement
         }
 
     protected:
-        Sparse m_sparse;
         Pool<T> m_values;
     };
 } // end namespace cement

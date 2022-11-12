@@ -18,6 +18,7 @@ namespace cement
         void SetElem(Id a_id, Elem a_elem);
         void RemoveElem(Id a_id);
         Id Find(Elem a_elem) const;
+        bool HasId(Id a_id) const;
 
     private:
         Pool<Elem> m_sparse{100};

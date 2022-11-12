@@ -29,7 +29,6 @@ namespace cement
         virtual void InternalDeleteInstance(Id a_instance) override;
 
     private:
-        Sparse m_sparse;
         std::set<Index *> m_indexes;
         size_t m_size;
     };

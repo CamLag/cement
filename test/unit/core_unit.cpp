@@ -124,9 +124,49 @@ TEST(Core, SimpleTest)
     EXPECT_EQ(thing_color->Get(1), 0);*/
 }
 
-TEST(Core, propertytest)
+TEST(InstancesTest, add_and_remove_long_values_test)
 {
+    cement::Instances<long> prop(0, "LongProperty", false);
+    auto id1 = prop.Instanciate();
+    auto id2 = prop.AddValue(25);
+    ASSERT_EQ(id1, 0);
+    ASSERT_EQ(id2, 1);
+    ASSERT_EQ(prop.Size(), 2);
 
+    auto val1 = prop.Get(id1);
+    auto val2 = prop.Get(id2);
+    ASSERT_EQ(val1, 0);
+    ASSERT_EQ(val2, 25);
+
+    std::string val2_str;
+    prop.Get(id2, val2_str);
+    ASSERT_EQ(val2_str, "25");
+
+    prop.SetValue(id1, 123);
+    ASSERT_EQ(prop.Get(id1), 123);
+
+    prop.Set(id2, "256");
+    ASSERT_EQ(prop.Get(id2), 256);
+
+    std::string val1_str;
+    prop.GetPointedValue(id1, val1_str);
+    ASSERT_EQ(val1_str, "123");
+    ASSERT_EQ(prop.CountValues(123), 1);
+
+    prop.AddValue(123);
+    ASSERT_EQ(prop.CountValues(123), 2);
+
+    prop.ReplaceValues(123, 124);
+    ASSERT_EQ(prop.CountValues(123), 0);
+    ASSERT_EQ(prop.CountValues(124), 2);
+    ASSERT_EQ(prop.Size(), 3);
+
+    prop.InternalDeleteInstance(id2);
+    ASSERT_EQ(prop.Size(), 2);
+    ASSERT_EQ(prop.Get(id1), 124);
+    ASSERT_FALSE(prop.HasId(id2));
+    ASSERT_EQ(prop.Get(id2), 0); // log error
+    ASSERT_EQ(prop.Instanciate(), id2);
 }
 
 TEST(Core, modeltest)

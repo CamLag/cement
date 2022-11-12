@@ -58,4 +58,9 @@ namespace cement
         }
         return NO_VALUE;
     }
+
+    bool Sparse::HasId(Id a_id) const
+    {
+        return !m_inc_ids.IsAvailable(a_id);
+    }
 } // end namespace cement

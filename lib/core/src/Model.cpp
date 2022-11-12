@@ -24,6 +24,11 @@ namespace cement
 
     void Model::InternalDeleteInstance(Id a_instance)
     {
+        if (!HasId(a_instance))
+        {
+            return;
+        }
+
         for (auto index : m_indexes)
         {
             index->DeleteInstance(a_instance);

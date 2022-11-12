@@ -4,6 +4,7 @@
 #include "Pool.h"
 #include "Callback.h"
 #include "IncrementalId.h"
+#include "Sparse.h"
 
 #include <string>
 #include <vector>
@@ -37,6 +38,7 @@ namespace cement
         // core
         virtual std::string Print() const;
         virtual Id Instanciate() = 0;
+        bool HasId(Id a_id) const;
         void DeleteInstance(Id a_instance);
         virtual size_t Size() const = 0;
         virtual size_t Depth() const;
@@ -75,9 +77,9 @@ namespace cement
 
     protected:
         virtual void InternalDeleteInstance(Id a_instance) = 0;
+        Sparse m_sparse;
 
     private:
-        IncrementalId m_inc_id;
         std::set<Index *> m_index_references;
         std::string m_name;
         bool m_shared;

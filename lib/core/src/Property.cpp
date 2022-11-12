@@ -19,6 +19,11 @@ namespace cement
         return "PROP " + std::to_string(m_id) + " " + StringConversions::ToString(Type()) + " \"" + m_name + "\"";
     }
 
+    bool Property::HasId(Id a_id) const
+    {
+        return m_sparse.HasId(a_id);
+    }
+
     void Property::DeleteInstance(Id a_instance)
     {
         if (IsShared())
@@ -31,28 +36,12 @@ namespace cement
 
             if (total_count == 0) // Nobody points on this instance
             {
-                auto last_index = Size() - 1;
-
                 InternalDeleteInstance(a_instance);
-
-                for (auto index : m_index_references)
-                {
-                    index->ReplaceValues(last_index, a_instance);
-                    // Due to the swap we have to update all the pointers to the last value
-                }
             }
         }
         else
         {
-            auto last_index = Size() - 1;
-
             InternalDeleteInstance(a_instance);
-
-            for (auto index : m_index_references)
-            {
-                index->ReplaceValues(last_index, a_instance);
-                // Due to the swap we have to update all the pointers to the last value
-            }
         }
         // TODO error logs
     }
