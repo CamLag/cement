@@ -51,26 +51,32 @@ namespace cement
             if (!HasId(a_instance))
             {
                 PLOGE << "instance " << a_instance << " does not exist in this pool";
-                static T default_val{};
+                static const T default_val{};
                 return default_val;
             }
 
             return m_values[m_sparse[a_instance]];
         }
 
-        // TODO delete, breaks signals
-//        T& Get(Id a_pos)
-//        {
-//            return m_values[m_sparse[a_pos]];
-//        }
-
         virtual void Get(Id a_instance, std::string &a_string_value) override
         {
+            if (!HasId(a_instance))
+            {
+                PLOGE << "instance " << a_instance << " does not exist in this pool";
+                return;
+            }
+
             StringConversions::ToString<T>(m_values[m_sparse[a_instance]], a_string_value);
         }
 
         virtual void Set(Id a_instance, const std::string &a_string_value) override
         {
+            if (!HasId(a_instance))
+            {
+                PLOGE << "instance " << a_instance << " does not exist in this pool";
+                return;
+            }
+
             T val;
             StringConversions::FromString<T>(val, a_string_value);
             SetValue(a_instance, val);

@@ -32,6 +32,8 @@ namespace cement
     class Property
     {
     public:
+        friend class Registry;
+
         Property(size_t a_id, const std::string &a_name, bool a_shared);
         virtual ~Property();
 
@@ -55,7 +57,6 @@ namespace cement
         bool IsShared() const;
         const std::string &GetName() const;
         const std::set<Index *> &GetIndexReferences() const;
-        void AddIndexReference(Index *a_index);
         virtual void Get(Id a_instance, std::string &a_string_value);
         std::string Get(Id a_instance);
         virtual void Set(Id a_instance, const std::string &a_string_value);
@@ -77,6 +78,7 @@ namespace cement
 
     protected:
         virtual void InternalDeleteInstance(Id a_instance) = 0;
+        void AddIndexReference(Index *a_index);
         Sparse m_sparse;
 
     private:

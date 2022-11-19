@@ -42,6 +42,147 @@ TEST(SparseTest, add_and_remove_ids_test)
     ASSERT_EQ(id2, NO_VALUE);
 }
 
+
+TEST(InstancesTest, add_and_remove_long_values_test)
+{
+    cement::Instances<long> prop(0, "LongProperty", false);
+    auto id1 = prop.Instanciate();
+    auto id2 = prop.AddValue(25);
+    ASSERT_EQ(id1, 0);
+    ASSERT_EQ(id2, 1);
+    ASSERT_EQ(prop.Size(), 2);
+
+    auto val1 = prop.Get(id1);
+    auto val2 = prop.Get(id2);
+    ASSERT_EQ(val1, 0);
+    ASSERT_EQ(val2, 25);
+
+    std::string val2_str;
+    prop.Get(id2, val2_str);
+    ASSERT_EQ(val2_str, "25");
+
+    prop.SetValue(id1, 123);
+    ASSERT_EQ(prop.Get(id1), 123);
+
+    prop.Set(id2, "256");
+    ASSERT_EQ(prop.Get(id2), 256);
+
+    std::string val1_str;
+    prop.GetPointedValue(id1, val1_str);
+    ASSERT_EQ(val1_str, "123");
+    ASSERT_EQ(prop.CountValues(123), 1);
+
+    prop.AddValue(123);
+    ASSERT_EQ(prop.CountValues(123), 2);
+
+    prop.ReplaceValues(123, 124);
+    ASSERT_EQ(prop.CountValues(123), 0);
+    ASSERT_EQ(prop.CountValues(124), 2);
+    ASSERT_EQ(prop.Size(), 3);
+
+    prop.InternalDeleteInstance(id2);
+    ASSERT_EQ(prop.Size(), 2);
+    ASSERT_EQ(prop.Get(id1), 124);
+    ASSERT_FALSE(prop.HasId(id2));
+    ASSERT_EQ(prop.Get(id2), 0); // log error
+    ASSERT_EQ(prop.Instanciate(), id2);
+}
+
+TEST(PropertyTest, add_and_remove_string_values_test)
+{
+    cement::Registry reg;
+    auto property = reg.CreateProperty(cement::PropertyType::pt_string, "test_property", false);
+    auto id1 = property->Instanciate();
+
+    ASSERT_EQ(id1, 0);
+    ASSERT_TRUE(property->HasId(id1));
+    ASSERT_EQ(property->Size(), 1);
+    ASSERT_EQ(property->GetName(), "test_property");
+
+    property->Set(id1, "test_value");
+    std::string value;
+    property->Get(id1, value);
+    ASSERT_EQ(value, "test_value");
+    ASSERT_EQ(property->Get(id1), "test_value");
+    ASSERT_TRUE(property->IsLeaf());
+
+    auto id2 = property->Instanciate();
+    property->Set(id2, "test_value2");
+    ASSERT_EQ(property->Size(), 2);
+    property->Instanciate();
+
+    property->DeleteInstance(id1);
+    ASSERT_EQ(property->Size(), 2);
+    ASSERT_FALSE(property->HasId(0));
+    ASSERT_TRUE(property->HasId(1));
+    ASSERT_TRUE(property->HasId(2));
+
+    value = "unchanged";
+    property->Get(id1, value);
+    ASSERT_EQ(value, "unchanged"); // log error
+    ASSERT_EQ(property->Get(id1), std::string()); // log error
+
+    auto id1_1 = property->Instanciate();
+    ASSERT_EQ(id1, id1_1);
+    ASSERT_EQ(property->Get(id1_1), "");
+}
+
+TEST(Core, add_and_remove_model_values_test)
+{
+
+}
+
+TEST(Core, idtest)
+{
+    cement::Registry registry;
+    auto prop1 = registry.CreateProperty<bool>("prop", false);
+    auto id = prop1->m_id;
+    auto prop2 = registry.CreateProperty<bool>("prop2", false);
+    ASSERT_EQ(prop2->m_id, id + 1);
+    //TODO delete
+}
+
+TEST(Core, modeltest)
+{
+    cement::Registry reg;
+    auto day_p = reg.CreateProperty<long>("day", false);
+    auto month_p = reg.CreateProperty<long>("month", false);
+    auto year_p = reg.CreateProperty<long>("year", false);
+
+    auto date_m = reg.CreateModel("date", false);
+    auto date_day_i = reg.AddProperty(date_m, day_p, "day");
+    auto date_month_i = reg.AddProperty(date_m, month_p, "month");
+    auto date_year_i = reg.AddProperty(date_m, year_p, "year");
+
+    auto firstname_p = reg.CreateProperty<std::string>("firstname", false);
+    auto surname_p = reg.CreateProperty<std::string>("surname", false);
+    auto isfemale_p = reg.CreateProperty<bool>("isfemale", false);
+
+    auto person_m = reg.CreateModel("person", false);
+    auto person_firstname_i = reg.AddProperty(person_m, firstname_p, "firstname");
+    auto person_surname_i = reg.AddProperty(person_m, surname_p, "surname");
+    auto person_isfemale_i = reg.AddProperty(person_m, isfemale_p, "isfemale");
+    auto person_birthdate_i = reg.AddProperty(person_m, date_m, "birthdate");
+
+    auto patricia = person_m->Instanciate();
+    person_firstname_i->SetPointedValue<std::string>(patricia, "patricia");
+    person_surname_i->SetPointedValue<std::string>(patricia, "porter");
+    person_isfemale_i->SetPointedValue(patricia, true);
+
+    auto patricia_birthday = person_birthdate_i->Get(patricia);
+    auto patricia_birthday_day = date_day_i->Get(patricia_birthday);
+    auto patricia_birthday_month = date_month_i->Get(patricia_birthday);
+    auto patricia_birthday_year = date_year_i->Get(patricia_birthday);
+
+    day_p->SetValue(patricia_birthday_day, 10);
+    month_p->SetValue(patricia_birthday_month, 11);
+    year_p->SetValue(patricia_birthday_year, 1992);
+    person_m->Instanciate();
+    std::cout << reg.Print();
+    std::cout << person_m->PrettyPrint(patricia);
+}
+
+
 TEST(Core, SimpleTest)
 {
     static plog::ConsoleAppender<plog::TxtFormatter> consoleAppender; // Create the 2nd appender.
@@ -122,99 +263,4 @@ TEST(Core, SimpleTest)
     EXPECT_EQ(thing_size->Get(1), 1);
     EXPECT_EQ(thing_color->Get(0), 1);
     EXPECT_EQ(thing_color->Get(1), 0);*/
-}
-
-TEST(InstancesTest, add_and_remove_long_values_test)
-{
-    cement::Instances<long> prop(0, "LongProperty", false);
-    auto id1 = prop.Instanciate();
-    auto id2 = prop.AddValue(25);
-    ASSERT_EQ(id1, 0);
-    ASSERT_EQ(id2, 1);
-    ASSERT_EQ(prop.Size(), 2);
-
-    auto val1 = prop.Get(id1);
-    auto val2 = prop.Get(id2);
-    ASSERT_EQ(val1, 0);
-    ASSERT_EQ(val2, 25);
-
-    std::string val2_str;
-    prop.Get(id2, val2_str);
-    ASSERT_EQ(val2_str, "25");
-
-    prop.SetValue(id1, 123);
-    ASSERT_EQ(prop.Get(id1), 123);
-
-    prop.Set(id2, "256");
-    ASSERT_EQ(prop.Get(id2), 256);
-
-    std::string val1_str;
-    prop.GetPointedValue(id1, val1_str);
-    ASSERT_EQ(val1_str, "123");
-    ASSERT_EQ(prop.CountValues(123), 1);
-
-    prop.AddValue(123);
-    ASSERT_EQ(prop.CountValues(123), 2);
-
-    prop.ReplaceValues(123, 124);
-    ASSERT_EQ(prop.CountValues(123), 0);
-    ASSERT_EQ(prop.CountValues(124), 2);
-    ASSERT_EQ(prop.Size(), 3);
-
-    prop.InternalDeleteInstance(id2);
-    ASSERT_EQ(prop.Size(), 2);
-    ASSERT_EQ(prop.Get(id1), 124);
-    ASSERT_FALSE(prop.HasId(id2));
-    ASSERT_EQ(prop.Get(id2), 0); // log error
-    ASSERT_EQ(prop.Instanciate(), id2);
-}
-
-TEST(Core, modeltest)
-{
-    cement::Registry reg;
-    auto day_p = reg.CreateProperty<long>("day", false);
-    auto month_p = reg.CreateProperty<long>("month", false);
-    auto year_p = reg.CreateProperty<long>("year", false);
-
-    auto date_m = reg.CreateModel("date", false);
-    auto date_day_i = reg.AddProperty(date_m, day_p, "day");
-    auto date_month_i = reg.AddProperty(date_m, month_p, "month");
-    auto date_year_i = reg.AddProperty(date_m, year_p, "year");
-
-    auto firstname_p = reg.CreateProperty<std::string>("firstname", false);
-    auto surname_p = reg.CreateProperty<std::string>("surname", false);
-    auto isfemale_p = reg.CreateProperty<bool>("isfemale", false);
-
-    auto person_m = reg.CreateModel("person", false);
-    auto person_firstname_i = reg.AddProperty(person_m, firstname_p, "firstname");
-    auto person_surname_i = reg.AddProperty(person_m, surname_p, "surname");
-    auto person_isfemale_i = reg.AddProperty(person_m, isfemale_p, "isfemale");
-    auto person_birthdate_i = reg.AddProperty(person_m, date_m, "birthdate");
-
-    auto patricia = person_m->Instanciate();
-    person_firstname_i->SetPointedValue<std::string>(patricia, "patricia");
-    person_surname_i->SetPointedValue<std::string>(patricia, "porter");
-    person_isfemale_i->SetPointedValue(patricia, true);
-
-    auto patricia_birthday = person_birthdate_i->Get(patricia);
-    auto patricia_birthday_day = date_day_i->Get(patricia_birthday);
-    auto patricia_birthday_month = date_month_i->Get(patricia_birthday);
-    auto patricia_birthday_year = date_year_i->Get(patricia_birthday);
-
-    day_p->SetValue(patricia_birthday_day, 10);
-    month_p->SetValue(patricia_birthday_month, 11);
-    year_p->SetValue(patricia_birthday_year, 1992);
-
-    std::cout << reg.Print();
-    std::cout << person_m->PrettyPrint(patricia);
-}
-
-TEST(Core, idtest)
-{
-    cement::Registry registry;
-    auto prop1 = registry.CreateProperty<bool>("prop", false);
-    auto id = prop1->m_id;
-    auto prop2 = registry.CreateProperty<bool>("prop2", false);
-    ASSERT_EQ(prop2->m_id, id + 1);
-    //TODO delete
 }
