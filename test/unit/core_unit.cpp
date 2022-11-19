@@ -127,9 +127,17 @@ TEST(PropertyTest, add_and_remove_string_values_test)
     ASSERT_EQ(property->Get(id1_1), "");
 }
 
-TEST(Core, add_and_remove_model_values_test)
+TEST(ModelTest, two_models_points_to_two_properties)
 {
-
+    cement::Registry reg;
+    auto double_prop = reg.CreateProperty(cement::PropertyType::pt_double, "property_double", false);
+    auto str_prop = reg.CreateProperty(cement::PropertyType::pt_string, "property_string", true);
+    auto model1 = reg.CreateModel("model1", false);
+    reg.AddProperty(model1, double_prop, "m1_double");
+    reg.AddProperty(model1, str_prop, "m1_string");
+    auto model2 = reg.CreateModel("model2", false);
+    reg.AddProperty(model2, double_prop, "m2_double");
+    reg.AddProperty(model2, str_prop, "m2_string");
 }
 
 TEST(Core, idtest)
