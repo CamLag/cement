@@ -1,9 +1,12 @@
 [requires]
 gtest/1.11.0
 plog/1.1.5
+imgui/1.85
 
 [generators]
 cmake
+CMakeDeps
+CMakeToolchain
 
 [options]
 
