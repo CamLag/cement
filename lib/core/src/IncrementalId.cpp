@@ -6,7 +6,7 @@ namespace cement
 {
     void IncrementalId::SetFree(Id a_id)
     {
-        m_available_ids.push_back(a_id);
+        m_available_ids.insert(a_id);
     }
 
     bool IncrementalId::IsAvailable(Id a_id) const
@@ -30,8 +30,9 @@ namespace cement
         }
         else
         {
-            auto id = m_available_ids.back();
-            m_available_ids.pop_back();
+            auto it = m_available_ids.begin();
+            auto id = *it;
+            m_available_ids.erase(it);
             return id;
         }
     }

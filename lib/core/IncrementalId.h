@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <stdint.h>
+#include <unordered_set>
 
 namespace cement
 {
@@ -15,7 +16,7 @@ namespace cement
         bool IsAvailable(Id a_id) const;
 
     private:
-        std::vector<Id> m_available_ids;
+        std::unordered_set<Id> m_available_ids;
         Id m_next_id{0};
     };
 } // end namespace cement
