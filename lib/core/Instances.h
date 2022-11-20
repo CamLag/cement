@@ -129,12 +129,6 @@ namespace cement
 
         virtual void InternalDeleteInstance(Id a_instance) override
         {
-            if (!HasId(a_instance))
-            {
-                PLOGE << "instance " << a_instance << " does not exist in this pool";
-                return;
-            }
-
             PLOGD << "a_instance=" << a_instance << " " << Print();
             auto size = Size();
             auto pos = m_sparse[a_instance];

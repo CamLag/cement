@@ -21,6 +21,7 @@ namespace cement
         virtual Id Instanciate() override;
         virtual void InternalDeleteInstance(Id a_instance) override;
 
+        size_t Depth() const;
         virtual std::string Print() const override;
 
         template<typename T>
@@ -39,5 +40,6 @@ namespace cement
 
         Property* m_indexed{ nullptr };
         Model* m_model{ nullptr };
+
     };
 } // end namespace cement

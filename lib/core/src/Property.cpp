@@ -26,20 +26,18 @@ namespace cement
 
     void Property::DeleteInstance(Id a_instance)
     {
-        if (IsShared())
+        if (!HasId(a_instance))
         {
-            int total_count = 0;
-            for (auto index : m_index_references)
-            {
-                total_count += index->CountValues(a_instance);
-            }
-
-            if (total_count == 0) // Nobody points on this instance
-            {
-                InternalDeleteInstance(a_instance);
-            }
+            return;
         }
-        else
+
+        int total_count = 0;
+        for (auto index : m_index_references)
+        {
+            total_count += index->CountValues(a_instance);
+        }
+
+        if (total_count == 0) // Nobody points on this instance
         {
             InternalDeleteInstance(a_instance);
         }
@@ -48,7 +46,7 @@ namespace cement
 
     size_t Property::Depth() const
     {
-        return 1;
+        return 0;
     }
 
     size_t Property::PropertyCount() const

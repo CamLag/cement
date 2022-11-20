@@ -43,12 +43,17 @@ namespace cement
 
     void Index::InternalDeleteInstance(Id a_instance)
     {
+        Instances<Id>::InternalDeleteInstance(a_instance);
+
         if (!GetIndexed()->IsShared()) // the property value is owned by this model and can be deleted
         {
             GetIndexed()->DeleteInstance(Get(a_instance));
         }
+    }
 
-        Instances<Id>::DeleteInstance(a_instance);
+    size_t Index::Depth() const
+    {
+        return m_indexed->Depth() + 1;
     }
 
     std::string Index::Print() const

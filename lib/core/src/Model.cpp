@@ -18,21 +18,18 @@ namespace cement
 
         auto id = m_sparse.AddElem(m_size);
         m_instance_added.Emit(id);
-        m_size++;
+        ++m_size;
         return id;
     }
 
     void Model::InternalDeleteInstance(Id a_instance)
     {
-        if (!HasId(a_instance))
-        {
-            return;
-        }
-
         for (auto index : m_indexes)
         {
             index->DeleteInstance(a_instance);
         }
+
+        --m_size;
     }
 
     size_t Model::Size() const
@@ -71,19 +68,16 @@ namespace cement
 
     size_t Model::Depth() const
     {
-        size_t counter = 1;
-        size_t max = 1;
-        for (auto &index : m_indexes)
-        {
-            size_t depth = index->GetIndexed()->Depth();
-            if (depth > max)
-            {
-                max = depth;
-            }
-        }
-        counter += max;
+        size_t max_depth = 0;
 
-        return counter;
+        auto greatest_depth = [&](const Index* a_index1)
+        {
+            max_depth = std::max(a_index1->Depth(), max_depth);
+        };
+
+        std::for_each(m_indexes.begin(), m_indexes.end(), greatest_depth);
+
+        return max_depth;
     }
 
     size_t Model::PropertyCount() const

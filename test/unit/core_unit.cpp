@@ -42,7 +42,6 @@ TEST(SparseTest, add_and_remove_ids_test)
     ASSERT_EQ(id2, NO_VALUE);
 }
 
-
 TEST(InstancesTest, add_and_remove_long_values_test)
 {
     cement::Instances<long> prop(0, "LongProperty", false);
@@ -133,11 +132,59 @@ TEST(ModelTest, two_models_points_to_two_properties)
     auto double_prop = reg.CreateProperty(cement::PropertyType::pt_double, "property_double", false);
     auto str_prop = reg.CreateProperty(cement::PropertyType::pt_string, "property_string", true);
     auto model1 = reg.CreateModel("model1", false);
-    reg.AddProperty(model1, double_prop, "m1_double");
-    reg.AddProperty(model1, str_prop, "m1_string");
+    auto m1_double = reg.AddProperty(model1, double_prop, "m1_double");
+    auto m1_string = reg.AddProperty(model1, str_prop, "m1_string");
+
     auto model2 = reg.CreateModel("model2", false);
-    reg.AddProperty(model2, double_prop, "m2_double");
-    reg.AddProperty(model2, str_prop, "m2_string");
+    ASSERT_EQ(model2->PropertyCount(), 0);
+
+    auto m2_double = reg.AddProperty(model2, double_prop, "m2_double");
+    auto m2_string = reg.AddProperty(model2, str_prop, "m2_string");
+    ASSERT_EQ(model2->PropertyCount(), 2);
+
+    auto str_0 = str_prop->Instanciate();
+    auto str_1 = str_prop->Instanciate();
+    auto m1_1 = model1->Instanciate();
+    auto m1_2 = model1->Instanciate();
+    auto m2_1 = model2->Instanciate();
+    m1_string->SetValue(m1_1, str_0);
+    m1_string->SetValue(m1_2, str_1);
+    m2_string->SetValue(m2_1, str_0);
+    ASSERT_EQ(double_prop->Size(), 3);
+    ASSERT_EQ(str_prop->Size(), 2);
+    ASSERT_EQ(model1->Size(), 2);
+    ASSERT_EQ(model2->Size(), 1);
+
+    model1->DeleteInstance(m1_1);
+    ASSERT_EQ(double_prop->Size(), 2);
+    ASSERT_EQ(str_prop->Size(), 2);
+    ASSERT_EQ(model1->Size(), 1);
+
+    auto model3 = reg.CreateModel("model3", false);
+    reg.AddProperty(model3, model1, "m3m1");
+    reg.AddProperty(model3, model2, "m3m2");
+    ASSERT_EQ(str_prop->Depth(), 0);
+    ASSERT_EQ(model1->Depth(), 1);
+    ASSERT_EQ(model3->Depth(), 2);
+
+    auto m3_1 = model3->Instanciate();
+    ASSERT_EQ(double_prop->Size(), 4);
+    ASSERT_EQ(str_prop->Size(), 2);
+    ASSERT_EQ(model1->Size(), 2);
+    ASSERT_EQ(model2->Size(), 2);
+    ASSERT_EQ(model3->Size(), 1);
+
+    auto m3_2 = m3_1 + 1;
+    model3->DeleteInstance(m3_2);
+    ASSERT_EQ(double_prop->Size(), 4);
+    ASSERT_EQ(str_prop->Size(), 2);
+    ASSERT_EQ(model1->Size(), 2);
+    ASSERT_EQ(model2->Size(), 2);
+    ASSERT_EQ(model3->Size(), 1);
+
+    /*
+    virtual std::vector<std::vector<Property *>> VisitProperties();
+    const std::set<Index *> &GetIndexReferences() const;*/
 }
 
 TEST(Core, idtest)
