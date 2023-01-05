@@ -1,6 +1,10 @@
 #include <imgui.h>
 #include <math.h>
 
+#include "imgui.h"
+#include <stdio.h>
+#include <SDL2/SDL.h>
+
 int main()
 {
     bool my_tool_active = true;

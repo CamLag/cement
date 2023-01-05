@@ -2,11 +2,17 @@
 gtest/1.11.0
 plog/1.1.5
 imgui/1.85
+#sdl/2.26.0
 
 [generators]
 cmake
 CMakeDeps
 CMakeToolchain
+cmake_find_package_multi
 
-[options]
+[imports]
+./misc/bindings, imgui_impl_sdl.h -> ../bindings
+./misc/bindings, imgui_impl_sdl.cpp -> ../bindings
+./misc/bindings, imgui_impl_sdlrenderer.h -> ../bindings
+./misc/bindings, imgui_impl_sdlrenderer.cpp -> ../bindings
 
