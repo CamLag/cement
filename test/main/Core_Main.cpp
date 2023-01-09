@@ -14,18 +14,18 @@ namespace cement
     {
     public:
         template<typename T>
-        static const T& GetValue(const Value& value)
+        static T& GetValue(const Value& value)
         {
             auto prop = dynamic_cast<Instances<T>*>(value.m_property);
             return prop->Get(value.m_index);
         }
 
-        template<typename T>
-        static void SetValue(const Value& value, const T& val)
-        {
-            auto prop = dynamic_cast<Instances<T>*>(value.m_property);
-            return prop->SetValue(value.m_index, val);
-        }
+//        template<typename T>
+//        static void SetValue(const Value& value, const T& val)
+//        {
+//            auto prop = dynamic_cast<Instances<T>*>(value.m_property);
+//            return prop->SetValue(value.m_index, val);
+//        }
     };
 
     template<typename T>
@@ -45,10 +45,11 @@ namespace cement
     template<typename R, typename... Args>
     struct FuncTraits<R(*)(Args...)>
     {
-        using ArgsTuple = std::tuple<Args ...>;
         using Return = R;
+        using Arguments = std::tuple<Args ...>;
         using Inputs = FilterConst<Args...>;
         using Outputs = FilterNotConst<Args...>;
+        static constexpr auto Size = std::tuple_size_v<Arguments>;
         static constexpr auto InputSize = std::tuple_size_v<Inputs>;
         static constexpr auto OutputSize = std::tuple_size_v<Outputs>;
     };
@@ -64,6 +65,7 @@ namespace cement
     {
     public:
         virtual void Compute() = 0;
+        virtual Node& GetNode(size_t index) = 0;
         virtual Node& InputNode(size_t index) = 0;
         virtual Node& OutputNode(size_t index) = 0;
 
@@ -79,6 +81,8 @@ namespace cement
         using ReturnType = typename FuncTraits<F>::Return;
         using InputTypes = typename FuncTraits<F>::Inputs;
         using OutputTypes = typename FuncTraits<F>::Outputs;
+        using Arguments = typename FuncTraits<F>::Arguments;
+        static constexpr auto Size = FuncTraits<F>::Size;
         static constexpr auto InputSize = FuncTraits<F>::InputSize;
         static constexpr auto OutputSize = FuncTraits<F>::OutputSize;
 
@@ -88,7 +92,7 @@ namespace cement
 
         virtual void Compute() override
         {
-            auto Inputs = GetNodeValues<InputTypes, InputSize>(m_inputs);
+            CallFunction<Arguments>(m_nodes);
         }
 
         template<typename Tuple, size_t N, size_t I>
@@ -109,21 +113,24 @@ namespace cement
         {
             return GetNodeValues<Tuple, N>(a_array, std::make_index_sequence<N>{});
         }
-//*
-        template <class... Formats, size_t N, size_t... Is>
-        std::tuple<Formats...> as_tuple(std::array<char*, N> const& arr,
-                                        std::index_sequence<Is...>)
+
+        template<typename Tuple, size_t N, size_t... I>
+        static void CallFunction(const std::array<Node, N>& a_array, std::index_sequence<I...>)
         {
-            return std::make_tuple(Formats{arr[Is]}...);
+            std::invoke(f, GetNodeValue<Tuple, N, I>(a_array)...);
         }
 
-        template <class... Formats, size_t N,
-                  class = std::enable_if_t<(N == sizeof...(Formats))>>
-        std::tuple<Formats...> as_tuple(std::array<char*, N> const& arr)
+        template<typename Tuple, size_t N, typename = std::enable_if_t<(N == std::tuple_size_v<Tuple>)>>
+        static void CallFunction(const std::array<Node, N>& a_array)
         {
-            return as_tuple<Formats...>(arr, std::make_index_sequence<N>{});
+            CallFunction<Tuple, N>(a_array, std::make_index_sequence<N>{});
         }
-//*
+
+        virtual Node& GetNode(size_t index) override
+        {
+            return m_nodes[index];
+        }
+
         virtual Node& InputNode(size_t index) override
         {
             return m_inputs[index];
@@ -134,31 +141,11 @@ namespace cement
             return m_outputs[index];
         }
 
+        std::array<Node, Size> m_nodes;
         std::array<Node, InputSize> m_inputs;
         std::array<Node, OutputSize> m_outputs;
 
     };
-
-//    template<>
-//    class FunctionBlock<PlusHM> : public Block
-//    {
-//    public:
-//        FunctionBlock<PlusHM>()
-//        {
-//            m_inputs.emplace_back();
-//            m_inputs.emplace_back();
-//            m_outputs.emplace_back();
-//        }
-
-//        virtual void Compute() override
-//        {
-//            auto& i1 = Helper::GetValue<long>(m_inputs[0].m_value);
-//            auto& i2 = Helper::GetValue<long>(m_inputs[1].m_value);
-//            long i3;
-//            PlusHM(i1, i2, i3);
-//            Helper::SetValue<long>(m_outputs[0].m_value, i3);
-//        }
-//    };
 }
 
 int main()
@@ -169,14 +156,14 @@ int main()
     auto v1 = prop->Instanciate();
     auto v2 = prop->Instanciate();
     auto v3 = prop->Instanciate();
-    prop->Set(v1, "1");
+    prop->Set(v1, "12");
     prop->Set(v2, "2");
 
-    std::cout << FuncTraits<decltype(&Plus)>::InputSize << std::endl;
-    std::cout << FuncTraits<decltype(&Plus)>::OutputSize << std::endl;
-
     auto bl = FunctionBlock<decltype(&Plus), &Plus>();
-    //bl->Compute();
+    bl.GetNode(0).m_value = Value{prop, v1};
+    bl.GetNode(1).m_value = Value{prop, v2};
+    bl.GetNode(2).m_value = Value{prop, v3};
+    bl.Compute();
 
-    //std::cout << prop->Get(v3) << std::endl;
+    std::cout << prop->Get(v3) << std::endl;
 }
