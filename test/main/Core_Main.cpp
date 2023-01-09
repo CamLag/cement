@@ -66,12 +66,6 @@ namespace cement
     public:
         virtual void Compute() = 0;
         virtual Node& GetNode(size_t index) = 0;
-        virtual Node& InputNode(size_t index) = 0;
-        virtual Node& OutputNode(size_t index) = 0;
-
-    protected:
-        size_t InputSize{};
-        size_t OutputSize{};
     };
 
     template<typename F, F f>
@@ -131,20 +125,7 @@ namespace cement
             return m_nodes[index];
         }
 
-        virtual Node& InputNode(size_t index) override
-        {
-            return m_inputs[index];
-        }
-
-        virtual Node& OutputNode(size_t index) override
-        {
-            return m_outputs[index];
-        }
-
         std::array<Node, Size> m_nodes;
-        std::array<Node, InputSize> m_inputs;
-        std::array<Node, OutputSize> m_outputs;
-
     };
 }
 
@@ -156,13 +137,14 @@ int main()
     auto v1 = prop->Instanciate();
     auto v2 = prop->Instanciate();
     auto v3 = prop->Instanciate();
-    prop->Set(v1, "12");
-    prop->Set(v2, "2");
 
     auto bl = FunctionBlock<decltype(&Plus), &Plus>();
     bl.GetNode(0).m_value = Value{prop, v1};
     bl.GetNode(1).m_value = Value{prop, v2};
     bl.GetNode(2).m_value = Value{prop, v3};
+
+    prop->Set(v1, "25");
+    prop->Set(v2, "32");
     bl.Compute();
 
     std::cout << prop->Get(v3) << std::endl;
