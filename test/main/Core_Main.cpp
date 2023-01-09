@@ -3,7 +3,7 @@
 #include <iostream>
 #include <tuple>
 
-void PlusHM(const long& i1, const long& i2, long& i3)
+void Plus(const long& i1, const long& i2, long& i3)
 {
     i3 = i1 + i2;
 }
@@ -29,21 +29,21 @@ namespace cement
     };
 
     template<typename T>
-    using IfConst = std::conditional_t<std::is_const_v<T>, std::tuple<T>, std::tuple<>>;
+    using IfConst = std::conditional_t<std::is_const_v<std::remove_reference_t<T>>, std::tuple<T>, std::tuple<>>;
 
     template<typename T>
-    using IfNotConst = std::conditional_t<std::is_const_v<T>, std::tuple<>, std::tuple<T>>;
+    using IfNotConst = std::conditional_t<std::is_const_v<std::remove_reference_t<T>>, std::tuple<>, std::tuple<T>>;
 
     template<typename ... T>
-    using FilterConst = decltype(std::tuple_cat(std::declval<IfNotConst<T>>()...));
+    using FilterConst = decltype(std::tuple_cat(std::declval<IfConst<T>>()...));
 
     template<typename ... T>
-    using FilterNotConst = decltype(std::tuple_cat(std::declval<IfConst<T>>()...));
+    using FilterNotConst = decltype(std::tuple_cat(std::declval<IfNotConst<T>>()...));
 
     template<typename  T> struct FuncTraits{};
 
     template<typename R, typename... Args>
-    struct FuncTraits<R(Args...)>
+    struct FuncTraits<R(*)(Args...)>
     {
         using ArgsTuple = std::tuple<Args ...>;
         using Return = R;
@@ -72,15 +72,15 @@ namespace cement
         size_t OutputSize{};
     };
 
-    template<auto F>
+    template<typename F, F f>
     class FunctionBlock : public Block
     {
     public:
-        using ReturnType = typename FuncTraits<decltype(F)>::Return;
-        using InputTypes = typename FuncTraits<decltype(F)>::Inputs;
-        using OutputTypes = typename FuncTraits<decltype(F)>::Outputs;
-        static auto InputSize = FuncTraits<decltype(F)>::InputSize;
-        static auto OutputSize = FuncTraits<decltype(F)>::OutputSize;
+        using ReturnType = typename FuncTraits<F>::Return;
+        using InputTypes = typename FuncTraits<F>::Inputs;
+        using OutputTypes = typename FuncTraits<F>::Outputs;
+        static constexpr auto InputSize = FuncTraits<F>::InputSize;
+        static constexpr auto OutputSize = FuncTraits<F>::OutputSize;
 
         FunctionBlock()
         {
@@ -88,50 +88,77 @@ namespace cement
 
         virtual void Compute() override
         {
+            auto Inputs = GetNodeValues<InputTypes, InputSize>(m_inputs);
         }
 
-        template<size_t... Is>
-        InputTypes BuildInputs()
+        template<typename Tuple, size_t N, size_t I>
+        static auto GetNodeValue(const std::array<Node, N>& a_array) -> std::tuple_element_t<I, Tuple>
         {
-            std::make_integer_sequence<size_t, InputSize> input_sequence;
-            return std::make_tuple(Helper::GetValue<std::tuple_element_t<Is>>(Inputs[input_sequence]...));
+            using Type = std::decay_t<std::tuple_element_t<I, Tuple>>;
+            return Helper::GetValue<Type>(a_array[I].m_value);
         }
 
+        template<typename Tuple, size_t N, size_t... I>
+        static Tuple GetNodeValues(const std::array<Node, N>& a_array, std::index_sequence<I...>)
+        {
+            return {GetNodeValue<Tuple, N, I>(a_array)...};
+        }
+
+        template<typename Tuple, size_t N, typename = std::enable_if_t<(N == std::tuple_size_v<Tuple>)>>
+        static Tuple GetNodeValues(const std::array<Node, N>& a_array)
+        {
+            return GetNodeValues<Tuple, N>(a_array, std::make_index_sequence<N>{});
+        }
+//*
+        template <class... Formats, size_t N, size_t... Is>
+        std::tuple<Formats...> as_tuple(std::array<char*, N> const& arr,
+                                        std::index_sequence<Is...>)
+        {
+            return std::make_tuple(Formats{arr[Is]}...);
+        }
+
+        template <class... Formats, size_t N,
+                  class = std::enable_if_t<(N == sizeof...(Formats))>>
+        std::tuple<Formats...> as_tuple(std::array<char*, N> const& arr)
+        {
+            return as_tuple<Formats...>(arr, std::make_index_sequence<N>{});
+        }
+//*
         virtual Node& InputNode(size_t index) override
         {
-            return Inputs[index];
+            return m_inputs[index];
         }
 
         virtual Node& OutputNode(size_t index) override
         {
-            return Outputs[index];
+            return m_outputs[index];
         }
 
-        std::array<Node, InputSize> Inputs;
-        std::array<Node, OutputSize> Outputs;
+        std::array<Node, InputSize> m_inputs;
+        std::array<Node, OutputSize> m_outputs;
 
     };
 
-    template<>
-    class FunctionBlock<PlusHM> : public Block
-    {
-    public:
-        FunctionBlock<PlusHM>()
-        {
-            m_inputs.emplace_back();
-            m_inputs.emplace_back();
-            m_outputs.emplace_back();
-        }
+//    template<>
+//    class FunctionBlock<PlusHM> : public Block
+//    {
+//    public:
+//        FunctionBlock<PlusHM>()
+//        {
+//            m_inputs.emplace_back();
+//            m_inputs.emplace_back();
+//            m_outputs.emplace_back();
+//        }
 
-        virtual void Compute() override
-        {
-            auto& i1 = Helper::GetValue<long>(m_inputs[0].m_value);
-            auto& i2 = Helper::GetValue<long>(m_inputs[1].m_value);
-            long i3;
-            PlusHM(i1, i2, i3);
-            Helper::SetValue<long>(m_outputs[0].m_value, i3);
-        }
-    };
+//        virtual void Compute() override
+//        {
+//            auto& i1 = Helper::GetValue<long>(m_inputs[0].m_value);
+//            auto& i2 = Helper::GetValue<long>(m_inputs[1].m_value);
+//            long i3;
+//            PlusHM(i1, i2, i3);
+//            Helper::SetValue<long>(m_outputs[0].m_value, i3);
+//        }
+//    };
 }
 
 int main()
@@ -145,7 +172,10 @@ int main()
     prop->Set(v1, "1");
     prop->Set(v2, "2");
 
-    //Block* bl = new FunctionBlock<Plus>();
+    std::cout << FuncTraits<decltype(&Plus)>::InputSize << std::endl;
+    std::cout << FuncTraits<decltype(&Plus)>::OutputSize << std::endl;
+
+    auto bl = FunctionBlock<decltype(&Plus), &Plus>();
     //bl->Compute();
 
     //std::cout << prop->Get(v3) << std::endl;
