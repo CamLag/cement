@@ -21,7 +21,7 @@ namespace cement
         virtual Id Instanciate() override;
         virtual void InternalDeleteInstance(Id a_instance) override;
 
-        size_t Depth() const;
+        size_t Depth() const override;
         virtual std::string Print() const override;
 
         template<typename T>

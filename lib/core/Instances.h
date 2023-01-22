@@ -58,6 +58,18 @@ namespace cement
             return m_values[m_sparse[a_instance]];
         }
 
+        T& Get(Id a_instance)
+        {
+            if (!HasId(a_instance))
+            {
+                PLOGE << "instance " << a_instance << " does not exist in this pool";
+                static T default_val{};
+                return default_val;
+            }
+
+            return m_values[m_sparse[a_instance]];
+        }
+
         virtual void Get(Id a_instance, std::string &a_string_value) override
         {
             if (!HasId(a_instance))
