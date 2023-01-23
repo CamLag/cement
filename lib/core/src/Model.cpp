@@ -43,7 +43,7 @@ namespace cement
 
         result += Property::Print();
 
-        result += "\n";
+        //result += "\n";
         for (auto &index : m_indexes)
         {
             if (index == *--m_indexes.end())

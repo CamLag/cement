@@ -11,8 +11,12 @@ namespace cement
 
     private:
         void ShowSummary();
+        void ShowProperties();
         Registry m_registry;
         bool m_show_summary{true};
+        bool m_show_properties{true};
+        bool m_show_demo_window{false};
+        bool m_is_shared_checkbox{true};
     };
 
 } // end namespace cement

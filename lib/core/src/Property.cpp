@@ -94,7 +94,7 @@ namespace cement
         return m_shared;
     }
 
-    const std::string &Property::GetName() const
+    std::string& Property::GetName()
     {
         return m_name;
     }
@@ -129,6 +129,11 @@ namespace cement
     {
         static const std::set<Index *> blank_index;
         return blank_index;
+    }
+
+    const Sparse &Property::GetIds() const
+    {
+        return m_sparse;
     }
 
     void Property::GetPointedValue(Id /*a_instance*/, std::string &/*a_string_value*/)

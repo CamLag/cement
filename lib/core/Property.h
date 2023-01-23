@@ -54,13 +54,14 @@ namespace cement
         virtual PropertyType Type() const = 0;
         virtual std::vector<std::vector<Property *>> VisitProperties();
         bool IsShared() const;
-        const std::string &GetName() const;
+        std::string& GetName();
         const std::set<Index *> &GetIndexReferences() const;
         virtual void Get(Id a_instance, std::string &a_string_value);
         std::string Get(Id a_instance);
         virtual void Set(Id a_instance, const std::string &a_string_value);
 
         virtual const std::set<Index *> &GetIndexes() const;
+        const Sparse& GetIds() const;
 
         // concrete
         virtual void GetPointedValue(Id a_instance, std::string &a_string_value);
