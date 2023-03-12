@@ -84,7 +84,7 @@ namespace cement
             return m_values[a_position];
         }
 
-        Ref SetAt(size_t a_position, const T& a_value)
+        void SetAt(size_t a_position, const T& a_value)
         {
             m_values[a_position] = a_value;
         }

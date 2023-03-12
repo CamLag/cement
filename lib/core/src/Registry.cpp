@@ -67,7 +67,7 @@ namespace cement
         return nullptr;
     }
 
-    Model *Registry::CreateModel(const std::string &a_name, bool a_shared)
+    Model* Registry::CreateModel(const std::string &a_name, bool a_shared)
     {
         auto model = new Model(m_inc_id.NextId(), a_name, a_shared);
         m_properties->AddProperty(model);

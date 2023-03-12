@@ -12,6 +12,7 @@ namespace cement
 
     private:
         void ShowSummary();
+        void ShowModel();
         void ShowProperties();
         void ShowPropertyValues(Property* a_property);
 
@@ -31,9 +32,11 @@ namespace cement
         }
 
         Registry m_registry;
+        Model* m_selected_model{};
         bool m_show_summary{true};
         bool m_show_properties{true};
         bool m_show_demo_window{false};
+        bool m_show_model{false};
         bool m_is_shared_checkbox{true};
     };
 

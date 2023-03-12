@@ -16,10 +16,12 @@ namespace cement
         if (ImGui::MenuItem("Demo")) m_show_demo_window = !m_show_demo_window;
         if (ImGui::MenuItem("Summary")) m_show_summary = !m_show_summary;
         if (ImGui::MenuItem("Properties")) m_show_properties = !m_show_properties;
+        if (ImGui::MenuItem("Model")) m_show_model = !m_show_model;
         ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         ImGui::EndMainMenuBar();
         if (m_show_summary) ShowSummary();
         if (m_show_properties) ShowProperties();
+        if (m_show_model) ShowModel();
         if (m_show_demo_window) ImGui::ShowDemoWindow();
     }
 
@@ -28,6 +30,63 @@ namespace cement
         ImGui::Begin("Registry", &m_show_summary);
         ImGui::Text("Size = %ld", m_registry.m_properties->Size());
         ImGui::Text("%s", m_registry.Print().c_str());
+        ImGui::End();
+    }
+
+    void Gui::ShowModel()
+    {
+        ImGui::Begin("Models", &m_show_model);
+        ImGui::Columns(4);
+        ImGui::SetColumnWidth(0, 210);
+        ImGui::SetColumnWidth(1, 400);
+        ImGui::SetColumnWidth(2, 200);
+        ImGui::SetColumnWidth(3, 200);
+        ImGui::BeginListBox("", {200, 600});
+        for (auto& pair : m_registry.m_properties->GetProperties())
+        {
+            if (pair.second->Type() == pt_model)
+            {
+                if (ImGui::Button(">")) m_selected_model = dynamic_cast<Model*>(pair.second);
+                ImGui::SameLine();
+                ImGui::PushID(pair.first);
+                ImGui::InputText("", &(pair.second->GetName()));
+                ImGui::PopID();
+            }
+        }
+        ImGui::EndListBox();
+        if (m_selected_model)
+        {
+            ImGui::NextColumn();
+            for (auto index : m_selected_model->GetIndexes())
+            {
+                ImGui::PushID(index->m_id);
+                ImGui::PushItemWidth(200.);
+                ImGui::InputText("", &(index->GetName()));
+                ImGui::PopID();
+                ImGui::SameLine();
+                ImGui::Text("%s", index->GetIndexed()->GetName().c_str());
+                ImGui::PopItemWidth();
+            }
+
+            ImGui::NextColumn();
+            for (auto& pair : m_registry.m_properties->GetProperties())
+            {
+                if (pair.second->Type() < pt_index)
+                {
+                    ImGui::PushID(pair.first);
+                    if (ImGui::Button("+")) m_registry.AddProperty(m_selected_model, pair.second, "");
+                    ImGui::PopID();
+                    ImGui::SameLine();
+                    ImGui::Text("%s", pair.second->GetName().c_str());
+                }
+            }
+            if (m_selected_model->Size() != 0)
+            {
+                ImGui::NextColumn();
+                ImGui::Text("%s", m_selected_model->PrettyPrint(0).c_str());
+            }
+        }
+
         ImGui::End();
     }
 
@@ -136,7 +195,7 @@ namespace cement
     template<>
     void Gui::ShowPropertyValue(Instances<long>* a_property, size_t a_position)
     {
-        ImGui::InputInt("", reinterpret_cast<int*>(a_property->GetPointerAt(a_position)));
+        ImGui::InputInt("", reinterpret_cast<int*>(a_property->GetPointerAt(a_position)), 0);
     }
 
     template<>
