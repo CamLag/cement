@@ -22,6 +22,7 @@ namespace cement
 
         using Ref = typename std::vector<T>::reference;
         using Const_Ref = typename std::vector<T>::const_reference;
+        using Pointer = typename std::vector<T>::pointer;
 
         Pool(size_t a_size) : m_sink_size(a_size)
         {

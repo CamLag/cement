@@ -1,6 +1,5 @@
 #include "Cementgui.h"
 #include <stdio.h>
-#include "imgui.h"
 #include "bindings/imgui_impl_sdl.h"
 #include "bindings/imgui_impl_opengl2.h"
 #include "imgui_stdlib.h"
@@ -62,28 +61,110 @@ namespace cement
         ImGui::SameLine();
         ImGui::Checkbox("shared", &m_is_shared_checkbox);
 
+        ImGui::Columns(5);
+        ImGui::SetColumnWidth(0, 100.f);
+        ImGui::SetColumnWidth(1, 20.f);
+        ImGui::SetColumnWidth(2, 150.f);
+        ImGui::SetColumnWidth(3, 30.f);
+
         for (auto& pair : m_registry.m_properties->GetProperties())
         {
             ImGui::Text("%s", StringConversions::ToString(pair.second->Type()).c_str());
-            ImGui::SameLine();
+            ImGui::NextColumn();
+
             ImGui::Text("%d", pair.second->IsShared());
-            ImGui::SameLine();
+            ImGui::NextColumn();
+
             ImGui::PushID(pair.first);
             ImGui::InputText("", &(pair.second->GetName()));
             ImGui::PopID();
-            ImGui::SameLine();
+            ImGui::NextColumn();
+
             ImGui::PushID(pair.first);
             if (ImGui::SmallButton("+")) pair.second->Instanciate();
             ImGui::PopID();
-            for (size_t i = 0; i < pair.second->Size(); ++i)
-            {
-//                ImGui::PushID(pair.first - 1 - i);
-                ImGui::SameLine();
-                ImGui::Text("%s", StringConversions::ToString(pair.second->Get(i)).c_str());
-//                ImGui::PopID();
-            }
+            ImGui::NextColumn();
+
+            ImGui::PushItemWidth(80.f);
+            ShowPropertyValues(pair.second);
+            ImGui::PopItemWidth();
+            ImGui::NextColumn();
         }
 
         ImGui::End();
     }
+
+    void Gui::ShowPropertyValues(Property* a_property)
+    {
+        switch (a_property->Type())
+        {
+        case pt_long :
+        {
+            CastToInstancesAndShowValues<long>(a_property);
+            break;
+        }
+        case pt_bool :
+        {
+            CastToInstancesAndShowValues<bool>(a_property);
+            break;
+        }
+        case pt_double :
+        {
+            CastToInstancesAndShowValues<double>(a_property);
+            break;
+        }
+        case pt_string :
+        {
+            CastToInstancesAndShowValues<std::string>(a_property);
+            break;
+        }
+        case pt_u_long :
+        {
+            CastToInstancesAndShowValues<unsigned long>(a_property);
+            break;
+        }
+        case pt_index :
+        case pt_model :
+        case pt_property :
+        default:
+        {
+            break;
+        }
+        }
+    }
+
+    template<>
+    void Gui::ShowPropertyValue(Instances<long>* a_property, size_t a_position)
+    {
+        ImGui::InputInt("", reinterpret_cast<int*>(a_property->GetPointerAt(a_position)));
+    }
+
+    template<>
+    void Gui::ShowPropertyValue(Instances<bool>* a_property, size_t a_position)
+    {
+        bool b = a_property->GetAt(a_position);
+        if (ImGui::Checkbox("", &b))
+        {
+            a_property->SetAt(a_position, !a_property->GetAt(a_position));
+        }
+    }
+
+    template<>
+    void Gui::ShowPropertyValue(Instances<double>* a_property, size_t a_position)
+    {
+        ImGui::InputDouble("", a_property->GetPointerAt(a_position));
+    }
+
+    template<>
+    void Gui::ShowPropertyValue(Instances<std::string>* a_property, size_t a_position)
+    {
+        ImGui::InputText("", a_property->GetPointerAt(a_position));
+    }
+
+    template<>
+    void Gui::ShowPropertyValue(Instances<unsigned long>* a_property, size_t a_position)
+    {
+        ImGui::InputInt("", reinterpret_cast<int*>(a_property->GetPointerAt(a_position)));
+    }
 }
+

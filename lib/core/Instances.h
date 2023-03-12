@@ -14,6 +14,10 @@ namespace cement
     class Instances : public Property
     {
     public:
+        using Ref = typename Pool<T>::Ref;
+        using Const_Ref = typename Pool<T>::Const_Ref;
+        using Pointer = typename Pool<T>::Pointer;
+
         Instances(Id a_id, const std::string &a_name, bool a_shared) : Property(a_id, a_name, a_shared), m_values(1000)
         {
         }
@@ -46,7 +50,7 @@ namespace cement
             }
         }
 
-        const T& Get(Id a_instance) const
+        Const_Ref Get(Id a_instance) const
         {
             if (!HasId(a_instance))
             {
@@ -58,7 +62,7 @@ namespace cement
             return m_values[m_sparse[a_instance]];
         }
 
-        T& Get(Id a_instance)
+        Ref Get(Id a_instance)
         {
             if (!HasId(a_instance))
             {
@@ -68,6 +72,26 @@ namespace cement
             }
 
             return m_values[m_sparse[a_instance]];
+        }
+
+        Const_Ref GetAt(size_t a_position) const
+        {
+            return m_values[a_position];
+        }
+
+        Ref GetAt(size_t a_position)
+        {
+            return m_values[a_position];
+        }
+
+        Ref SetAt(size_t a_position, const T& a_value)
+        {
+            m_values[a_position] = a_value;
+        }
+
+        Pointer GetPointerAt(size_t a_position)
+        {
+            return &m_values[a_position];
         }
 
         virtual void Get(Id a_instance, std::string &a_string_value) override
