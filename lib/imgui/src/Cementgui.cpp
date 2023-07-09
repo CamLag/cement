@@ -46,7 +46,13 @@ namespace cement
         {
             if (pair.second->Type() == pt_model)
             {
-                if (ImGui::Button(">")) m_selected_model = dynamic_cast<Model*>(pair.second);
+                std::string id = ">" + std::to_string(pair.first);
+                ImGui::PushID(id.c_str());
+                if (ImGui::Button(">"))
+                {
+                    m_selected_model = dynamic_cast<Model*>(pair.second);
+                }
+                ImGui::PopID();
                 ImGui::SameLine();
                 ImGui::PushID(pair.first);
                 ImGui::InputText("", &(pair.second->GetName()));
@@ -57,6 +63,7 @@ namespace cement
         if (m_selected_model)
         {
             ImGui::NextColumn();
+            ImGui::Text("%s", m_selected_model->GetName().c_str());
             for (auto index : m_selected_model->GetIndexes())
             {
                 ImGui::PushID(index->m_id);
