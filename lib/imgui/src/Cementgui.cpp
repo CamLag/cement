@@ -42,6 +42,7 @@ namespace cement
         ImGui::SetColumnWidth(2, 200);
         ImGui::SetColumnWidth(3, 200);
         ImGui::BeginListBox("", {200, 600});
+        ImGui::Text("Models");
         for (auto& pair : m_registry.m_properties->GetProperties())
         {
             if (pair.second->Type() == pt_model)
@@ -63,7 +64,7 @@ namespace cement
         if (m_selected_model)
         {
             ImGui::NextColumn();
-            ImGui::Text("%s", m_selected_model->GetName().c_str());
+            ImGui::Text("Sub properties of %s", m_selected_model->GetName().c_str());
             for (auto index : m_selected_model->GetIndexes())
             {
                 ImGui::PushID(index->m_id);
@@ -76,6 +77,7 @@ namespace cement
             }
 
             ImGui::NextColumn();
+            ImGui::Text("Properties");
             for (auto& pair : m_registry.m_properties->GetProperties())
             {
                 if (pair.second->Type() < pt_index)
